@@ -1,0 +1,1122 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sistema PE · Engenharia de Produção UFAM</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dosis:wght@300;400;500;600;700;800&display=swap">
+<style>
+/* Layout: faixa institucional (logos + títulos) · navegação por ambientes · área de trabalho em cartões sobre fundo neutro vinho-acinzentado */
+:root{
+  --bg:#F6F2F4; --surface:#FFFFFF; --surface2:#F1E9EE; --ink:#26121D; --muted:#6F5A66; --line:#E4D7DE;
+  --wine:#6E1230; --wine2:#8E1F44; --wine-soft:#F6E3E9;
+  --gold:#A87B22; --gold2:#C9A24A; --gold-soft:#F6EBCF;
+  --purple:#4A1D6B; --purple-soft:#EEE5F5;
+  --ok:#2E7D4F; --warn:#B26A00; --bad:#B3261E; --off:#7C7280;
+  --hdr1:#5A0E27; --hdr2:#3A1450; --on-hdr:#FFF7EC;
+  --shadow:0 1px 2px rgba(60,10,30,.06),0 6px 22px rgba(60,10,30,.07);
+  --f:'Dosis',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --r:12px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#150B11; --surface:#1F121A; --surface2:#2A1923; --ink:#F3E9EE; --muted:#B8A3AF; --line:#3B2733;
+  --wine:#D2557C; --wine2:#E27296; --wine-soft:#3A1624;
+  --gold:#DDB45C; --gold2:#E8C77A; --gold-soft:#3A2E15;
+  --purple:#B392D6; --purple-soft:#2D2040;
+  --ok:#5CC08A; --warn:#E5A24A; --bad:#F07A70; --off:#9C93A0;
+  --hdr1:#3E0919; --hdr2:#25103A; --on-hdr:#FFF7EC;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 26px rgba(0,0,0,.35); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#150B11; --surface:#1F121A; --surface2:#2A1923; --ink:#F3E9EE; --muted:#B8A3AF; --line:#3B2733;
+  --wine:#D2557C; --wine2:#E27296; --wine-soft:#3A1624;
+  --gold:#DDB45C; --gold2:#E8C77A; --gold-soft:#3A2E15;
+  --purple:#B392D6; --purple-soft:#2D2040;
+  --ok:#5CC08A; --warn:#E5A24A; --bad:#F07A70; --off:#9C93A0;
+  --hdr1:#3E0919; --hdr2:#25103A; --on-hdr:#FFF7EC;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 26px rgba(0,0,0,.35); color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f);font-size:16px;line-height:1.5;text-align:justify;hyphens:auto;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--f);line-height:1.15;text-wrap:balance;text-align:left;margin:0;hyphens:none}
+h2{font-size:1.65rem;font-weight:700;color:var(--wine)}
+h3{font-size:1.25rem;font-weight:700}
+h4{font-size:1.05rem;font-weight:700;color:var(--purple)}
+p{margin:0}
+a{color:var(--wine)}
+small,.muted{color:var(--muted)}
+button,input,select,textarea{font-family:var(--f);font-size:1rem;color:var(--ink)}
+:focus-visible{outline:2px solid var(--gold2);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+
+/* Cabeçalho institucional */
+.hdr{background:linear-gradient(110deg,var(--hdr1) 0%,var(--hdr1) 45%,var(--hdr2) 100%);color:var(--on-hdr);border-bottom:3px solid var(--gold2)}
+.hdr-in{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:20px;padding-block:16px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.logo{background:#fff;border-radius:10px;padding:6px;display:grid;place-items:center;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+.logo img{height:74px;width:auto;display:block}
+.ttl{text-align:center}
+.ttl .eyebrow{letter-spacing:.22em;text-transform:uppercase;font-size:.78rem;color:var(--gold2);font-weight:600}
+.ttl h1{font-size:clamp(1.25rem,3.2vw,2.15rem);font-weight:800;text-align:center;color:var(--on-hdr);margin:2px 0 4px;letter-spacing:.01em}
+.ttl .by{font-size:.92rem;opacity:.9;text-align:center}
+.ttl .by b{color:var(--gold2);font-weight:600}
+@media (max-width:640px){.logo img{height:44px}.hdr-in{gap:10px}.ttl .by{font-size:.8rem}.ttl .eyebrow{font-size:.66rem;letter-spacing:.14em}}
+
+/* Navegação dos ambientes */
+.nav{background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);z-index:20}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--hdr1)}
+.nav-in{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:6px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));overflow-x:auto;scrollbar-width:none}
+.nav-in::-webkit-scrollbar{display:none}
+.nav button{background:none;border:0;padding:14px 14px 12px;font-weight:600;font-size:1.02rem;color:var(--muted);border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap;text-align:center}
+.nav button:hover{color:var(--ink)}
+.nav button.on{color:var(--wine);border-bottom-color:var(--gold2)}
+.nav .sp{flex:1}
+.mode{font-size:.8rem;padding:3px 10px;border-radius:99px;white-space:nowrap;font-weight:600}
+.mode.local{background:var(--gold-soft);color:var(--gold)}
+.mode.fb{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}
+.who{font-size:.88rem;color:var(--muted);white-space:nowrap}
+
+.wrap{max-width:1280px;margin:0 auto;padding-block:24px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.stack{display:flex;flex-direction:column;gap:18px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.between{justify-content:space-between}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);min-width:0}
+.card.flat{box-shadow:none}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+@media (max-width:900px){.g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.g2,.g3{grid-template-columns:minmax(0,1fr)}.g4{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.kpi b{font-size:1.6rem}}
+.sect-h{display:flex;align-items:end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.sect-h p{color:var(--muted);max-width:70ch}
+.eyebrow{font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:700;text-align:left}
+
+.btn{white-space:nowrap;hyphens:none;display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--wine);background:var(--wine);color:#fff;padding:9px 16px;border-radius:9px;font-weight:600;cursor:pointer;text-align:center;line-height:1.2;text-decoration:none}
+.btn:hover{background:var(--wine2);border-color:var(--wine2)}
+.btn.gold{background:var(--gold2);border-color:var(--gold2);color:#2A1A05}
+.btn.gold:hover{filter:brightness(1.06)}
+.btn.ghost{background:transparent;color:var(--wine);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--wine);background:var(--wine-soft)}
+.btn.danger{background:transparent;color:var(--bad);border-color:color-mix(in srgb,var(--bad) 40%,transparent)}
+.btn.sm{padding:6px 11px;font-size:.9rem;border-radius:8px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+:root:not([data-theme="light"]) .btn:not(.ghost):not(.gold):not(.danger){color:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn:not(.ghost):not(.gold):not(.danger){background:#8E1F44;border-color:#8E1F44}}
+:root[data-theme="dark"] .btn:not(.ghost):not(.gold):not(.danger){background:#8E1F44;border-color:#8E1F44}
+.icon{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--muted);cursor:pointer;font-size:1.1rem;line-height:1;flex:none}
+.icon:hover{color:var(--bad);border-color:var(--bad)}
+
+.chip{display:inline-flex;align-items:center;gap:5px;padding:2px 10px;border-radius:99px;font-size:.82rem;font-weight:600;background:var(--surface2);color:var(--muted);white-space:nowrap}
+.chip.wine{background:var(--wine-soft);color:var(--wine)}
+.chip.gold{background:var(--gold-soft);color:var(--gold)}
+.chip.purple{background:var(--purple-soft);color:var(--purple)}
+.chip.ok{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}
+.chip.warn{background:color-mix(in srgb,var(--warn) 15%,transparent);color:var(--warn)}
+.chip.bad{background:color-mix(in srgb,var(--bad) 14%,transparent);color:var(--bad)}
+
+/* Formulários */
+.fgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px 16px}
+@media (max-width:640px){.fgrid{grid-template-columns:minmax(0,1fr)}.fgrid>*{grid-column:1/-1!important}}
+.fld{display:flex;flex-direction:column;gap:5px;min-width:0}
+.lbl{font-weight:600;font-size:.93rem;color:var(--ink);text-align:left;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.lbl small{font-weight:500}
+.cnt.over{color:var(--bad);font-weight:700}
+input[type=text],input[type=email],input[type=url],input[type=number],input[type=date],input[type=password],input:not([type]),select,textarea{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:9px 11px;line-height:1.4;transition:border-color .15s,box-shadow .15s}
+textarea{resize:vertical;min-height:70px;text-align:justify}
+input.bad{border-color:var(--bad)!important}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold2);box-shadow:0 0 0 3px color-mix(in srgb,var(--gold2) 25%,transparent)}
+.help{font-size:.84rem;color:var(--muted)}
+.lst .rows{display:flex;flex-direction:column;gap:10px}
+.lrow{display:grid;grid-template-columns:28px minmax(0,1fr) 30px;gap:10px;align-items:start;padding:12px;border:1px dashed var(--line);border-radius:10px;background:var(--surface2)}
+.lnum{width:26px;height:26px;border-radius:50%;background:var(--wine);color:#fff;display:grid;place-items:center;font-size:.82rem;font-weight:700}
+.lst>.btn{align-self:flex-start;margin-top:4px}
+.imgbox{border:1px dashed var(--line);border-radius:10px;min-height:120px;display:grid;place-items:center;background:var(--surface2);overflow:hidden}
+.imgbox img{max-height:260px;width:auto;display:block}
+.imgph{color:var(--muted);font-size:.9rem;padding:20px;text-align:center}
+.chk{display:flex;gap:8px;align-items:center;font-weight:600}
+
+/* Barra de progresso */
+.prog{height:8px;border-radius:99px;background:var(--surface2);overflow:hidden;min-width:60px}
+.prog>i{display:block;height:100%;background:linear-gradient(90deg,var(--wine),var(--gold2));border-radius:99px}
+
+/* Tabelas */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:.94rem}
+th,td{padding:9px 11px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--surface2);font-weight:700;color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.r,th.r{text-align:right}
+
+/* Abas internas */
+.tabs{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--line);margin-bottom:18px}
+.tabs button{background:none;border:0;padding:10px 14px;font-weight:600;color:var(--muted);cursor:pointer;border-radius:8px 8px 0 0;position:relative;text-align:center}
+.tabs button.on{color:var(--purple);background:var(--purple-soft)}
+.tabs button .badge{background:var(--wine);color:#fff;border-radius:99px;font-size:.72rem;padding:1px 7px;margin-left:5px}
+.ptabs{display:flex;gap:6px;flex-wrap:wrap}
+.ptabs button{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:6px 14px;font-weight:600;cursor:pointer;color:var(--muted)}
+.ptabs button.on{background:var(--purple);border-color:var(--purple);color:#fff}
+
+/* KPIs e barras */
+.kpi{padding:16px 18px;border-radius:var(--r);background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column;gap:2px}
+.kpi b{font-size:2rem;font-weight:800;color:var(--wine);line-height:1.1;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:.92rem;text-align:left}
+.kpi.gold b{color:var(--gold)}
+.kpi.purple b{color:var(--purple)}
+.bars{display:flex;flex-direction:column;gap:9px}
+.bar{display:grid;grid-template-columns:minmax(90px,170px) minmax(0,1fr) 54px;gap:10px;align-items:center;font-size:.92rem}
+.bar .t{text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar .tr{height:16px;background:var(--surface2);border-radius:5px;overflow:hidden}
+.bar .tr i{display:block;height:100%;background:var(--wine);border-radius:5px}
+.bar.g .tr i{background:var(--gold2)}
+.bar.p .tr i{background:var(--purple)}
+.bar .v{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+.vbars{display:flex;align-items:flex-end;gap:14px;height:180px;padding-top:20px;border-bottom:1px solid var(--line)}
+.vbar{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px;min-width:0}
+.vbar i{width:100%;max-width:56px;background:linear-gradient(180deg,var(--wine2),var(--wine));border-radius:6px 6px 0 0}
+.vbar b{font-size:.88rem;font-variant-numeric:tabular-nums}
+.vlabels{display:flex;gap:14px}
+.vlabels span{flex:1;text-align:center;font-size:.8rem;color:var(--muted);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* Acervo */
+.pe-card{display:flex;flex-direction:column;gap:10px;cursor:pointer;transition:transform .15s,border-color .15s;text-align:left}
+.pe-card:hover{transform:translateY(-2px);border-color:var(--gold2)}
+.pe-card .org{font-size:1.25rem;font-weight:700;color:var(--wine);text-align:left}
+.pe-card .mis{font-size:.95rem;color:var(--muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.medal{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:800;background:var(--surface2);color:var(--muted);flex:none}
+.medal.m1{background:var(--gold2);color:#2A1A05}.medal.m2{background:#C9C3CC;color:#2B2530}.medal.m3{background:#C68B5A;color:#2B1606}
+
+/* Layout do aluno */
+.pe-layout{display:grid;grid-template-columns:270px minmax(0,1fr);gap:20px;align-items:start}
+.secnav{position:sticky;top:calc(env(safe-area-inset-top,0px) + 66px);display:flex;flex-direction:column;gap:2px;max-height:calc(100vh - 90px);overflow:auto;padding:12px}
+.secnav .gh{font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:700;margin:10px 8px 4px;text-align:left}
+.secnav button{display:flex;align-items:center;gap:8px;text-align:left;background:none;border:0;border-radius:8px;padding:7px 9px;cursor:pointer;color:var(--ink);font-weight:500;font-size:.95rem}
+.secnav button:hover{background:var(--surface2)}
+.secnav button.on{background:var(--wine-soft);color:var(--wine);font-weight:700}
+.dot{width:10px;height:10px;border-radius:50%;border:2px solid var(--line);flex:none}
+.dot.half{border-color:var(--gold2);background:linear-gradient(90deg,var(--gold2) 50%,transparent 50%)}
+.dot.full{border-color:var(--ok);background:var(--ok)}
+.dot.auto{border-color:var(--purple);background:var(--purple-soft)}
+.secsel{display:none}
+@media (max-width:900px){.pe-layout{grid-template-columns:minmax(0,1fr)}.secnav{display:none}.secsel{display:block}}
+.fbk{border-left:4px solid var(--gold2);background:var(--gold-soft);padding:12px 14px;border-radius:8px;color:var(--ink)}
+.fbk b{color:var(--gold)}
+.savest{font-size:.85rem;color:var(--muted)}
+.savest.ing{color:var(--gold)}
+.teambar{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:16px}
+.teambar .nm{font-size:1.5rem;font-weight:800;color:var(--wine);text-align:left}
+.teambar .sl{color:var(--gold);font-style:italic}
+
+/* Orientações / linha do tempo */
+.tl{display:flex;flex-direction:column;gap:0;position:relative}
+.tli{display:grid;grid-template-columns:120px 26px minmax(0,1fr);gap:12px;padding-bottom:20px}
+.tli .dt{text-align:right;font-weight:700;color:var(--purple);font-size:.92rem;padding-top:2px;font-variant-numeric:tabular-nums}
+.tli .ax{position:relative;display:flex;justify-content:center}
+.tli .ax::before{content:"";position:absolute;top:22px;bottom:-20px;width:2px;background:var(--line)}
+.tli:last-child .ax::before{display:none}
+.tli .ax i{width:18px;height:18px;border-radius:50%;background:var(--surface);border:3px solid var(--gold2);margin-top:3px;z-index:1}
+.tli.done .ax i{background:var(--ok);border-color:var(--ok)}
+.tli.now .ax i{background:var(--wine);border-color:var(--wine)}
+.tli .bd{display:flex;flex-direction:column;gap:6px}
+.tli .bd h4{color:var(--wine)}
+.pre{white-space:pre-line}
+@media (max-width:640px){.tli{grid-template-columns:22px minmax(0,1fr)}.tli .dt{grid-column:2;text-align:left;order:-1}.tli .ax{grid-row:1/span 2;grid-column:1}}
+
+/* Mensagens */
+.chat{display:grid;grid-template-columns:260px minmax(0,1fr);gap:16px;min-height:480px}
+@media (max-width:760px){.chat{grid-template-columns:minmax(0,1fr)}}
+.threads{display:flex;flex-direction:column;gap:4px;max-height:560px;overflow:auto}
+.threads button{display:flex;justify-content:space-between;gap:8px;align-items:center;text-align:left;background:none;border:1px solid transparent;border-radius:9px;padding:9px 11px;cursor:pointer;font-weight:600;color:var(--ink)}
+.threads button.on{background:var(--purple-soft);border-color:var(--purple);color:var(--purple)}
+.thread{display:flex;flex-direction:column;gap:10px}
+.msgs{display:flex;flex-direction:column;gap:10px;max-height:460px;min-height:260px;overflow:auto;padding:12px;background:var(--surface2);border-radius:10px}
+.bub{max-width:78%;padding:9px 13px;border-radius:12px;background:var(--surface);border:1px solid var(--line);align-self:flex-start}
+.bub.me{align-self:flex-end;background:var(--wine-soft);border-color:transparent}
+.bub.prof{border-left:3px solid var(--gold2)}
+.bub .meta{font-size:.76rem;color:var(--muted);margin-bottom:2px;text-align:left}
+.bub .tx{white-space:pre-wrap;text-align:justify}
+.compose{display:flex;gap:8px;align-items:flex-end}
+.compose textarea{min-height:46px}
+
+/* Modal e toast */
+.ov{position:fixed;inset:0;background:rgba(20,6,14,.55);display:grid;place-items:center;z-index:50;padding:16px}
+.mdl{background:var(--surface);border-radius:14px;max-width:min(980px,100%);width:100%;max-height:92vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.35);padding:22px;display:flex;flex-direction:column;gap:14px}
+.mdl.sm{max-width:480px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:10px;z-index:60;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.3);max-width:calc(100% - 32px);text-align:center}
+
+/* Visualização de PE (somente leitura) */
+.vsec{display:flex;flex-direction:column;gap:12px}
+.vgroup{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-top:10px;text-align:left}
+.vdl{display:grid;grid-template-columns:minmax(140px,220px) minmax(0,1fr);gap:8px 16px;margin:0}
+.vdl dt{font-weight:700;color:var(--muted);font-size:.92rem;text-align:left}
+.vdl dd{margin:0;min-width:0}
+.vdl .wide{grid-column:1/-1}
+@media (max-width:640px){.vdl{grid-template-columns:minmax(0,1fr)}}
+.vimg{max-height:320px;border-radius:8px;border:1px solid var(--line)}
+
+/* Mapa estratégico */
+.mapa{display:flex;flex-direction:column;gap:6px}
+.mrow{display:grid;grid-template-columns:120px minmax(0,1fr);border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
+.mlab{display:flex;flex-direction:column;justify-content:center;padding:10px;color:#fff;text-align:left}
+.mlab b{font-size:1.3em;letter-spacing:.04em}
+.mlab span{font-size:.78em;line-height:1.2;opacity:.95}
+.m-SF .mlab{background:#6E1230}.m-C .mlab{background:#8A5A12}.m-PI .mlab{background:#4A1D6B}.m-AC .mlab{background:#2F5A63}
+.mbody{padding:10px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.mobj{font-weight:700;text-align:left}
+.mmetas{display:flex;flex-wrap:wrap;gap:8px}
+.mmeta{flex:1 1 200px;min-width:0;border:1px solid var(--line);border-radius:8px;padding:7px 9px;background:var(--surface2);font-size:.9em}
+.mmeta b{color:var(--wine)}
+.myrs{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px}
+.myrs span{font-size:.84em;background:var(--surface);border:1px solid var(--line);border-radius:5px;padding:0 6px;font-variant-numeric:tabular-nums}
+.marrow{text-align:center;color:var(--gold2);font-size:1.1em;line-height:1}
+@media (max-width:640px){.mrow{grid-template-columns:minmax(0,1fr)}}
+
+/* Matriz X */
+.mx{display:grid;grid-template-columns:minmax(0,1fr) minmax(150px,240px) minmax(0,1fr) minmax(0,.8fr);grid-template-rows:auto auto auto;gap:8px;font-size:.88em}
+.mx .cell{border:1px solid var(--line);border-radius:8px;padding:8px;background:var(--surface);min-width:0}
+.mx .cell h5{margin:0 0 5px;font-size:.78em;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);text-align:left}
+.mx .cell,.mx li,td,.help,.mmeta{text-align:left;hyphens:manual}
+.mx .cell ol{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:3px}
+.mx .top{grid-column:2;grid-row:1}.mx .lft{grid-column:1;grid-row:2}.mx .ctr{grid-column:2;grid-row:2;display:grid;place-items:center;padding:4px}
+.mx .rgt{grid-column:3;grid-row:2}.mx .bot{grid-column:2;grid-row:3}.mx .rsp{grid-column:4;grid-row:1/span 3}
+.mx svg{width:100%;height:auto;max-width:220px;color:var(--purple)}
+@media (max-width:760px){.mx{grid-template-columns:minmax(0,1fr)}.mx>*{grid-column:1!important;grid-row:auto!important}.mx .ctr{max-width:220px;justify-self:center}}
+
+/* Pôster A1 (Modelo 1) — cores fixas de documento impresso */
+.pwrap{border:1px solid var(--line);border-radius:10px;background:var(--surface2);overflow:hidden;position:relative}
+.pwrap.real{overflow:auto;max-height:80vh}
+.pscale{transform-origin:0 0}
+.poster{--ink:#26121D;--muted:#6F5A66;--surface:#FFFFFF;--surface2:#F6EFF3;--line:#E2D3DB;--wine:#6E1230;--wine2:#8E1F44;--wine-soft:#F6E3E9;--gold:#A87B22;--gold2:#C9A24A;--gold-soft:#F6EBCF;--purple:#4A1D6B;--purple-soft:#EEE5F5;
+  color-scheme:light;width:594mm;min-height:841mm;background:#fff;color:var(--ink);font-family:var(--f);font-size:17pt;line-height:1.35;padding:16mm;display:flex;flex-direction:column;gap:9mm}
+.poster .ph{display:grid;grid-template-columns:auto 1fr auto;gap:10mm;align-items:center;border-bottom:4mm solid #6E1230;padding-bottom:7mm}
+.poster .ph img{height:34mm;width:auto}
+.poster .ph h2{font-size:34pt;color:#6E1230;text-align:center;font-weight:800}
+.poster .ph .sub{text-align:center;font-size:16pt;margin-top:3mm;color:#4A1D6B;font-weight:600}
+.poster .ph .sub b{color:#A87B22}
+.poster .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:8mm;flex:1}
+.poster .pbox{border:0.6mm solid #E2D3DB;border-radius:5mm;padding:7mm;display:flex;flex-direction:column;gap:4mm;min-width:0}
+.poster .pbox h3{font-size:22pt;color:#fff;background:#6E1230;margin:-7mm -7mm 2mm;padding:4mm 7mm;border-radius:4.4mm 4.4mm 0 0;display:flex;justify-content:space-between;align-items:center;gap:4mm}
+.poster .pbox h3 .plan{font-size:12pt;background:#C9A24A;color:#2A1A05;padding:1mm 4mm;border-radius:99px;letter-spacing:.1em}
+.poster .pbox h4{font-size:16pt;color:#4A1D6B}
+.poster p,.poster .pj{text-align:justify}
+.poster .vals{display:grid;grid-template-columns:auto 1fr;gap:1.5mm 5mm;font-size:14pt}
+.poster .vals b{color:#6E1230}
+.poster .gest{display:grid;grid-template-columns:1fr 1fr;gap:3mm}
+.poster .gest div{background:#F6EFF3;border-radius:3mm;padding:3mm 4mm;font-size:13pt}
+.poster .gest b{display:block;color:#6E1230;font-size:12pt;text-transform:uppercase;letter-spacing:.05em}
+.poster .dest{display:grid;grid-template-columns:repeat(auto-fit,minmax(40mm,1fr));gap:4mm}
+.poster .dest div{border:0.6mm solid #C9A24A;border-radius:4mm;padding:4mm;text-align:center;background:#FBF5E6}
+.poster .dest strong{display:block;font-size:30pt;color:#6E1230;line-height:1}
+.poster .dest span{font-size:12pt;display:block;margin-top:1.5mm}
+.poster .dest small{font-size:10pt;color:#6F5A66}
+.poster .pimg{max-height:110mm;width:auto;max-width:100%;border-radius:3mm;align-self:center}
+.poster .ptable{width:100%;border-collapse:collapse;font-size:12pt}
+.poster .ptable th{background:#EEE5F5;color:#4A1D6B;font-size:11pt;padding:2mm 3mm;white-space:normal}
+.poster .ptable td{padding:2mm 3mm;border-bottom:0.3mm solid #E2D3DB}
+.poster .mapa,.poster .mx{font-size:13pt}
+.poster .mrow{grid-template-columns:34mm minmax(0,1fr)}
+.poster .mx{grid-template-columns:minmax(0,1fr) 52mm minmax(0,1fr) minmax(0,.8fr)}
+.poster .mx .ctr{max-width:none}
+.poster .pfoot{display:flex;justify-content:space-between;font-size:12pt;color:#6F5A66;border-top:0.6mm solid #E2D3DB;padding-top:4mm}
+.ex{background:var(--gold-soft);color:var(--gold);border-radius:6px;padding:1px 8px;font-size:.8rem;font-weight:700}
+
+.empty{padding:34px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:var(--r)}
+.empty b{display:block;color:var(--ink);font-size:1.1rem;margin-bottom:4px}
+.login{max-width:980px;margin:0 auto}
+.foot{text-align:center;color:var(--muted);font-size:.85rem;padding-block:20px 30px}
+.code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.84rem;background:var(--surface2);border:1px solid var(--line);border-radius:8px;padding:12px;white-space:pre;overflow-x:auto;text-align:left}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+@page{size:A1 portrait;margin:0}
+@media print{
+  body{background:#fff}
+  body.printing > *:not(#printArea){display:none!important}
+  body:not(.printing) #printArea{display:none}
+  #printArea .poster{min-height:841mm;width:594mm}
+  body::before{display:none}
+}
+</style>
+
+</head>
+<body>
+<header class="hdr">
+  <div class="hdr-in">
+    <div class="logo"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHUAAACQCAYAAAA2jSSNAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAES2SURBVHhe7X0HdBRHtrbfvvU6J5y93uBde/8NBhQBA8YE55ywwTgAimAyiAwOYEwOtsGKKJFzziCJoJwRUUhkSYgMIiO+/3y3p3p6enpGEsHG7717Tp2Z6a6ucL+6t27dutVzC/6PNLpiS9WkGmb/RekW84XfEpGplwBcAHDels4BOGP75O/L5odckQVKV664hs0i+01DNy2oVTGN9whmBYDSC8CuCmDF5hOYnXkYfcJXoX/EKmzcVSHAuqdKW/qfQ785UCk9CtCc3ccRs2ozBkSuRq/QNegbl44+8bnoFJGGbtEZ6B+ZgFNXrMuxkx1U5qNkU/o5GFgHf0tb3EjtzUbXHVRXYFxPItP3ngL6/7wUg6ZkoVNECr4MT0WHsDQEhaVL6hCRiT5RG1F87IodGHNBBuI9lku1nb//DDYUnkZBuabKeb2q528m+k2CSgnadgQiiR3DUhAQno3A8EzHFJaN/lOysWH7UX1uddcu3mO+vJJL+CpyFb6dlo4+YWswa/1OlJzXwFWSe7PTdQTVcW66ZnBdFMBLZG7ZBeC7KUnoOjndJai9YzMxM2mHAOIODJbJ+6cAjJiVIc91CE1G58hU9I3PwpDpGVhZcBLllRrwlbZ23awq+TcJKtUhDaSwxZnoHZ/lEtSe0ZkYPjMdR22AUbUqq5ifHBzKeubvdQWHRbqDwhzL6jI5GwPiMjBuTjo2H6iQ/BZNu2noOoLqiqq2Lh1HfNX5KVUEZnnWAfSOzbAGNTwTweEZ6BqZjG9m5GHo9CyMnZ+PaRv2i9StKjiObUeB8kvASQAHK4Fv4jahe1S6UzkyR4eloV98Br6JXo39FdpguFnpFwPVlapSqk8l61waqbwElJKaWw6ExGSIVJL5AWEZToAQ2M7RueganYtu0VmiWvtPycTA+HSEhK3FoMjViEkoxo/LdqFnpGZsmcuQssOzxSDrF7ocO49e+d8OqiMZtapSpQRJOQzczX28xzxcl67adgajFm5Hp3BnIF0nTeK0lCJLn64RqbIM6hGTh+DQNASGuigvLBt947MxPWFble38tekXA1VJqgJVAcq5blZCPqKW52LexkKRQDVnqaSk8/AlYEV2CYZO3Shr0u4x2QKEeQ5kCorIkk8lvfxU14yJEijqm9Juk3hzOVS/naOyMCgmGSXn7Eucm5V+EVDFYWBQvwosSufM5AP4aloWQmLSRSVGrt6J/eftywcykPnS9l7CmPn5ojrpWLCvSZ0BvZrkCnQm1tU/Nh2Lsw+LlCrr92alXwRUMyk1mlp8Br2jksVRQOYFhafJEmLY9GQUHdfmzaNXgFkbi9A7Mgk9YnMEyAALQMxAMF+gSHE6giOodrWknBPm/FZJlds5KgODpmSgzNbumxzT6wFq1daqkcgQMiZl70X0i96ILlEZwjwNqHQBlsuUb6amYWXhFYxcsEWWGfQYaWCYALGpTaVGgyOz0TEyCz3jcmWulDQlG33icuR7yJR8dI3OQXB4FoLCc/TnXEkpE42tXjFZmJV1VKYLao+bWVp/UVDJB6rVXUcr0S8qSaxRSpNIhS0JI0PT0DkyXSSzy2RKp5HJjsBS+r4MS5c1ab8p2egWvl4Gy8TlOzEtpQzTUkokzbB9Tk0tw7BZ2egfnYYekcli/NCBodS5GVCCTVA7hqfLPB6/djvKL9rn/ZuRrgOo7sgRbGUYTZiTgj5xdqaZGSnXdVXpfI8pIDRL8+/GZaFXeALGz83AmvxDKDoGHLlot6bNidfZBhpdmcUVWJi2H0OmbELvmHR0j87VyrZY97ItBLbflBz8sCAfhy5YG0xGA89875eiXxzUoxeBAZMWokdUquVcaJWMwCtHQO/YbHHYT924H/nlGlC0kK0YbSbabJzXKW0E+XAlsHb7GXw/Owd9YjPQdbKmLazawEFGYCcuyBCnhapPWegnLgOFZeex9+ilmu3nXke6waA6EjvPjq7N2Y8BsanoGEXmacCaJdbpd3iO5P0yIkMs0Z8X5WBr2WUxphSYVTkvhAwZFBhqk/0EgMQdx/HdtBSZf41aIiiM7kNNgjXvUhZmpRzUHf1sR0EZ8MPirfg6Pg2DoxOReeCylFtlm64z3QBQXc+xiolkxLK8YwiJWC9zoVio4dZqWCWuR3tMzkCv8CSs3npapMQ+rznWp/ZcjZ4qtTxyx2Blle85A0xctk2klipXwDU5JTjP0m24puAIjgNYufkY+oStQ6+YHJnne8Zl47vp6Th00bpeVx6260E3AFT3pJhN5mXtvYBv4lPFshRvjgWYksJSxb03dFoasnafwVk3AClAlafKOJ/yt7uNb+NzVOeLs0rEkd9RvFbORlSnyHT0jknFyIXbZW7vEp4m/ZABGpqG/lNzMCd5t0gxy/2l6BcHVREZSEZvOwV8P2+beGzMTJMUmoaQuEyMnJuF4gqN4WYwjfMjVSh3ZTIOl2P+5s2YnZ+HGTnZmJmTi3n5+Vi4OR97r1yWfFbzsIBtK5NgzMs4JA6PjuGpTsDSJuDyqUtMnm3wGXZ4wrLFFdl/8nqk779g2e4bRTcOVMUdC4lQJK4/AGMXbZXlixWgXPYMjkvGPhugZsODJfM6gUw4VIYBS5fDd8AAPBEYiIf8/fBggB8eCPTDg/4BWvJrj/+E9MK748cjPCsb+23gmiVJSS2BXZC+V5YzVLkCZqiLAWhOoWniyhwyNVUMRLbdaX1r4JPjb9fTWFX0i4DqigjGhqIK9IvdJBEMRobQUKLDvU/UenFUmEc6v1M6ObdmnziODpFReLJtOzwY1AF3BAXh94FBuCUoUEvB/B5sS4G4NSgQ9wQF4VE/PzTu2xeRyZtQbpP0i4Z6FLAEnVY2rV7Ol1Y+YleJ/RgwNQtLkndaTxlmPt3UoFZBbPdpAMNnZ6BHrOY0N49yqr0VuWVOkQuK2ccATExLwb97dMeDQUG4wz8Atwb4478CAvC7QBugFon3/jvAH3/w98PdgYF4NCgQb44ejZSTJwRAoxXNT9Eol4ER0zaKYWdcx5qtdHPyD8vCgGm5mDRng31gOiF7fem6gOpKvboiqiBKWdbu0+gbTfefiRm0dGOzMHp+jkiimcmciwnokMWL8Uj7trg9UIGoSaICzh2wtwT5O+S9PzAITwcHYeG27U7qmHWyvQWHrqBneJKuht0ltZ6mPfB13CbkHTjjFtSa8pDk6pnrAqoiV5WYIxuo4jhXhS7SNq0dGBKm+XnpRswtczSMjBLafeYsPBIYgDsC/PG7QBtANnDdg2kH0vibEn5PoD/+FhyMuUVF0j4jsW5em5xQLL5k+qidgIywh9bQ8OM8HLEsD8XHre2BmpIr/prpuoJqRWyGkjT1yQ7urgAGRCXKMsA8R3F5ELo410li+J2SO2n9Bjzs54ffBwZYgsX0XzKPOoNpzme/5i8q+a6gQPw1MBDZJ07ad2RsvOTv7SeAvpGJMt+bQVUS2is+BwNik7F660npw9X6ia1AtLpmphsCqnFDXK37lNeGn+zo8q2n0SdWi0JwZEqmbMdtPnjBiRmUlKX79+PxL77AXcZ50wLcWwKDtWS+bpUMz1PqHwgIwHsjhuOgrc1afyp1azh2zTYZeLI7ZHB1couvS8QmxG8qw+6T2iDgM/q62NAXks6nagBVE7ruoKrFv5LIzKKjSNp6GOvyy5Gw+TDWbS5DdjkwbnmhbI8ZDSR+57bY0BmZArzqKj/JmCMAXhz2nViulConcByAqiagFokG1OMBfghNT3NqBwda3v5z6DM5xckLRu9Tj6gUpJVAHCRmqMy/FSl+qcS+MnFAqMR6jYkDxjzoFV0/UFm6bRGmnAEbtpbim/hk9J+aK1tcWspCp7AN+DLCvtWl7Wtqm+ScY+eml0mjFbE8WsBztxTgYeMcKuBZSKlTshoAvGZ1XZNWqmHPkF4osTDUOAUMjklGl0ha7UZnfzr6Tc3HrIwj9vZbcd1ACkQjeBQG9pdagYkDiwHldF8WndZSVsllrMkplvxmur6g2jrARrJTcavyBdCAcJVs8UAROfalgL7JTUd5iuyFZh64YlB7WkcPAfjw++G4N6g6IFYPPD25GBgP+QdgSnqG9MVo5EjfEvehd5xt3WrQNN1icjF+0Ra7oWXgiZIwAqbS0UvAzvIL2FZ2EVtKL0lalrEH0cvzELNqC6JXbUHosnzZIAj5eRV6TlyBnpOWYNjUJCzN2HODQTWQkqypa7eJdHKtZjaGdEaoALHQLHSLTMO38RslWtDYWJaVWVGBJz5tgzv9qwBITwpM96A6G0y2FBgsy5xWI0eJ2je2h8DwhB0jMsw2wZdR2RgUu8nBer5YCWzefRgrs/cjfOVWibUaPW8zRs3fjMFT0tA9NEHUea/JqZIYr8U5mxEgHDghsdkS9chVAVOvyckYHLlCYpaNhqSiawbVarLXQU3YLua/1aazUwrLll2YUTM3OVm9/D0mMQmP+NNh4Bogx1QFqDZDyiWoQcFijNX5shP22oBURC2SfqASIRGJNp+wEdRcDIxLw0nbaTuyhfzYVVaB2OXZ+ComCd/OzJVphi5ExiMbtZbSZuZkrIODaWnWQScNouiaQdXJpH4JKkM/XB6LMCWq3x7RaRg/O9kBVDWH9Vm8BLWCO1RtIFWRXIPoDP7tfv54on07zNyxw0HyKLUlF4G+4WvlvI0xEI4xUj3C1qPwiONpO37nYNh5+BKmrNuC3qGrJfqDxpV61r+KoAGqdx4BGRybIiE1xrneSDcEVAJCFyAX3lQdAqpB/VpFPJAxIXEZiF+71WGrikXSWf/G6LG4KzBIA8TFHFidVBNQqRWoHSKyc2SgKSKoZReBfuGrnUCl0UcVmlF0UvpgZDq/81n2b/NRIGztbply9I0CM09MfKKqHzA1B/OzDskAcUXXDqoBTEXszJHLwLD4JGm0PqfaDCLVeKPflMBz5C7NPuDg62XRpQD+0aUzbrOpS2G6DVhaqg7WsFNyBqu6iaBypyciL08HVQHDeb9/xBqZ6xwHZ7bEO6XsOi75zLsy6nkJo2Hcc+45WcYZl3YCpgouN0RLMkDu2/j1KFNzqZWYXm9Q1bzKCk9cAcZOW4dvpmunz7pFZogXRiIJLFxsGqhZWJC6xwlULiv+1b0bbg0ygGpLriVPpasH9baAAAE1Mj/fElRKqhFUFZz21dR0pBYecVhH8lMtWdi/facZz7xbfN9adIV16KtRwzGEZmW+ttwT/twwUC1Idbxg33FMXpKBMbNSMTR+vZjkvSLWi9dFAruMHpmwbDnsFL401ylSgMsZj969cXuVAF7fZCWpJFliXQIGRHJOtYPBPeF+MSkYOWMjio+cc5hT2R8B8xywILscg+J59jVbYq7IC/14iIUaFqdMVLbsKzMK0qzWzXRDQCUZO0JDh4eEC08CuYc5l+wVb5LDMsdg/aooPUWMUgiaPt3ak1QTd6CL5MpPTFAf9/NHZHaWk6FERwAltWfUJtmJocRNWLwViYVnZQnEOU9JJiWLZ3AWZezFN1O0c0CdIm2AmbbuCKjZYFLHPlZtOWX3R7uh6wiq86YuKzd6S9hRMmd5TqnuO7WPRg3UETNSBETjnEGQ+y5ajEeCgkUl/ndQEH4X3NEEpm0TPJib4obfZrCMRha/uxwUwbjDzx9PBwYg9cQJGZzSpCuaYyRhy1GMmpWGryavFQdB7r6z0jflvlNgHrgALMo9IlJGb1qXKM3fbaVuJWLSJKWclrrHZGLEjE2yO2VcL7uiGwiq+bddencerkS3nxPt7jU5WZaJruGbMCh8hdw3gkqGLtpViL9/8QWe9PcTi7RW2/ao1d5P1GMt//ao5ac54ulxuicoAPcGBuFu/wDc4eeH2/39ROqYuMVGadfnYktQtQFxT0AQmvXpJwaN0dokY+kCXZqxD8Un7LFOvM5Pgll6Dlidd0gCxRl16ByD5XjSQNyN5n1lm+qlZG/YcczlutRM1xFUE6nJxOLS/tNA95/XOagerr+oYkZPS8Cucm0+UkSAuURK37cPmWWHkHaoDOsPHMSKXbuwaOtWLN62TTa3wzduwKdjx6DV2LH4eNx4CVWhF+qRzz/DQ23bitvvgaBA3BscjDuDgyWshVKv0u86KGnX0gNBwRg0c5aTM0TZDMZEMNnGPWeBBVmH8e1UhpBqXjJHyXQEk5JIMHk6gMm8wUEHBUNNzcEC7ugXBVVdPlkJjJyTI+qW1iPV0rczsrB8y0mUntdGOjfSlepWqkz5TY2ObmOi2qZU0bBi2g1g/bHjSDh+EvP37cfAJUvRacYMBM2cgTfHT8Bfg4Pw5+AOeDI4GH8MCkKttm1F4msxaC04GE9+/hkyDh1ysGJJXKaotqkppfAYJBx0cMwGAbNzlPV5VwWqgBeWKgfE+sZlYuyCLVi05ZLwQ50C5GDoG52M5D1atH916caB6oYIztTEIoyck4fBUWuwOGO/eEh4Xc2/yvTnUUYaJcWn7DsUO08DhRX2VHQWcqaVcw4TweXINiYFPL/zPvPtvnAeRRfPo+jCRWytqEDSnn2ISU7B2BXLMW7lCszJyJI2GAFVUwjbeqQSyDgIRKwpksB0WrN0RmiSaVCh5tMGtmOVzE9H/cq8Q3q7xi3epm9JMh569MwUCRbXNEX1AtF+FVAJGPckZyftwO4TGni8pkY+/aY5e89gypqtEuzVN2wVQiatRC+HtFr/3jtspby7gbsZNFriVhVgzvodyDlwDgWl57Gt7DzKbe9CYlJSryRfXVOWOpmr4oKV4aPmSqpYzvkciKNnp6Pv5E3iNROvkE0yzZ4gI5iMmqTfl4OAJ/E4YNW6nHWs21Eh0xDz9YtJQ1rxabmuTUc3G6gGdazmJGX2K4ZRKmm2D5+VI7sWtJD5tpQu4SkS9qJ2Kb4MT9a/06HB35QQMld2NmIz5ciEtuuRLGvjgXEpsisybuFWTFq+HSu3nUZC0Tkk7TqHjcXnsPOEtglP9W1OW44xlPU85mUdkTK6/bxOvF+cPsyWrCtAmRjD3D9mE35alC2RHWowq7mS3+l+/Dp6HQbGZ8oUxUFU3blU0a8CqvqpAKV62bDjBEbNSpFRSuNAGGTcCDB5V8weF6ddDTo2bEHXVH/cEuNeJ40RqjWC0jcuVerjHi4d7N/EbcCQuAQMjU/EkLgkfBOXhK/jN6BX6Co5fsHBwjL07UI3GxVaHi2ikMsY+myHz8mWGGZqAPM8TSJ4BDp+ZTZGzkxG8j4t3rmmdA2gOi9ZXJE5BkcBSgODUjJqfp6Y/cZ3OehMkwg9Z9DUprsT2G6SlGt7ZQCNlKDwFKmPqo4ST61A/2rXyam2Ty3xVTvSLnFvOq4vrTxAqu081dd3SoY4HPjOJ3qDlN1gBpSkQmdzd5Vh0vSVTlZ3demaQTUD5o6UxciOMWwyjltzURtFMjUgtZFNBlO1cS+WljE3jXtFM9QlQ4wL7Xq2bCBzyUDVrKlhx5dO6mBaBFwLEMbruuNcAWXfx7R63liOvkFhi/WlZDKanxvgdDzQiFNrTCtuKRaqwX76/GXsLjspUmqVvyq6xawWrxeZi+V3NpJW55KccvSNSBJgZD8xNE1/TwONg4GTkzB2dpq8wGPupiIsyzmI1Xllstifs3EXZm7YKS+CnJpYiG9i1mJg1Dr0i0iUIxpUcwSbOx+dJufI/qaDqq6BZLtLotpNZdLBwA1sLmtoSNE1aJ43qyLFN+Z3cDSYGeqGbjiobJhanmwuu4QfFvI9f3wplfauBs5vXKfRkJm0cgdWbTmB/Rc0K9RomSpjyrxWZUhHySVg33kgqbACywpOYHpqqSzYufblhjXXjTScuGEQEpMla0GqXLNkM7kzdJiU54dJ3jcRnqq9byI+Szav56SVikXrTs1eFdUAp2tQv85kVsXKTCfj52WVIyRygzBA3jIWl4UeoWvx48IsJG07gpKzGljMr5Y3xqRGrjHRQaHWtMZlB5MCnZEG2XsqkLj1KCKXZGPSwmx8G5soks1lRQjVelwOesXnoXtsniz8qW47ROQimImSzt+RefJbu5cp+TkY+0QkYOycVCRsOSKuQbUEqq5kOpPNVqkBiGa6rqAqMkpnfulFjJubhkHxDKbSlho066cnH8SWo45rQSYFiFovcknBE2nGJQYjIYwOBpZhlGjjoDACzjzMy73QLYeBvMOaS4/vJqQDYdzCAhloDATrPikR3UOTZPnSJXSd+KqZeJaG73QKX7MbM1P2SznK9+ugLi3IPOit6SYEle1gB8n4hTmHZZ77ZkYOBk7egB/mZyFx62EZ0UapZCKQnG+3XbokZ1m+XrMGb44dg9ohveQ8ae1evfFszxD57d2vH9pEROCr1asl34SUFKSdOYuCSxexz1a3Ut9qLayk2wy0kmyl1ksqgAMVmn+an3tPAruPa5/8ffAMUGpzGKjBqMq3wqF6QFoH8F0tXTdQ2RRl2W4/dAE/zk3GmHk56B2+DmGri5G675JIlxrRzK/Uc8nli+KY7xgZhWc7dMQjtnOm9wR3wG2286SMelCJm+XcW6XDnUcYuVPzZPv2eNrfH41CeqNLbBy6R0djWnY2kssOYfPxEzJglFRzABklWwFvBNxK5Zvz8Dml5o+eO49zlZVcD2jgXkeQakrVBtVd43hHSduqgqP4evIqfBu5HDMTtklUHa8bJUaVxGub9u1Bk25d8Wi7tgISwzIZxadtkdnDVcyJ95iHiVtqfIb7n3z+vqBg1AoMxgPt/VCrfTtx1r8yZoycHv961WrM2LkD8wt3odDm+KdKNwPO/igw1QBU04PaPOCzaw8fxncLF+C76BicuqJFEN5QslIHJqo2qFZk7Oy+YxcRvyQZ30WvwNzU/Sg6pTGI96zbUCmgMqa2ef9+sv/ptIltlSz3P43XzUnbXrujQ7BIN18RwBPkT7RtC++ePfFCv/54dfBgDJ43Dz8lJmBSYgLCEhOQsLsYxRcvYe+ly9h3uRJ7K68g/9RJxKQkY2JSIr5esADN+vXHX9q1xT/atsPqHTsE8N88qOwAO5K+/SDCZq7Eko0FKKtwnGvc1c/nKRUrd+/Bg+3aCfMJgoSXVAWuKbmMXdKjDrXT47pk+/uJVN8TECjnUhmNz71W2XYLCMT9n3+Opzp3xt86aempLzvhcdugqBUcJPnv9/fHE/4BCIqKEsk1aiE7Vd/zZqRqYOeSrhpUauOTFReQkleIFcmbUXbW9drMleZWks75rsusWbKHSaY7AVONRND4WgDz9eon2+a4IQTm92xPhw64tcOXMpdrg86uBfhqgWeCApF3QXPOW9OvAurVVXrxUiX27S/F0VNn9fWi9Uh1T8zPwbCHAdvDhtrVsIt0XeN83WgDczCaWRPwRSE8+Dxn6xb3Plodnavj89VQjUA1GkuqrdcyohQpNZxz+jSe7hiMu4MtogZ15lZ1lLEGoBqSGUSnZFDjVN+PBXdAlxkz3ahdG101g6qPi5muWv1eK5kHCBnDET9321b8zd9PJNYsHZbJleFkAsOeagi6oXw1LzOqMSgsXNbDNPauCrOrpWoMkusE6tWNKDPRuOLIX753D3z79RVjpMo5tipQbckuiVcBKi3ogEDcGahF7AfHxQugri37G0i/HKjXQIZG8oOM4ppx24WLeG3IUDnp5gzMVYBzDYkSSkCf8PdDWIoWf/uLS2gN6NcHlTvDJu6oOXbn5Up5aRW9RpzHHNWxBmqVc2E1k1U5rI+agrHEfwrwR/yWAj3Q3Hzw6WaiXx9UC1JzrPhiAQyYO0didv/gND/aPUzVVcMqn/6c+b6egvGHgCAJEK/fpw8W79gpGuRXUbk1pJsSVEVKHXP+GrpmLR7xDxSHgdEyvq6gBgaIxCoJfTgwCK9/PxybL10S75hbK/cmopsaVBKZyPmL8xhfivVUUJAs+n/n7ydAEAQr1XktSQAN8Md7o0aj+EqlaAwrp8rNSjc9qCQyk0yl+ltVVgaPXj1xf6AmsdfmRXJMlNDbAvzxUPv2CJk7R14bS8fIbwVMRTcBqAxeu1ylpW60jNOPHYNvSIj4aZ2cFNVVw05J29LjOx5Gr1srKv8XcdDfALopQGVS+5BVEfMwwDnn3Dm0mjhJnO883kiJ1TYCag4qVTlV+p+CgjEhKUk/5eZuu/FmppsA1JoTVTHnOYa5dIyLx+MBAQKsA1BmI8hNovfKt2cPrDlwQJYsv1UJVfSbBFURpYkb1b1mzcIj7duLg0CpY+OLnK0MKWXhcmPep28fpNte4PxbMohc0W8aVEqTsownZ2bir9wjdZJEZ88TASX4nJNbjhmL/IozsmT5nwAo6TcNqiLlM16wqxBP2SIc7AaUI6iUYG6Qcw3aYepUkXSlbn+rc6iZbnpQq7KKSUbLeOWe3Wjcv58secz7rpRQWrjcB+09bZoYRDqgJlCrU+/NSv8jQFVE9Uk1yjDTt8eONfiM/cXFyNCVJwOD8HNWlv5SDFdl16Tem41+fVB17l39prAiFqOAPQCgzdhxeDgoQF7KzG08eqOWFhWJRDvtslQbxWtv542m/1GgKlIGFOfL3gvn44/tvsBzvfvIq9pp4Vr6cJ0uuKLr184bRdUHtaqRXNV9EznMX/LdmllXY7zwCaNlvGLLZuw8daraFm5V9xVJ26TpFk9UxQ9Xz10H+sVAvRpwrpUUuArI6rTAmK8mbXbKW1WFVd2/Bqo+qDayN95ashTdwDYLqfLN9ZiZa5XnRpK5/l+DHKIJVYP4yW8c5bQQ3SXj/KSeMZ43cRU66iovNRL9wCqP8b4xqTMw/G7+fzarcq3um1Wx8R4/rfqm6jb2SyVXbTXXpfKaeWPVdiveVUW3qAYZSVWavn07FqWkYn4aUzoWpKfZvmtpcWoaknJypHLVIHb4QEWF3OOz+08bXxljL1/l3XnkiORdmp6Bo5WVDh05fv4cFqck2+pNd6ibaUFqKhanpWDHoTJ5hoOB7ebaM3VXkZS7cfs2h/1Q5tt9qBxLUtOwLD0NJy9e0PvPe+Vnz2JZ8iasSE7B4XP2N4Hyec7JK7NzpN4tpaVSjxbzfEXanbFjh9Sp8ys1FQvT0lB0/LjOA1VW0ubN0oat+/Y5tI1tzdhdLM+tycvXz/XoGFkBZiJLUBXD3/Frj1penrjLyxP3eqhUV9J9nl6o5eGBui2a68csjl+6hG8n/Yx/v/wK7q/rKelfL72Mr36a6BC9z8/9J0+h69Dv8HTTZnjA0wP3e9SFx5tv4cfp0/S8W/buxQN16+JuL2/c42lug6c887CnF0ZOjtJH9vqCAnzUpQse8vLSyq1TB28FBGBNZqYu2WHTp2v369bFjoMH9f6zzpRt2/Dos7XxWO06SNlRqD8Ts2gJGrX8CPfV8ZC+/6lRIwQOHoxd5eWSh23+qGMHPOjtJfxS7SUPnm7eHL1GDkfZ2bNSB/P7vvMuHvb2Rq9hw3StU3T4sLT9UV9fqePeOrXx/McfYWVGhjOw/HCh6i3nVIIqjfyykzTwVk8PvZH8VImgerzYQrbCOIrb9OyJe728cKeXF+720J65y9tbrrUfOEB/1Uz5+fNo2OoT3O3jg7ttTGDid+YdGBom9W89cBB31a2L33t44nZbeUZwCQpBHTE5WkZ06s6deKRBfdxlK+dujzp6mQ95+2JhRrrki5g7V6492qgRdpSWOoCavHMH7n+2Nh6oXQebirR/Kf5h2nRhMvuit9f2nQOxuOKU9K1Nt+5yjfy609ND5xevMb3Yvj1OVlZK355r9Qnu8/JB39GjpI7i0xXwfOcd3OftLe1Xz7Geh+s3wPK0NEdg3ZBbUFt27ow7fbzx5KuvIG59EqYnJWJ60nr9c8badVidliaNWpKZKZJzp5cn3g7phdiEBEnNgoIFZDJlasI6yfvz7FkifX/w8kbA98MRs24dJq9bi7offCD13V2nLgr27UfxsWMC5q2+vmg9cDCmbtiAqbb6ZySux6yERExbtRL5JQeFqe936qwxpL4vhk2bivjEdRg5ayYeatBAmMPymW/yooXy+5HGz2N7WammFq9oKnTTzkLcV7s27q/jgfSSUuy9cAmP+9aT/M+89RYiVq2RfnUcO1aAI+N7T5oovmcOag7Ueu3bYcrGDZi2fgPiExLRqv8A3GYDNnbxYmlD/U8+xT3ePhgwfoI4Q1r16Sf376vni69iYxCflIQfFy/CX199VfI9+/JLOHDqlMM05oosQK10AJWNrNPyQ13KjElN9hz9H/TsgXt8vOH7wQcSNaAO9ZZerkTdt96SBr/Ts6esG59v2VIa+krHTvrReuYtKCsV1fqgbz30HTka+8+dx22eHrjdxxujps/Qz7ka28A5jc+mFe+WqYJtIKAqL9sRtnAh7vTywR2enkgtKsb0NWudQCUxvwKVkpp/4hTGzp2P+zy9UcvTBxt2aa+CZ31sd+vevXC3jzf+9GIL8SO369cP9/j64qNBA3WvFRMBb/D5F8LLFm3aCA/qf6H95tREfj3ZvIX8HjhporSddbAuzs+P1PMVrbgiK1v6XBVVD9T333c+1WXQA8zLPMz73pcdJS/LUOX0GTcO9/r44rXu3aXzf27YSCQ1+PsR0mlVHBscvmAe+v/wAxYlbkDh8RMaqL5eGB412a5+TDqI1xemZYg2oMqdl2FXVWIYHT+OR194AXd6+2JVfj5mJCZagspnNu7YqYNacPoMQiIicb+3Lzzfeld/8SPzM2/E/HlSzj3164n3qm3fvtLPD/r0kX4re4X88B8+XPJS4gjic+38hF9Dw8KRX16Ou+v5yv1V2Vl621kX63ymeVM84OGFyGVLrxZUR/VL5td9zwJUAzGv90etNFA7dJDfClSCNiQ0TDr7eo8eAurfmrwgktvum69toNqWVCYtkLd3L27zrIs76nnLvKmDaiJeX5KZLUbJ3XVqY35mut555qfa+vOLL4lqX1NQgOkJCTIlWIFqlNTNpyrQLzpGQH3+41YOoLLdU1eukHIeaNRQB5Ua6KP+/XUeMD+l+oXAAKm/4fvv2yS1neT9NiIUOWUHcZevj4C6JDXFwaA8dOmSDuqkBfOvD6isuCagvhPkDOo3E3+yBLX9t984gGokdqrgwAHc7lFXJLUqUJdl2EHlEsgOaiX2HDuGP7V4UZi6brMGqlFSVZlOoJ4+JaDSeKHlq6LzFVjxy5dp9oIRVF9NIxWeOCkaIrO4GJ1GfC+qn30eGxcrqtm3jTanEtTcQyU6qEtTXIM6cdECjQcGf4IVVQmqUr/U8w6kdIsJ1LeDOzioX4L29SQ7qIwr+tsLz5tAdSa3oKq6bfWbJdURVGDv8eMOoE5bt04H1Wj9ugL1fh8fAVVJqmK4GdQv+vWVOm5v0ABPvvwS/vLSy7i3Xj3c7uUp6YUvPkfpmTPCH2UofRsejtyyMgdQyTcjqP9o0cwB1KqoSlA58mq3bCmji9dUUgYLKybgnh8rUIOcQP3m54kuQVVSzbKMZYv63b9f1O9tvt4YY3vtuTGPagPrW5iRWW1QRf36eOPhF5pgH9+qYiuT/cg6VI57a9eV5ZKAGhONe3190Kh1a5FUZSgx78wNG3GHt139ElQadf/l7YXbfXwl3ertjd97eeE2Dy+sLdolz7KMBhagcs7n9GCsg/PvMy+9iPu9vDFp8cIagmoY+UZQ2flaTZvio4GD0HrAQDHP+cn0xYCBGDRunHTWs3Vrl6C6k1TWU3iwBO1sZbYe0B9tBw7CjBUrsOvkKTGU/tvbGx6ftEargfY8bfoPxKf9+8v6d3leLtbtLBQguGCvLqh/qFcPb4X0kvKkbwMH4qXOnWUZRWAVqFwmPdKkCVrqbRyIjwcMQMP27QU045zKcu9v3Ahe730gK4G/NGsu0szlW71PPsE+225RgzafOYBKQG/18kXT4GC9n/x8v39/3Fe/vqyNay6pLkDlSPydl5dILIFhQ9T3Wj6++Fv9BjLxe7dp46R+6T4zgsq5xgwq8yZlZYmHh+VypFMyug/7HnvOa0sajnxZ5/mwbh+5z3ZwrnvExwdjZs3Apr373ILKJYMZVPaLEiJlsm+2+lmnAnVAtAYqr7F+1i31+/rqZdRq3MhhTn2nTx/5TXW98/gJ9Jk4UZ6nev0+Ily0Xr1PHUG9y6cefuflI5+Kv6yPVrE8awPV1XRlpCrVLxt+b8PnxBvyhp8fXmvXDq+2byefr3/RFp0HDJBGerVSkqqBarQSnSTVYCixnq27i/Fm2y/wSkAAHmveTCzu/uPGY8+Zs9KhW7098f/eeAOvBQTiNb/2WhvattXa0PZzLElPRULhLrfq1wrU27x98Pxnn+J1fz+83r49XvUPEGm6w6Mu7qn9rB1UL088/NxzaOHXXvJK/f4BqPPue/iDl6eDpKolDaWRPGA7OG204Bkgby80eP8925KmnfDLqH4pzV4ftsSrAX7CY9bRtH07eY4eJgWqsgFckeU7H4ygsrL/fPC+Pp8YE/Ow0fY5tZ6lofTVxB9xn289l6Cy88zHOt7rozHGCCqlZ2iMZjWyLnMbyLTFWdaGEp38RvW7Nn+zbv0+1OR5FBw5opfFchKLi8WjRZ+xcU5t8NFHYrmr+sUztWq1w5yqljQf9tbWqYrYty5jx0if67zxmpTTgGDZQM0pLdXmVB9vcWUa6+CfF/69RXNZg9cAVGcygsqKa3/4gVSkgDImVsB7mvVrB9WdpD71fBMH65dlMC/Ladm3vw5q8dmz4kclqCNiY/VBZG4Dryvr967az1pKqnlOFeu3SRNsLy93aOumoiJH6zcmWrN+P24lg04Zh8wbv2KlE6hsuw6qjfvM233CeOmzx1vOoBqtX+4cGes4jCt4pllzsX5/XljTOdVAZlCf/eB9/QX95sR2E0QzqOq+GVTxKDV6Ttx5gcO/1/MqK7qZf6Dk7TVipEiqAvX76Ghdqo11M7GO6i5pdOeDj/OShmUn7yzUHfoOoNqWNKpe5p2yYrm+pCkzgSpznwHUbuPHiRr3etMaVOVRslrS/L9m2jq1xqAaF7IslMz+sIumfmu3/NDBl2lMjksa96C+1rWbGFX0OrFDHq1aYe/Zc5KfZczauEFcbuzchKnTsKfijK5+x9h8vwRW1c0OMvH5RZlZLiV134kTePJFZ1Afft618+H+2v+pElTjOtUMqq5+r9hBpaR6v/WmJajunA9XDaqR2HA2iqBK55s1Rc8JE8SHa0zcNpoYq811dkNJW9IoiWI5CtRXu3aRvAs3bdS35Xzefx+dvx+GgG++xUM+2rbTQ/Xqy+b6jsOHtV0ab080be+Hfj/+pNfdb+w49B87Dr2HD8emHTuxett2XVI5L7HzKoLDpaRS/boA9YE6z6Kg4rQTqEaGT1lmAaqvaU61/dlBd/q/vbzg9eYbAqqVoVQVqFdv/V7RCjtrkyh2nutESgu/GxM7+68mL4j01fmwpZjitA7NkjpowngxlF7u2FGkjWV/OWSI5oA3lMeR/Hj9+liali7P5e/bhzvqautUWqrMwzmMn2QArWQuq8bOm4ukvXtkU/y+unUwPyXFQVL3HDuOR55vLO2jQ3/q2rWi7h5oUB/bS0ocQF2/c6csi7grknfyBHpHReIBX1/Ue/cdJzcht9HYDgLCOZVbb9w6e7dHd4OhpEVzdB41SvhV59VXBFQuATnQB0+aJIaSWjIt3rTJQRscvnQJf234HB708sGPC+bpg9UdWYLKR/hwQJ8++GvTF/BEs6Z4omkzLTVrisclNcOfmzbD659/JtLH5cjfmzVDu549BRBjw8ZERclk/1mf3rrKJvB0173VuZOU+admzdB28GBs2LZVf37ngRIxqoz1/7F5M6mf359s2hR/a9oU0WtWIW3/Pjzz/POSVmVmSh227qD05Cn4vPuetG8T/+xvwwY81awpar/2uoS2KBbxmfRdu/B048b4R6PG2HHyJEZMnSaS8k67dvqrX5mfn3NXr8FTL7yAf732qixTun37rfSTERG6mrxyWcr9euIkPPNCE7zSurXw653OnSXqY2xMDLaWleHpFi9JX9ZmZDjUwWiShm+/g380aYK4ZUv1frmjW+jwZjITCz11/rzE7DAMg/E6/GQ6ZPvOeyfOau8mPHb+Ag6fOSvPqEapcs5cuiT3Tlyw3+MnO84RXXb2nJSl5kmV5+IVyHOqLlW/+s3E+6crL0s5R85USDpvU7uKyIgjtjpY/tnLl+U5XmMdiqROYznkweVK+X7SEK+k8qpyWC7rOH1B4wH7aaxfeHnpopRz4myF5OVLn5mXvGGb+J3J2HZ+Mu/xinM4UnFW6jOW64pu4e6pFaiKWIi5gdUp2EyuVIa5vJr+ri65es5Vu6pL1T0Bb0WqTVfbP1dtd1K/rjKaqbr5bjrSuaacLq4H9LWRY9msUtkZVqkmYFZFt1QHnOrk+bXI2LZqtdMS1BsBrL1cgrZl9x5syMvHhs2bnVNeHjK3btOMIHMxV0EGSb1RnbOTWmIYkxU5gGPIaA2a+3a7q8eabOXV/EGXRLC4KpCIxLp1JWBNJTok7vP0wFP16uOIzR65VrIElX1h4erlzCrxmoqeN+Yz5jE/Y+aN+m1+zliHOb8xr/ULo53VnLE8o3pTv6tbr1X7jWWar6vyjK9cpMHF5c4jDZ7Dw40bycrh8RbNJT3UuDEea/gcfF57HUcvXHBqq1XbFFkPcos5lcRCDpw6jb2nz2DvaX6eFmeA2nlQh7X4nTv5Wh5+2vPTG8Rnjp6xW42qEfx9uvKK1ME86ll+V/5d1bHTlyoN+VRbTukuQzNjeY33mN9cHuulNSvlnbK3V50iUOUxHy3RklOnHKxeJpZ36HSFLJPO2oBjYh1cprGs0nPnHKx4pkMnT6Po8BGUXa7E5qPHsGHvXglB5ZqVzpH9Rw7LVqWqn8+fuHIFB8+cweELF5z66o4s3YQs8K8NGuLJho3xx/oN8GS9+vhzvQZo/nErxCxYIB1jxeWnT6H2Sy/hyYYN9Xxa8sUT9erLXmuHkBCnBvF3Uk6u3P/Lcw0l75O+z+FPvvXxdmAwZq1Zoy9vEnJyHPPV88Wf6/vg406dsTpLi7xTksPv6/Pz8XnPXvhL/efwp/oN8EnXbhK1z3tM9AI99dxz+EuDxniinpbnz/XqoW1Ib2Tu2iV5WHfHwV/hmYaN8NWoUQ5g7ywrw7NNmuDpevWQun27np+OiBc//RR/ql8P/2zaFP3GjMWucgJlbx/zTVmxEi0++xT/aNoMXm++hZGTo2U3RtXBTw74n2ZMR6MPPpDy6rz8MkZEROhCVRW4lpvkBI3bT/Ry3FPXQ9xvPG5Qy9Nb5oXOI0ZKHkbpPeirxdPKEYM6dWyB0HUkGPpRTy+0Dgp2aggZsSIzCw+IW6+uVkdt1uGpbX57emFYZLh0lkHicvTClo8eIwaNc0PgAW8vzFizWvcHz09KElcjXXVss0Ty+/jisYaNsGHLFmEK/afiyaqjHd1gvySvjy/+0qQpkrdvl3o/7BkiXpwuX2sRj2rQFJSU4KE6tfFg7TpYt1XL++OMmVo0vo+31kYemfDxxd+bv4itJSXyPKV44IQf5J45X8NWrXDw9GkpX3aqOnfW7jFwQPHfywcte/YU6XWljhW5BJXuOcbWRK5ei/W7iiR1GD5SfJ30267LzhYvSq2Gz8lGcdSaddhQWISNu3ZhQ2GhJO547CwpsQR1eU6eDBJ6pVbtKMT6wt1YvW0n3u/bT9uU9vRCbvkh+b8Xuv8YFsJ8Cbt2YllBARq2aytuRXqcuClw4PwFeL72hlx7rl1bLMrOkXzPfvihDJR/N28u7syI1auEWdzgTijaLf2auSkZ/3nvfclHdyD79WH/AeLW6/addtZFgbr5UCke8/WWwZtWWioRFxzELJPhJ4m7ihC+YgWeeeNNicxoF9JbgFqRmyuDk7xrP2yY5PthwQLxPxOwwePHSz7G9tJw4rN9wyOQVFSM7+LjRXB4bUxsjLSjeqAaSEBlFJ+HB7L27dclgaOSu/rsrF+fvuLgrtWwoVSYX1Kqq0xjUqrHSMwnoHp44Z8vvqK/ZYyJ3+u3bClSMm7hImw8sF/8sDx0Zdyo57bcs6+/LlH5kWtWy+b2g3U95ODSrrNaxB7T1mPH8M+XX5Yy5mVnIXbTJmFa00/a6MF0zJe6Z4+ExpDxGeVH8OnQoS5BfdTHS7bn0g6VoVdoKB7w9sGbgUEO5c1av1401cP/+qe0m05+lvdp7xA9H0H8ceFCcdYrH/rrXbqIpukw5Fs90I75hsTHyekF37fe0qXVFbkFlSltxw5d3Nk5Hmlg4z7r0VNGNDeIaZpnFBZaVmRQADqROcuycwXUfzd/Eccq7Vajpn66CqPGL1mCpP0HNFBfbKH/EQHbR8a07N5DVPCo+fORsHeflEeHuZqjVHnvduwg5Y1bthTT0tNF8pu2/MhpL7fxR9pg+mHlCviPGWcJKo+GUFIVqG+FhIjDf1z8FD0fE12ZU5cuxeyVKwXUlzt1FrAmzprtUB41GwcS/c00ml7t0V3y/Tx7ji6R/Ny0u1imHTr3D9kMJ1fkDOoVu/plMoP6tW0riobFETegWoEpZNsFUpJKUI2R72Q0d4cIwoSlSwVUgsAjkUpSCUDe4SMS5sF7M1PTkVC8R8rTjjVo51RVeTzKyPJ+WLESU9PSnEBV+Zq2aqXthqxaifajxkg/GQDnDtR3+AcOPj4YHWOPS2ZSg0WV/VpnDdSxcfG6ocly127ZIqByI4KgMjiP+cZPmeoA6pqCrTK46dgvv3jx6kGl+q0pqKpTKhnXtap8M6jHrmggKIn5oHMnYa4mqftE7TzeqLGooJFT4jE8Lha133tP5qe6XN/RoMovkPJojR83gxrop0mgA6itnEB94eOPNVBXr4Kfbaus+3dDdVBZphWoBGH0ZMNZHxORn69TUn18MTo2Ti/PFajcvpsQ7wwq8/2jSdOrANVgKBlBJTiuQL3D00OsQlauwFFM1QG2LZn4yXwK1P+89LLTCbHn27QR5k5YoM2ptABpid9mC+GUME5fX9l+S9hcIAOBkQ8cyZagBgTooE5JTa0WqP6jR1uCuuVQGZ7gXnINQOX+sQJ14qy5wl/m5WeKLbTVLKkElfUqUBMKtqFWHTuodMK4oipB5VrMnaQy5pVHCn6YN1+Cpng4lmlFejpWp6Ujd4f9eUUKVJrqf3mhCWanJmNZeoa8IuCzAQOE6Q95eKLg2HGxfhWot3pq8be0tgkqwz5TCncJqIwmdAeqWf02+6i1W1CVpHYb5iypf/T1kRgmI6ijorTT7Fagkp9vdO4im/RB332PpelZWJ6WgWUZmRg5c7Ysh7hu1UH1cZbUdZu3olYdz+srqa5AZZglA5olcsHLnhgRwHOm7/r76UxRxEbSUCJYrENFMkg0Ay1QTw+ZoyT0MzdbfnNTe0XBFgk3iVq6VJYkXApwU5qhJEs3b6kRqFVJqhFUSppRUq3Vr4ulhi1G6c0vO0v0BiM3pK+2k+m8RqHghrkGak9LUDX16wiqqy1Tl6DeaTuSbwUqrT0zqH9s0QJ/f/lV/P2VVyQ99cqr+Ocrr6Gz7biiGVRKKkHlcugvtvxPv/oqmrVtLxERbAPT0pxsWbbQACLILIvXt584hX+/9obci0lMQOLuvVWCOmH5Cg1UDy9LUJt89JEBVM1QovWrDBu22zinppYeshtKVYD6VqcucraG/OLpcPaX6ZHmLYQHdlDtkmpUv9agWpMzqDUwlNgIzqkcaYnbt+N45RV5p4FK9LNyt149r0iBSuY+06IF9l64IMYSn2EdvM9n+J2gUrLUkkY59GXNTIPK2wsTFi/B+r37ZZ1KlxpBVfkUqDxgpEuqC1AdJdUOqhqUZlDTysrxbl9HUM19JSlDieqXQemM5SWvjly5gsV5ebJUoVXL/r3aras+p7qSVMYt1Uz9VrGk+TYu1slQovWbXVzstiIjKVBl/dn8RX1daSSqFiOo/2nRwnnpExgkoP64dBmS9uwTUCmpXMQzHxPn23f4Z7YEa5m1pKp8zT/5RBskK5bji++/l34y/thBUsvL8KgN1JTSErzXr5/k41JFga/KZH5VNpc0tGq5VDEOEgqDMpQI6mvdu2nW79RpDqCu275DQGW+Gs6p2vabUr9mUHl9UHSMjKQ2thheepTM61TrLSH71p4R1H+1eFFGrFUjma9KUG1gcZ1KUJWaVqDy+yvt2mr5li7DtNQ0qdfsfGBfar/+qtybmpKKXhHhAlarHt318tie/MNlIlkMIc0/cUKOiTAfowKN5W0uLUG9t9/Gix99pHmKumlWrRF8fpqXNC926iT5fpg+wyHfsvzN4g/+W8OGKL9YbeeDYroGKgGlpZldUiKN5bXC48fkDSf0QQ6ZqL2RhKBS/TJ2lfloVKj5kI1RINjrMEnqi9o7EKwayXxLsrN09UtQqVYVqJRA5XnKLj8qTvbH6tXDnORNIh1MdOCzHkpWztGjmJyYJOU1+aSN7swgaN9GR8n1Rz09hLlL8vPl92MN6mNZbo6UxXwDCLaXJ/7+fGMB66cli0W10wdNf7fKx5NulPr/NG1mk0BtrnQHKvO1G6K5J1/x88eBCxelfaWXLuLlYM0h0/JLe7C8K3JWvwbrlwZQk8BAvNurl6SnXn1FrNMnGz0vL7eibn+wUSPJx3OVzPNeTy3xO3cVaOqrCV8RwVqWa5dU5XwwklrPUlIpGQpUo6QSVDJg2IyZstZt3aWr/OYge6t7d7zRtasMTF7z69tP8kxatlSc/g8/31jOprKdr3z5pTxDp3zIiJFSdtn58/ImFe6o3PdcA8nXvEOwLKf4PI8kMt/Bc+fg8/Y7uNdTi/hnvqb+/tq7ILx98NO0aVoIbecuTqDKXLl1i/SPg4SgZh44IAOQ5f37/felPB574Qrhnrp1kJSXq2tOV2QJKivlvEOTmw2hOmCihNZ+8209WPrgyZNyjlPPZ0vc7eAnXxXzUutPnEAlMAzYftzTE096eOKYzZhSpNS3SGpaOh7z8sSfvbx1R7Ya5S+1biVvBxsSHSMa4uDpCrweHCxAqLYQgI9DQlB65qwM1h9nzxYJutfLw96ver7inQoaMlQkTanuPSdOoOnnn2tvfLPl5fdOIzXgmYft4Cvz6rVuI0cRCbqcYPP0QPcxY6VdzNv087Z4tF4DjAgL0+dKPr8qO0e0wyP/eRYl589L3mmrVuNvzVpofLTVy92s0EULnXhpRZagsrLhoaHyOpjvJIVKCp09UxzVbBQZyxhfBmrb84XLd5W+DwvD3JUr7VJoaw2f3VVSitGhofg5Ng5nXYRZusvHMmcuXoKR4eHYtLlAB4JMWbJxo7RlWHgEFq1fL2Cq+1k7dghjVZ+YhoWGYnlKsi5BrEMxnRZ5zKJFGBauPbM2K0svTw0w/qbKbty2rWiyhp9+hqQt9qB05uXm/PDwcKQaJI2fDCYfGRqKH6OjZXOceclfniqYEB8vddJbVXhIe12eO7WryBJU1SEWwgpU4jXVYat8/DQm9YzeENuDqkPGZAWqOZ8xj7rH8q3eIqrabHzO+Ixqr1U+PbOhj+Z8KvF3fnGxvO+Ba2ZqOGoyo0Tx0/y8uq7aY+yjuZ3m56oiS1BJqmBjB6wKNeZTDTM30P6cY4CY831ncspj+OF0z5TF1T0VgG3dRmdyVZ56a+mE2BiZarhPy3Wt8kAZyep5I5nvmet09ZwVuQTVHVkvWdwT/6TPCKr9eg3LqqKHNS7vGog1EdTpS5fi8759MGXdWn1N6wCQRZusrhmpqvvuyAlUFnYtBVb72SrAsaJql10FSTlXUb8DGZ69UKlZ6mY1WeP2GrKbnzX/dkdOoJrp5MmTuHCBzQWOHz+Os2epXOx0+fJlXLzobiPImSorK1F56bLeiQMHDkg5VrR//36X5R88eBCZmZnYuXOn+ZbQaYZrlvKtCY5kBpX9Yz3mPHy2oqLCgaH69yvAxfMXcLbijNvBURUYDnfdZ602OYNq6Cxp+vTpyMrKku8zZ85Ebm6u/SZPae/bh7Iy7pNUj9hJ5jcCMYnemDNnLBkwYcIEHD3KFZwjnThxAh06dMDIkSOljVZUWFiImJgY7YepX0Zie0aPHm2+LOXm5+ebL+vE++PHjnNRrquTA66uXz+qElQyJTU1Vb7Pnj0bCQkJWLhwIUJDQ7Fp0yaRhrlz5+ojPSMjQ9LUqVOxfft2FBcX46effsLGjRuFCcuXL8eePXtQVFSEnJwcKad37944cuQIJk+ejDlz5og2WL9+vdzr1q2b1MHn4uPj5TuJ0v3VV1/p7WR5U6ZMkbYyD58l4PPmzZP6pk2ZiuzMLOzduxdjx45FcnIyZs2ahcWLF0vbf/zxR70s5vn555/RsWNHaf/8+fPlt3EgUrpHjRqFrwYNxpnTFaLFmIeJdYaF/YyiokLpV1xcnFxjudHR0Rg+fJi0n3WPHz8eJSUlyM7OlsFNXp46dQpr165FRESEaCPyic9t3rxZr98dOYNqIjaIIJEWLVqEadOmoVevXti1a5dIERv29ddfY8aMGcjLyxPmDBgwAJGRkRgyZAiioqLke2ZmOvr27S1Sn5SUJAD98MMPAgaZTMZOnDhRnqFGGDFihNTBPBwgrIMgTRg3XgYdpbdNmzYyYDi4WPbkyZEIDg6WfGwLByHLHDp0qAyY7t27I2ZyNH6c8IOoVjKtb9++wnC2UxH7RQBZN9vC8ij1BEBpjbS0NHz33XeSZ8WKFTKA2c/ExEQZbLt375Z7u/fuQVT0ZLRu3Ub6znK7du2KmTOnY8GCefrAZuJUwnZs2LABq1atwrBhwzBmzBgBOzw8HDt27NDb6I6qBJWVsKEkdp5gcISTyDR2hFLF0RwSEiKdZ6c48thgXt+yZQvOnDmN9PRUfSBwsHD0kVgmyyZ4HBwsk9dIzEfVyLxU/Xk5uQIqR3e/fv1EKimJHTsGIzc3G+np6QIiqby8XJ4dNGiQPEumzp87D9u2bMWCBQuwdOlSYVhYWBhiY2P1PitVTO1AZq9evVqmhnHjxom0kSilBJmajAOOg2jZsmUiwWwziQNp4eJFSElLxYgRo5CZmS39JM2ePRMFBZpq5+Bi/yihHPDUOOSb6gv7RwnWp5IqqEpQOd+QKf379xcpJEBkPomMITMI6tatW0W6SJS8gQMHCjOWLFkiaoOd7tmzp4z6devWYeXqVQiPjEDnzp2lQ2Q4paZ9+/byHCWwS5cuUj5VEH8TRDWns10KPBLbxHZyUHBAUZtwkBEEDpDBgwfLYCJQvM82sG6qWEo6tUtBQYGURY3E+Zr1cZDyHqcBXqeRR5XKPipi+UxsN+d6gkli2wkiecH6OdibN28u3wnoyJHD4e/vL0ByaqIWoNolgOwL+0eeUrDYBoJdHaoS1BtFbuyWm46sDDhFvOfuvmuqvsFU0/JdgnqzM111tKYd/t9A1QLVzDjzb0WurhupOnmM5C6/u3s1IXfluLrn6roV1SSvkdw95+6eS1D/j6pJxtFvQY68r3QLxvWi6wrq9Wjw9ShD0fUsyyVVAaojVW8OvVb6/6YHbbI0fpReAAAAAElFTkSuQmCC" alt="Logo Engenharia de Produção UFAM"></div>
+    <div class="ttl">
+      <div class="eyebrow">Engenharia de Produção · UFAM</div>
+      <h1>Sistema de Elaboração de Planejamento Estratégico</h1>
+      <div class="by">Elaborado por <b>Dr. Jonas Gomes da Silva</b> · jgsilva@ufam.edu.br · Versão 1 (22/10/26)</div>
+    </div>
+    <div class="logo"><img src="data:image/png;base64,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" alt="Logo UFAM"></div>
+  </div>
+</header>
+<nav class="nav" aria-label="Ambientes">
+  <div class="nav-in">
+    <button type="button" data-view="publico" id="nv-publico">Ambiente público</button>
+    <button type="button" data-view="aluno" id="nv-aluno">Ambiente dos alunos</button>
+    <button type="button" data-view="prof" id="nv-prof">Ambiente do professor</button>
+    <span class="sp"></span>
+    <span class="who" id="who"></span>
+    <span class="mode" id="mode"></span>
+  </div>
+</nav>
+<main id="app"><div class="wrap"><div class="empty"><b>Carregando o sistema…</b>Conectando ao banco de dados.</div></div></main>
+<div class="foot">Curso de Engenharia de Produção · Faculdade de Tecnologia · Universidade Federal do Amazonas · Manaus/AM</div>
+<div id="printArea"></div>
+
+<script>
+/* =====================================================================
+   CONFIGURAÇÃO DO FIREBASE
+   Para guardar os dados na nuvem (compartilhados entre professor, alunos e
+   público), cole aqui o objeto de configuração do seu projeto Firebase
+   (Console do Firebase → Configurações do projeto → Seus apps → Web).
+   Sem configuração, o sistema funciona em MODO LOCAL (dados apenas neste navegador).
+   ===================================================================== */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyDZBKuTSYMACWLpHghSngOeq--c8FLTLGM",
+  authDomain: "sistema-para-elaborar-pe.firebaseapp.com",
+  projectId: "sistema-para-elaborar-pe",
+  storageBucket: "sistema-para-elaborar-pe.firebasestorage.app",
+  messagingSenderId: "92312207152",
+  appId: "1:92312207152:web:42939296005945d23d12f5"
+};
+/* Exemplo:
+const FIREBASE_CONFIG = {
+  apiKey: "AIza...", authDomain: "sistema-pe-ufam.firebaseapp.com",
+  projectId: "sistema-pe-ufam", storageBucket: "sistema-pe-ufam.appspot.com",
+  messagingSenderId: "000000000", appId: "1:000:web:abc"
+};
+*/
+
+/* ===================== Utilidades ===================== */
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const nl=s=>esc(s).replace(/\n/g,'<br>');
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const clone=o=>JSON.parse(JSON.stringify(o??null));
+const wc=s=>String(s||'').trim().split(/\s+/).filter(Boolean).length;
+const fmtD=d=>{if(!d)return '—';const x=new Date(typeof d==='string'&&d.length===10?d+'T12:00:00':d);return isNaN(x)?String(d):x.toLocaleDateString('pt-BR')};
+const fmtDT=t=>t?new Date(t).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'}):'—';
+const n2=v=>v==null||v===''||isNaN(v)?'—':Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+const isoToBR=v=>{const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(v||'');return m?`${m[3]}/${m[2]}/${m[1]}`:(v||'')};
+const brToISO=v=>{const m=/^(\d{2})\/(\d{2})\/(\d{4})$/.exec(v||'');if(!m)return null;const d=new Date(+m[3],m[2]-1,+m[1]);return d.getDate()==+m[1]&&d.getMonth()==m[2]-1?`${m[3]}-${m[2]}-${m[1]}`:null};
+const maskDate=v=>{const d=String(v).replace(/\D/g,'').slice(0,8);return d.length>4?`${d.slice(0,2)}/${d.slice(2,4)}/${d.slice(4)}`:d.length>2?`${d.slice(0,2)}/${d.slice(2)}`:d};
+const numBR=v=>v===''||v==null||isNaN(v)?'':String(v).replace('.',',');
+const parseBR=v=>{const t=String(v).trim().replace(/\s/g,'');if(t==='')return '';const n=Number(t.replace(/\./g,'').replace(',','.'));return isNaN(n)?null:n};
+function getPath(o,p){return p.split('.').reduce((a,k)=>a==null?undefined:a[k],o)}
+function setPath(o,p,v){const ks=p.split('.');let a=o;for(let i=0;i<ks.length-1;i++){const k=ks[i];if(a[k]==null||typeof a[k]!=='object')a[k]=/^\d+$/.test(ks[i+1])?[]:{};a=a[k]}a[ks[ks.length-1]]=v}
+function filled(v){if(v==null)return false;if(typeof v==='string')return v.trim()!=='';if(typeof v==='number'||typeof v==='boolean')return true;if(Array.isArray(v))return v.some(filled);if(typeof v==='object')return Object.values(v).some(filled);return false}
+async function sha(s){try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('sispe-ufam:'+s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){let h=5381;for(const c of 'sispe-ufam:'+s)h=((h<<5)+h+c.charCodeAt(0))|0;return 'x'+(h>>>0).toString(16)}}
+function ss(k,v){try{if(v===undefined)return JSON.parse(sessionStorage.getItem(k)||'null');if(v===null)sessionStorage.removeItem(k);else sessionStorage.setItem(k,JSON.stringify(v))}catch(e){return null}}
+function ls(k,v){try{if(v===undefined)return JSON.parse(localStorage.getItem(k)||'null');localStorage.setItem(k,JSON.stringify(v))}catch(e){return null}}
+let toastT;function toast(m){let t=$('#toast');if(!t){t=document.createElement('div');t.id='toast';t.className='toast';t.setAttribute('role','status');document.body.appendChild(t)}t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,3200)}
+function modal(html,cls=''){closeModal();const o=document.createElement('div');o.className='ov';o.id='ov';o.innerHTML=`<div class="mdl ${cls}" role="dialog" aria-modal="true">${html}</div>`;o.addEventListener('click',e=>{if(e.target===o||e.target.closest('[data-close]'))closeModal()});document.body.appendChild(o);return o.firstElementChild}
+function closeModal(){$('#ov')?.remove()}
+function confirmBox(msg,ok='Confirmar'){return new Promise(res=>{const m=modal(`<h3>Confirmação</h3><p>${msg}</p><div class="row" style="justify-content:flex-end"><button class="btn ghost" data-close>Cancelar</button><button class="btn" id="cfOk">${esc(ok)}</button></div>`,'sm');m.querySelector('#cfOk').onclick=()=>{closeModal();res(true)};m.parentElement.addEventListener('click',e=>{if(e.target.closest('[data-close]')||e.target===m.parentElement)res(false)})})}
+function loadScript(src){return new Promise((ok,no)=>{const s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=no;document.head.appendChild(s)})}
+function inFrame(){try{return window.self!==window.top}catch(e){return true}}
+async function compressImage(file,max=1200){const url=await new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(r.result);r.onerror=no;r.readAsDataURL(file)});const img=await new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=url});const k=Math.min(1,max/Math.max(img.width,img.height));const c=document.createElement('canvas');c.width=Math.round(img.width*k);c.height=Math.round(img.height*k);const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(img,0,0,c.width,c.height);let q=.82,d=c.toDataURL('image/jpeg',q);while(d.length>700000&&q>.4){q-=.12;d=c.toDataURL('image/jpeg',q)}return d}
+
+/* ===================== Banco de dados (Firebase ou local) ===================== */
+const DBKEY='sispe_ufam_db_v1';
+const Store={mode:'local',fs:null,mem:{},
+  async init(){
+    if(FIREBASE_CONFIG&&FIREBASE_CONFIG.apiKey){
+      try{
+        await loadScript('https://cdn.jsdelivr.net/npm/firebase@10.12.2/firebase-app-compat.js');
+        await loadScript('https://cdn.jsdelivr.net/npm/firebase@10.12.2/firebase-firestore-compat.js');
+        firebase.initializeApp(FIREBASE_CONFIG);this.fs=firebase.firestore();this.mode='firebase';return;
+      }catch(e){console.warn(e);toast('Não foi possível conectar ao Firebase. O sistema está em modo local.')}
+    }
+    try{this.mem=JSON.parse(localStorage.getItem(DBKEY)||'null')||{}}catch(e){this.mem={}}
+  },
+  persist(){try{localStorage.setItem(DBKEY,JSON.stringify(this.mem))}catch(e){toast('O armazenamento deste navegador está cheio. Reduza imagens ou conecte o Firebase.')}},
+  c(col){return this.mem[col]||(this.mem[col]={})},
+  clean(o){const d=clone(o)||{};delete d.id;return d},
+  async list(col){if(this.fs){const q=await this.fs.collection(col).get();return q.docs.map(d=>({id:d.id,...d.data()}))}return Object.entries(this.c(col)).map(([id,d])=>({id,...clone(d)}))},
+  async get(col,id){if(this.fs){const d=await this.fs.collection(col).doc(id).get();return d.exists?{id:d.id,...d.data()}:null}const d=this.c(col)[id];return d?{id,...clone(d)}:null},
+  async set(col,id,data){const d=this.clean(data);if(this.fs)return this.fs.collection(col).doc(id).set(d);this.c(col)[id]=d;this.persist()},
+  async patch(col,id,part){const d=this.clean(part);if(this.fs){const ref=this.fs.collection(col).doc(id);try{await ref.update(d)}catch(e){await ref.set(d,{merge:true})}return}this.c(col)[id]=Object.assign(this.c(col)[id]||{},d);this.persist()},
+  async del(col,id){if(this.fs)return this.fs.collection(col).doc(id).delete();delete this.c(col)[id];this.persist()}
+};
+const imgCache={};
+async function getImg(id){if(!id)return null;if(imgCache[id])return imgCache[id];const d=await Store.get('imgs',id);return imgCache[id]=d?.data||null}
+function hydrateImgs(root){$$('img[data-img]',root).forEach(async im=>{const d=await getImg(im.dataset.img);if(d)im.src=d;else im.replaceWith(Object.assign(document.createElement('span'),{className:'muted',textContent:'Imagem indisponível'}))})}
+
+/* ===================== Estrutura do PE (Modelo 2 e Modelo 1) ===================== */
+const SEGMENTOS=['Alimentação','Comércio','Serviços','Indústria','Educação','Saúde','Organização religiosa','ONG / Terceiro setor','Transporte e logística','Tecnologia','Cultura e audiovisual','Outro'];
+const NATUREZAS=['MEI – Microempreendedor Individual','EI – Empresário Individual','SLU – Sociedade Limitada Unipessoal','LTDA – Sociedade Limitada','S/A – Sociedade Anônima','Associação privada','Fundação privada','Organização religiosa','Órgão público','Outra'];
+const STATUS=['Não iniciado','Em andamento','Concluído','Atrasado','Cancelado'];
+const PERSP=[
+ {k:'SF',n:'Sustentabilidade Financeira',c:'MF',ob:'OB4',q:'Para alcançar nossa missão e visão, como podemos melhorar nosso relacionamento com a sociedade e garantir a sustentabilidade financeira?'},
+ {k:'C',n:'Clientes',c:'MC',ob:'OB3',q:'Para alcançar nossa missão e visão, como podemos satisfazer e encantar nossos clientes internos e externos?'},
+ {k:'PI',n:'Processos Internos',c:'MPI',ob:'OB2',q:'Para alcançar nossa missão e visão, o que faremos para melhorar a infraestrutura e os processos internos?'},
+ {k:'AC',n:'Aprendizagem e Crescimento',c:'MAC',ob:'OB1',q:'O que iremos fazer para promover a aprendizagem e o crescimento dos colaboradores?'}];
+const SECOES=[
+ {id:'capa',g:'1. Informações iniciais',n:'1.1 Capa',d:'Identificação do documento e da organização alvo escolhida pela equipe.',f:[
+  {k:'organizacao',l:'Nome da organização alvo'},
+  {k:'cidade',l:'Cidade',ph:'Manaus',w:1},{k:'codigo',l:'Código',ph:'PE 01',w:1},{k:'revisao',l:'Revisão nº',t:'number',w:1},{k:'dataRevisao',l:'Data da revisão',t:'date',w:1},
+  {k:'representante',l:'Representante da organização',ph:'Nome do(a) representante'},
+  {k:'logo',l:'Logomarca da organização',t:'image'}]},
+ {id:'perfil',n:'1.2 Perfil institucional',d:'Dados cadastrais, natureza jurídica, fontes de recursos e principais fatos históricos.',f:[
+  {k:'email',l:'E-mail institucional',t:'email',w:2},{k:'site',l:'Site institucional',t:'url',w:2},
+  {k:'endereco',l:'Endereço',w:2},{k:'diretor',l:'Diretor(a)',w:2},
+  {k:'natureza',l:'Natureza jurídica',t:'select',opts:NATUREZAS,w:2,help:'Consulte a lista oficial de naturezas jurídicas da Receita Federal.'},
+  {k:'atividade',l:'Principal atividade',t:'textarea',w:4},
+  {k:'recBanco',l:'Recursos: banco (%)',t:'number',w:1},{k:'recConvenio',l:'Recursos: convênio (%)',t:'number',w:1},{k:'recProprios',l:'Recursos: próprios (%)',t:'number',w:1},{k:'recOutros',l:'Recursos: outros (%)',t:'number',w:1},
+  {k:'historico',l:'Principais fatos históricos',t:'list',max:10,item:'fato',sub:[{k:'quando',l:'Quando',w:1,ph:'2020'},{k:'fato',l:'Fato histórico',t:'textarea',w:3,rows:2}]}]},
+ {id:'proposito',g:'2. Quem somos',n:'2.1–2.3 Missão, visão, slogan e valores',d:'O propósito organizacional. A missão diz a razão de existir e o grande diferencial; a visão diz onde a organização quer estar ao final do horizonte do plano.',f:[
+  {k:'missao',l:'2.1 Missão',t:'textarea',max:40,ph:'Qual a razão da existência da organização? Inclua o grande diferencial do empreendimento.'},
+  {k:'visao',l:'2.2 Visão',t:'textarea',max:30,ph:'Onde a organização deseja estar ao final do horizonte do plano?',vis:true},
+  {k:'slogan',l:'2.3 Slogan'},
+  {k:'valores',l:'2.3 Valores',t:'list',max:6,item:'valor',sub:[{k:'palavra',l:'Palavra-chave',w:1},{k:'descricao',l:'Descrição',t:'textarea',w:3,rows:2}]}]},
+ {id:'areas',n:'2.4 Áreas estratégicas de atuação',d:'Áreas de atuação, público-alvo e principais produtos ou serviços de cada área.',f:[
+  {k:'areas',l:'Áreas de atuação',t:'list',max:4,item:'área',sub:[{k:'area',l:'Área de atuação',w:2},{k:'publico',l:'Público-alvo',w:2},{k:'produtos',l:'Principais produtos ou serviços',t:'textarea',w:4,rows:2}]}]},
+ {id:'gestores',n:'2.5 Gestores e organograma',d:'Equipe gestora (cargos usados na Matriz RACI e na Matriz X) e organograma funcional.',f:[
+  {k:'gestores',l:'Gestores',t:'list',max:6,item:'gestor',sub:[{k:'cargo',l:'Cargo',w:2},{k:'nome',l:'Nome do gestor',w:2}]},
+  {k:'organograma',l:'2.6 Organograma funcional',t:'image'}]},
+ {id:'raci',n:'2.6 Matriz RACI',t:'raci',d:'Papéis, responsabilidades e autoridade. R = responsável pela execução · A = autoridade para aprovar · C = consultado para contribuir · I = informado do progresso.'},
+ {id:'macro',g:'3. Análise do ambiente — onde e como estamos?',n:'3.1 Síntese da análise macro (Manaus)',d:'Segmentos e variáveis do macroambiente que favorecem ou ameaçam o empreendimento. Cite as fontes dos dados.',f:[
+  {k:'itens',l:'Segmentos e variáveis',t:'list',max:8,item:'segmento',sub:[{k:'segmento',l:'Segmento e variável',w:1,ph:'Ex.: Clima'},{k:'analise',l:'Análise',t:'textarea',w:3,rows:3},{k:'fonte',l:'Fonte',w:4,ph:'Ex.: IBGE (2022)'}]}]},
+ {id:'local',n:'3.2 Síntese da análise local (5 Forças de Porter)',d:'Análise competitiva do setor e posição atual da organização no mercado.',f:[
+  {k:'rivalidade',l:'Rivalidade entre os concorrentes',t:'textarea',w:2},{k:'fornecedores',l:'Poder de negociação dos fornecedores',t:'textarea',w:2},
+  {k:'compradores',l:'Poder de negociação dos compradores',t:'textarea',w:2},{k:'substitutos',l:'Ameaça de produtos substitutos',t:'textarea',w:2},
+  {k:'entrantes',l:'Ameaça de entrada de novos concorrentes',t:'textarea',w:2},{k:'ranking',l:'Principais concorrentes e ranking atual da organização',t:'textarea',w:2,ph:'Os avaliadores da Mostra costumam pedir o ranking atual da empresa.'}]},
+ {id:'swot',n:'3.3 Pontos fortes e fracos',d:'Ambiente interno: use brainstorming, figura rica e matriz de score.',f:[
+  {k:'fortes',l:'Pontos fortes',t:'list',max:8,item:'ponto forte',w:2,sub:[{k:'item',l:'Ponto forte',w:4}]},
+  {k:'fracos',l:'Pontos fracos',t:'list',max:8,item:'ponto fraco',w:2,sub:[{k:'item',l:'Ponto fraco',w:4}]},
+  {k:'foto',l:'Foto do brainstorming ou figura rica',t:'image'}]},
+ {id:'oport',n:'3.4 Oportunidades e ameaças com recomendações',d:'Para cada oportunidade e ameaça do ambiente externo, recomende como usar os pontos fortes e como melhorar os pontos fracos.',f:[
+  {k:'oportunidades',l:'Principais oportunidades',t:'list',max:6,item:'oportunidade',sub:[{k:'item',l:'Oportunidade',w:4},{k:'sf',l:'Captar usando os pontos fortes',t:'textarea',w:2,rows:2},{k:'sw',l:'Captar melhorando os pontos fracos',t:'textarea',w:2,rows:2}]},
+  {k:'ameacas',l:'Principais ameaças',t:'list',max:6,item:'ameaça',sub:[{k:'item',l:'Ameaça',w:4},{k:'sf',l:'Reduzir impactos usando os pontos fortes',t:'textarea',w:2,rows:2},{k:'sw',l:'Reduzir impactos melhorando os pontos fracos',t:'textarea',w:2,rows:2}]}]},
+ {id:'bsc',g:'4. Planejamento — o que vamos fazer?',n:'4.1 e 4.3 Diretrizes e Balanced Scorecard',persp:true,d:'Para cada perspectiva: objetivo estratégico, metas, indicadores (KPIs), fórmula, metas anuais, plano de ação do 1º ano e responsável. Estes dados geram automaticamente a Matriz X e o Mapa Estratégico.',f:[
+  {k:'objetivo',l:'Objetivo estratégico',t:'textarea',rows:2},
+  {k:'metas',l:'Metas estratégicas',t:'list',max:4,item:'meta',sub:[{k:'meta',l:'Meta estratégica',t:'textarea',w:4,rows:2},{k:'indicador',l:'Principal indicador (KPI)',w:2},{k:'formula',l:'Fórmula do indicador',w:2},{k:'m1',yr:0,w:1},{k:'m2',yr:1,w:1},{k:'m3',yr:2,w:1},{k:'resp',l:'Responsável',w:1},{k:'plano',l:'Plano de ação ou projeto para o 1º ano',t:'textarea',w:4,rows:2}]}]},
+ {id:'matrizx',n:'4.1 Matriz X (gerada)',t:'auto',d:'Gerada automaticamente a partir das diretrizes. Leitura Hoshin Kanri: Norte = objetivos de longo prazo; Oeste = metas; Leste = indicadores; Sul = iniciativas do 1º ano; à direita, os responsáveis.'},
+ {id:'mapa',n:'4.2 Mapa estratégico (gerado)',t:'auto',d:'Gerado automaticamente a partir das diretrizes. As setas indicam a relação de causa e efeito, da base (aprendizagem) ao topo (sustentabilidade financeira).'},
+ {id:'layout',n:'4.4 Layout',d:'Conceito do layout físico da organização (ou da nova unidade).',f:[
+  {k:'gestor',l:'Gestor responsável',w:2},{k:'dimensoes',l:'Dimensões',w:2,ph:'Ex.: 6 m × 5 m'},
+  {k:'descricao',l:'Informações básicas sobre o conceito do layout',t:'textarea'},{k:'imagem',l:'Planta / layout',t:'image'}]},
+ {id:'planos',g:'5. Implantação e melhorias — como vamos chegar lá?',n:'5.1–5.4 Planos de ação do 1º ano',persp:true,tabs:true,d:'Um plano de ação para cada perspectiva do BSC. O farol de cada ação acompanha o status.',f:[
+  {k:'gestor',l:'Gestor responsável',w:2},{k:'nome',l:'Nome do plano',w:2},
+  {k:'objetivo',l:'Objetivo (alvo)',t:'textarea',w:2,rows:2},{k:'meta',l:'Meta (quantificação do alvo)',t:'textarea',w:2,rows:2},
+  {k:'cargos',l:'Cargos da equipe',w:2},{k:'versao',l:'Versão',w:1},{k:'vigencia',l:'Vigência',w:1,ph:'1 ano'},
+  {k:'ind1',l:'Primeiro indicador',w:2},{k:'ind2',l:'Segundo indicador',w:2},
+  {k:'acoes',l:'Ações e/ou atividades',t:'list',max:12,item:'ação',sub:[{k:'acao',l:'Ação / atividade',w:4},{k:'quem',l:'Quem?',w:1},{k:'inicio',l:'Início',w:1,ph:'Jan'},{k:'termino',l:'Término',w:1,ph:'Mar'},{k:'status',l:'Status',t:'select',opts:STATUS,w:1},{k:'onde',l:'Onde?',w:1},{k:'como',l:'Como? (métodos, ferramentas, materiais)',t:'textarea',w:3,rows:2}]}]},
+ {id:'aprov',g:'Aprovação',n:'Responsáveis e versões',d:'Principais responsáveis pela organização e controle de versões do PE.',f:[
+  {k:'resp',l:'Principais responsáveis pela organização',t:'list',max:6,item:'responsável',sub:[{k:'nome',l:'Nome',w:2},{k:'cargo',l:'Cargo',w:2}]},
+  {k:'versoes',l:'Versões do documento',t:'list',max:8,item:'versão',sub:[{k:'versao',l:'Versão',w:1,ph:'V1'},{k:'data',l:'Aprovada em',t:'date',w:1},{k:'mudou',l:'O que mudou',w:2}]}]}
+];
+const BASICO={f:[
+  {k:'plusTitulo',l:'Título do espaço “Plus” da equipe',w:2,ph:'Ex.: Como vai ficar a nova unidade'},
+  {k:'plusImg',l:'Imagem do Plus (layout, foto, matriz de indicadores…)',t:'image',w:2},
+  {k:'plusTexto',l:'Texto do Plus',t:'textarea',max:60,w:4},
+  {k:'atrTexto',l:'2. Atratividade do empreendimento — síntese',t:'textarea',max:120,ph:'Aponte a necessidade do empreendimento (resultado da pesquisa de mercado) e o potencial de crescimento. Seja visual: prefira números e gráficos a textos longos.'},
+  {k:'destaques',l:'Números em destaque',t:'list',max:4,item:'número',sub:[{k:'valor',l:'Número',w:1,ph:'2,06 mi'},{k:'rotulo',l:'O que significa',w:2,ph:'habitantes em Manaus'},{k:'fonte',l:'Fonte',w:1,ph:'IBGE, 2022'}]},
+  {k:'atrImg1',l:'Gráfico ou foto 1',t:'image',w:2},{k:'atrImg2',l:'Gráfico ou foto 2',t:'image',w:2}]};
+const VIEWABLE=SECOES.filter(s=>s.t!=='auto');
+
+/* ===================== Estado ===================== */
+const S={view:'publico',sub:'dashboard',cfg:null,sess:ss('sispe_sess'),ano:2028,pe:null,eq:null,fb:{},sec:'capa',ptab:'SF',atab:'inicio',ptabProf:'painel',dirty:{},saveT:null,msgCanal:'prof',msgThread:null,poll:null,filt:{ed:'',seg:'',q:''}};
+const app=$('#app');
+function setSess(s){S.sess=s;ss('sispe_sess',s);paintNav()}
+function paintNav(){
+  $$('.nav [data-view]').forEach(b=>b.classList.toggle('on',b.dataset.view===S.view));
+  const m=$('#mode');m.className='mode '+(Store.mode==='firebase'?'fb':'local');m.textContent=Store.mode==='firebase'?'Firebase conectado':'Modo local';
+  m.title=Store.mode==='firebase'?'Dados salvos na nuvem (Firestore)':'Dados salvos apenas neste navegador. Configure o Firebase para uso real.';
+  $('#who').textContent=S.sess?(S.sess.role==='prof'?'Professor conectado':`${S.sess.nome} · equipe conectada`):'';
+}
+$$('.nav [data-view]').forEach(b=>b.onclick=()=>go(b.dataset.view));
+function go(view,sub){flushSave();S.view=view;if(sub)S.sub=sub;else if(view==='publico')S.sub='dashboard';try{history.replaceState(null,'','#'+view)}catch(e){}render()}
+function stopPoll(){clearInterval(S.poll);S.poll=null}
+
+/* ===================== Formulários genéricos ===================== */
+function lab(f){return typeof f.yr==='number'?`Meta para ${S.ano+f.yr}`:(f.l||'')}
+function fid(ctx,p){return 'f_'+(ctx.idp||'')+p.replace(/\W/g,'_')}
+function fieldHTML(f,v,path,ctx){
+  const id=fid(ctx,path),span=`style="grid-column:span ${f.w||4}"`,ph=f.ph?` placeholder="${esc(f.ph)}"`:'';
+  const L=`<span class="lbl">${esc(lab(f))}${f.max&&f.t==='textarea'?` <small class="cnt ${wc(v)>f.max?'over':''}" data-cnt="${path}">${wc(v)}/${f.max} palavras</small>`:''}</span>`;
+  const help=f.help?`<span class="help">${esc(f.help)}</span>`:'';
+  switch(f.t||'text'){
+    case 'textarea':return `<label class="fld" ${span}>${L}<textarea id="${id}" data-k="${path}" ${f.max?`data-max="${f.max}"`:''} rows="${f.rows||3}"${ph}>${esc(v)}</textarea>${help}</label>`;
+    case 'select':return `<label class="fld" ${span}>${L}<select id="${id}" data-k="${path}"><option value="">Selecione…</option>${f.opts.map(o=>`<option ${o===v?'selected':''}>${esc(o)}</option>`).join('')}</select>${help}</label>`;
+    case 'check':return `<label class="fld chk" ${span}><input type="checkbox" id="${id}" data-k="${path}" ${v?'checked':''}> ${esc(lab(f))}</label>`;
+    case 'image':return `<div class="fld" ${span}>${L}<div class="imgbox">${v?`<img data-img="${esc(v)}" alt="${esc(lab(f))}">`:'<div class="imgph">Nenhuma imagem enviada.<br>JPG ou PNG; a imagem é otimizada automaticamente.</div>'}</div><div class="row"><label class="btn sm ghost" for="${id}">${v?'Trocar imagem':'Enviar imagem'}</label><input type="file" accept="image/*" id="${id}" data-file="${path}" hidden>${v?`<button type="button" class="btn sm danger" data-clr="${path}">Remover</button>`:''}</div></div>`;
+    case 'list':{const arr=Array.isArray(v)?v:[];
+      return `<div class="fld lst" ${span}>${L}<div class="rows">${arr.map((r,i)=>`<div class="lrow"><div class="lnum">${i+1}</div><div class="fgrid">${f.sub.map(s=>fieldHTML(s,r?.[s.k],`${path}.${i}.${s.k}`,ctx)).join('')}</div><button type="button" class="icon" data-del="${path}.${i}" title="Remover" aria-label="Remover ${esc(f.item||'linha')} ${i+1}">×</button></div>`).join('')||`<div class="help">Nenhum(a) ${esc(f.item||'item')} adicionado(a).</div>`}</div>${arr.length<(f.max||20)?`<button type="button" class="btn sm ghost" data-add="${path}">+ Adicionar ${esc(f.item||'linha')}</button>`:`<span class="help">Limite de ${f.max} atingido.</span>`}</div>`}
+    case 'date':return `<label class="fld" ${span}>${L}<input type="text" inputmode="numeric" maxlength="10" data-date="1" id="${id}" data-k="${path}" value="${esc(isoToBR(v))}" placeholder="dd/mm/aaaa" autocomplete="off">${help}</label>`;
+    case 'number':return `<label class="fld" ${span}>${L}<input type="text" inputmode="decimal" data-num="1" id="${id}" data-k="${path}" value="${esc(numBR(v))}"${ph||' placeholder="0"'}>${help}</label>`;
+    default:return `<label class="fld" ${span}>${L}<input type="${f.t||'text'}" id="${id}" data-k="${path}" value="${esc(v)}"${ph}>${help}</label>`;
+  }
+}
+function mountForm(el,fields,obj,ctx,onChange){
+  const draw=()=>{el.innerHTML=`<div class="fgrid">${fields.map(f=>fieldHTML(f,getPath(obj,f.k),f.k,ctx)).join('')}</div>`;hydrateImgs(el)};
+  draw();
+  el.oninput=e=>{const t=e.target,k=t.dataset.k;if(!k)return;let v=t.type==='checkbox'?t.checked:t.value;
+    if(t.dataset.date){const mv=maskDate(v);if(mv!==v){t.value=mv;v=mv}if(v===''){setPath(obj,k,'');t.classList.remove('bad')}else{const iso=brToISO(v);t.classList.toggle('bad',v.length===10&&!iso);if(!iso)return;setPath(obj,k,iso)}onChange&&onChange();return}
+    if(t.dataset.num){const n=parseBR(v);t.classList.toggle('bad',n===null);if(n===null)return;v=n}
+    setPath(obj,k,v);
+    if(t.dataset.max){const c=el.querySelector(`[data-cnt="${CSS.escape(k)}"]`);if(c){const n=wc(v);c.textContent=`${n}/${t.dataset.max} palavras`;c.classList.toggle('over',n>+t.dataset.max)}}onChange&&onChange()};
+  el.onclick=e=>{const a=e.target.closest('[data-add],[data-del],[data-clr]');if(!a)return;
+    if(a.dataset.add){const p=a.dataset.add;const arr=getPath(obj,p)||[];arr.push({});setPath(obj,p,arr)}
+    else if(a.dataset.del){const ps=a.dataset.del.split('.'),i=+ps.pop(),arr=getPath(obj,ps.join('.'));arr.splice(i,1)}
+    else{const p=a.dataset.clr,old=getPath(obj,p);if(old)Store.del('imgs',old).catch(()=>{});setPath(obj,p,'')}
+    draw();onChange&&onChange()};
+  el.onchange=async e=>{const t=e.target;if(!t.dataset.file||!t.files[0])return;toast('Otimizando e enviando imagem…');
+    try{const data=await compressImage(t.files[0]);const p=t.dataset.file,old=getPath(obj,p);const id=(ctx.imgp||'img')+'__'+p.replace(/\W/g,'_')+'__'+uid();
+      await Store.set('imgs',id,{data,em:Date.now()});imgCache[id]=data;if(old)Store.del('imgs',old).catch(()=>{});setPath(obj,p,id);draw();onChange&&onChange();toast('Imagem salva.')}
+    catch(err){console.error(err);toast('Não foi possível ler esta imagem. Tente um arquivo JPG ou PNG.')}};
+  return {draw};
+}
+
+/* ===================== Progresso ===================== */
+function secProg(sec,pe){const d=pe?.[sec.id];
+  if(sec.t==='raci'){return (d?.linhas||[]).some(r=>Object.keys(r).some(k=>/^c\d$/.test(k)&&r[k]))?1:0}
+  if(sec.persp){let t=0,o=0;PERSP.forEach(p=>sec.f.forEach(f=>{t++;if(filled(d?.[p.k]?.[f.k]))o++}));return o/t}
+  return sec.f.filter(f=>filled(d?.[f.k])).length/sec.f.length}
+function peProg(pe){if(!pe)return 0;return Math.round(100*VIEWABLE.reduce((a,s)=>a+secProg(s,pe),0)/VIEWABLE.length)}
+function progBar(p){return `<div class="row" style="gap:8px;flex-wrap:nowrap"><div class="prog" style="flex:1"><i style="width:${p}%"></i></div><b class="num" style="min-width:42px;text-align:right">${p}%</b></div>`}
+
+/* ===================== Visualizações geradas ===================== */
+function metasOf(pe,k){return (pe?.bsc?.[k]?.metas||[]).filter(filled)}
+function mapaHTML(pe,ano=S.ano){const b=pe?.bsc||{};
+  return `<div class="mapa">${PERSP.map((p,i)=>`<div class="mrow m-${p.k}"><div class="mlab"><b>${p.k}</b><span>${p.n}</span></div><div class="mbody"><div class="mobj">${p.ob}: ${b[p.k]?.objetivo?esc(b[p.k].objetivo):'<span class="muted">objetivo não definido</span>'}</div><div class="mmetas">${metasOf(pe,p.k).map((m,j)=>`<div class="mmeta"><b>${p.c}${j+1}</b> ${esc(m.meta||'')}<div class="myrs"><span>${ano}: ${esc(m.m1||'—')}</span><span>${ano+1}: ${esc(m.m2||'—')}</span><span>${ano+2}: ${esc(m.m3||'—')}</span></div></div>`).join('')||'<span class="muted">Nenhuma meta cadastrada.</span>'}</div></div></div>${i<3?'<div class="marrow" aria-hidden="true">▲ ▲ ▲</div>':''}`).join('')}</div>`}
+function xSVG(){return `<svg viewBox="0 0 200 200" role="img" aria-label="Matriz X"><rect x="2" y="2" width="196" height="196" rx="8" fill="none" stroke="currentColor" stroke-width="3"/><line x1="2" y1="2" x2="198" y2="198" stroke="currentColor" stroke-width="2.5"/><line x1="198" y1="2" x2="2" y2="198" stroke="currentColor" stroke-width="2.5"/><g fill="currentColor" font-family="Dosis,sans-serif" font-weight="700" font-size="13" text-anchor="middle"><text x="100" y="42">OBJETIVOS</text><text x="100" y="58" font-size="10" font-weight="500">longo prazo (N)</text><text x="100" y="168">INICIATIVAS</text><text x="100" y="182" font-size="10" font-weight="500">1º ano (S)</text><text x="40" y="104">METAS</text><text x="40" y="118" font-size="10" font-weight="500">(O)</text><text x="160" y="104">KPIs</text><text x="160" y="118" font-size="10" font-weight="500">(L)</text></g></svg>`}
+function matrizXHTML(pe){const b=pe?.bsc||{};const all=[];PERSP.forEach(p=>metasOf(pe,p.k).forEach((m,j)=>all.push({p,m,c:p.c+(j+1)})));
+  const li=(a,fn)=>a.length?`<ol>${a.map(fn).join('')}</ol>`:'<span class="muted">—</span>';
+  const resp=[...new Set(all.map(x=>x.m.resp).filter(Boolean))];
+  return `<div class="mx">
+   <div class="cell top"><h5>Objetivos (Norte)</h5>${li([...PERSP].reverse().filter(p=>b[p.k]?.objetivo),p=>`<li><b>${p.ob} · ${p.k}</b> ${esc(b[p.k].objetivo)}</li>`)}</div>
+   <div class="cell lft"><h5>Metas (Oeste)</h5>${li(all,x=>`<li><b>${x.c}</b> ${esc(x.m.meta||'')}</li>`)}</div>
+   <div class="ctr">${xSVG()}</div>
+   <div class="cell rgt"><h5>Indicadores (Leste)</h5>${li(all.filter(x=>x.m.indicador),x=>`<li><b>${x.c}</b> ${esc(x.m.indicador)}</li>`)}</div>
+   <div class="cell bot"><h5>Iniciativas do 1º ano (Sul)</h5>${li(all.filter(x=>x.m.plano),x=>`<li><b>${x.c}</b> ${esc(x.m.plano)}</li>`)}</div>
+   <div class="cell rsp"><h5>Responsáveis</h5>${li(resp,r=>`<li>${esc(r)}: ${all.filter(x=>x.m.resp===r).map(x=>x.c).join(', ')}</li>`)}</div>
+  </div>`}
+function desdobHTML(pe,ano=S.ano){const rows=[];PERSP.slice().reverse().forEach(p=>metasOf(pe,p.k).forEach((m,j)=>rows.push(`<tr><td><span class="chip purple">${p.k}</span></td><td><b>${p.c}${j+1}</b> ${esc(m.meta||'')}</td><td>${esc(m.indicador||'')}<br><small>${esc(m.formula||'')}</small></td><td class="num">${esc(m.m1||'')}</td><td class="num">${esc(m.m2||'')}</td><td class="num">${esc(m.m3||'')}</td><td>${esc(m.plano||'')}</td><td>${esc(m.resp||'')}</td></tr>`)));
+  return rows.length?`<div class="tbl-wrap"><table><thead><tr><th>Persp.</th><th>Meta</th><th>Indicador / fórmula</th><th>${ano}</th><th>${ano+1}</th><th>${ano+2}</th><th>Iniciativa 1º ano</th><th>Resp.</th></tr></thead><tbody>${rows.join('')}</tbody></table></div>`:''}
+function farol(s){return {'Concluído':'ok','Em andamento':'warn','Atrasado':'bad','Cancelado':'','Não iniciado':''}[s]??''}
+
+/* ===================== Visualização somente leitura ===================== */
+function valView(f,v){
+  if(f.t==='image')return v?`<img class="vimg" data-img="${esc(v)}" alt="${esc(lab(f))}">`:'<span class="muted">—</span>';
+  if(f.t==='list'){const a=(v||[]).filter(filled);if(!a.length)return '<span class="muted">—</span>';
+    if(f.sub.length===1)return `<ul style="margin:0;padding-left:1.2em">${a.map(r=>`<li>${nl(r[f.sub[0].k])}</li>`).join('')}</ul>`;
+    return `<div class="tbl-wrap"><table><thead><tr>${f.sub.map(s=>`<th>${esc(lab(s))}</th>`).join('')}</tr></thead><tbody>${a.map(r=>`<tr>${f.sub.map(s=>`<td>${s.k==='status'&&r[s.k]?`<span class="chip ${farol(r[s.k])}">${esc(r[s.k])}</span>`:nl(r[s.k])}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`}
+  return filled(v)?`<div class="pre">${esc(v)}</div>`:'<span class="muted">—</span>'}
+function dlHTML(fields,d){return `<dl class="vdl">${fields.map(f=>`<dt class="${f.t==='list'||f.t==='image'?'wide':''}">${esc(lab(f))}</dt><dd class="${f.t==='list'||f.t==='image'?'wide':''}">${valView(f,d?.[f.k])}</dd>`).join('')}</dl>`}
+function raciView(pe){const cargos=(pe?.gestores?.gestores||[]).filter(g=>g.cargo).map(g=>g.cargo);const l=(pe?.raci?.linhas||[]).filter(r=>r.resp);if(!l.length)return '<span class="muted">—</span>';
+  return `<div class="tbl-wrap"><table><thead><tr><th>Responsabilidade</th>${cargos.map(c=>`<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>${l.map(r=>`<tr><td>${esc(r.resp)}</td>${cargos.map((c,j)=>`<td><b>${esc(r['c'+j]||'')}</b></td>`).join('')}</tr>`).join('')}</tbody></table></div>`}
+function secView(sec,pe,ano){
+  if(sec.id==='mapa')return mapaHTML(pe,ano);
+  if(sec.id==='matrizx')return matrizXHTML(pe)+'<div style="margin-top:12px">'+desdobHTML(pe,ano)+'</div>';
+  if(sec.t==='raci')return raciView(pe);
+  const d=pe?.[sec.id]||{};
+  if(sec.persp)return PERSP.map(p=>filled(d[p.k])?`<div class="vsec"><h4>${p.k} · ${p.n}</h4>${dlHTML(sec.f,d[p.k])}</div>`:'').join('')||'<span class="muted">Seção não preenchida.</span>';
+  return dlHTML(sec.f,d)}
+function peView(eq,pe,opts={}){const ano=eq.anoInicio||S.ano;const keep=S.ano;S.ano=ano;let g='';
+  const html=SECOES.map(sec=>{let head='';if(sec.g&&sec.g!==g){g=sec.g;head=`<div class="vgroup">${esc(g)}</div>`}
+    const fbt=opts.feedback?`<label class="fld" style="margin-top:6px"><span class="lbl">Recomendação do professor para esta seção</span><textarea data-fb="${sec.id}" rows="2" placeholder="Escreva a recomendação; ela aparece para a equipe na seção correspondente.">${esc(opts.fb?.[sec.id]||'')}</textarea></label>`:(opts.fb?.[sec.id]?`<div class="fbk"><b>Recomendação do professor:</b> ${nl(opts.fb[sec.id])}</div>`:'');
+    const pr=sec.t==='auto'?'':` <span class="chip ${secProg(sec,pe)>=.99?'ok':secProg(sec,pe)>0?'gold':''}">${Math.round(secProg(sec,pe)*100)}%</span>`;
+    return `${head}<section class="card vsec" id="v_${sec.id}"><div class="row between"><h3>${esc(sec.n)}</h3>${opts.prog?pr:''}</div>${secView(sec,pe,ano)}${fbt}</section>`}).join('');
+  S.ano=keep;return html}
+
+/* ===================== Pôster A1 (Modelo 1) ===================== */
+const LOGO_EP=document.querySelector('.hdr .logo img').src, LOGO_UFAM=document.querySelectorAll('.hdr .logo img')[1].src;
+function consultores(eq){return [eq.lider,...(eq.membros||[]).map(m=>m.nome)].filter(Boolean).sort((a,b)=>a.localeCompare(b,'pt-BR'))}
+function posterHTML(eq,pe){const ano=eq.anoInicio||S.ano,p=pe?.proposito||{},b=pe?.basico||{},org=pe?.capa?.organizacao||eq.organizacao||'Organização alvo';
+  const vals=(p.valores||[]).filter(filled),areas=(pe?.areas?.areas||[]).filter(filled),gest=(pe?.gestores?.gestores||[]).filter(filled),dest=(b.destaques||[]).filter(filled);
+  const acts=[];PERSP.slice().reverse().forEach(x=>{const pl=pe?.planos?.[x.k];(pl?.acoes||[]).filter(a=>a.acao).slice(0,4).forEach(a=>acts.push({x,pl,a}))});
+  return `<div class="poster">
+  <div class="ph"><img src="${LOGO_EP}" alt=""><div><h2>Planejamento Estratégico Básico da ${esc(org)}</h2><div class="sub">Elaborado pela start-up <b>${esc(eq.nome||'—')}</b>${eq.slogan?` · “${esc(eq.slogan)}”`:''}</div><div class="sub" style="font-weight:500;color:#26121D">Consultores: ${esc(consultores(eq).join(', ')||'—')} · Período de funcionamento: jan/${String(ano).slice(2)} a dez/${String(ano+2).slice(2)}</div></div>${pe?.capa?.logo?`<img data-img="${esc(pe.capa.logo)}" alt="">`:`<img src="${LOGO_UFAM}" alt="">`}</div>
+  <div class="pgrid">
+   <section class="pbox"><h3>1. Propósito organizacional <span class="plan">PLAN</span></h3>
+     <h4>1.1 Missão</h4><p>${esc(p.missao||'—')}</p><h4>1.2 Visão</h4><p>${esc(p.visao||'—')}</p>
+     <h4>1.3 Valores</h4><div class="vals">${vals.map(v=>`<b>${esc(v.palavra)}</b><span class="pj">${esc(v.descricao)}</span>`).join('')||'—'}</div>
+     <h4>1.4 Áreas de atuação</h4><table class="ptable"><thead><tr><th>Área</th><th>Público-alvo</th><th>Produtos / serviços</th></tr></thead><tbody>${areas.map(a=>`<tr><td><b>${esc(a.area)}</b></td><td>${esc(a.publico)}</td><td>${esc(a.produtos)}</td></tr>`).join('')}</tbody></table></section>
+   <section class="pbox"><h3>Equipe gestora do empreendimento <span class="plan">PLAN</span></h3>
+     <div class="gest">${gest.map(g=>`<div><b>${esc(g.cargo)}</b>${esc(g.nome||'')}</div>`).join('')||'—'}</div>
+     <h4>${esc(b.plusTitulo||'Plus da equipe')}</h4>${b.plusImg?`<img class="pimg" data-img="${esc(b.plusImg)}" alt="">`:''}${b.plusTexto?`<p>${esc(b.plusTexto)}</p>`:''}</section>
+   <section class="pbox"><h3>2. Atratividade do empreendimento <span class="plan">PLAN</span></h3>
+     ${dest.length?`<div class="dest">${dest.map(d=>`<div><strong>${esc(d.valor)}</strong><span>${esc(d.rotulo)}</span>${d.fonte?`<small>${esc(d.fonte)}</small>`:''}</div>`).join('')}</div>`:''}
+     ${b.atrTexto?`<p>${esc(b.atrTexto)}</p>`:'<p>—</p>'}<div style="display:flex;gap:4mm">${b.atrImg1?`<img class="pimg" style="max-width:48%" data-img="${esc(b.atrImg1)}" alt="">`:''}${b.atrImg2?`<img class="pimg" style="max-width:48%" data-img="${esc(b.atrImg2)}" alt="">`:''}</div></section>
+   <section class="pbox"><h3>3.2 Mapa estratégico com metas anuais <span class="plan">PLAN</span></h3>${mapaHTML(pe,ano)}</section>
+   <section class="pbox"><h3>3.1 Planejamento de longo e médio prazos (${ano} a ${ano+2}) <span class="plan">PLAN</span></h3>${matrizXHTML(pe)}</section>
+   <section class="pbox"><h3>3.3 Planejamento de curto prazo (${ano}) <span class="plan">PLAN</span></h3>
+     <table class="ptable"><thead><tr><th>Persp.</th><th>Ação</th><th>Quem</th><th>Quando</th><th>Status</th></tr></thead><tbody>${acts.map(r=>`<tr><td><b>${r.x.k}</b></td><td>${esc(r.a.acao)}</td><td>${esc(r.a.quem||'')}</td><td>${esc([r.a.inicio,r.a.termino].filter(Boolean).join(' – '))}</td><td>${esc(r.a.status||'')}</td></tr>`).join('')||'<tr><td colspan="5">—</td></tr>'}</tbody></table></section>
+  </div>
+  <div class="pfoot"><span>${esc(eq.edicao||S.cfg?.edicao||'')} · Engenharia de Produção · UFAM</span><span>Sistema de Elaboração de Planejamento Estratégico</span></div></div>`}
+function mountPoster(el,eq,pe){el.innerHTML=`<div class="row between" style="margin-bottom:10px"><div class="row"><button class="btn sm ghost" id="pzoom">Ver em tamanho real</button>${inFrame()?'<span class="help">A impressão em A1 fica disponível na versão hospedada do sistema.</span>':'<button class="btn sm gold" id="pprint">Imprimir / salvar PDF (A1)</button>'}</div><span class="help">Folha A1 retrato (594 × 841 mm)</span></div><div class="pwrap"><div class="pscale">${posterHTML(eq,pe)}</div></div>`;
+  const w=$('.pwrap',el),sc=$('.pscale',el),po=$('.poster',el);hydrateImgs(el);let real=false;
+  const fit=()=>{if(real){sc.style.transform='none';w.style.height='';return}const k=w.clientWidth/po.offsetWidth;sc.style.transform=`scale(${k})`;w.style.height=(po.offsetHeight*k)+'px'};
+  requestAnimationFrame(fit);setTimeout(fit,400);new ResizeObserver(fit).observe(w);
+  $('#pzoom',el).onclick=e=>{real=!real;w.classList.toggle('real',real);e.target.textContent=real?'Ajustar à tela':'Ver em tamanho real';fit()};
+  const pp=$('#pprint',el);if(pp)pp.onclick=()=>{const pa=$('#printArea');pa.innerHTML=posterHTML(eq,pe);hydrateImgs(pa);document.body.classList.add('printing');setTimeout(()=>{window.print();document.body.classList.remove('printing')},700)}}
+
+/* ===================== Dados auxiliares ===================== */
+async function loadCfg(){S.cfg=await Store.get('config','geral');if(!S.cfg){await seed();S.cfg=await Store.get('config','geral')}S.ano=S.cfg.anoInicio}
+function nf(av,cfg=S.cfg){if(!av)return null;const w=cfg?.pesos||{prof:2,resp:3,alunos:1};const parts=[[av.prof,w.prof],[av.resp,w.resp],[av.alunos,w.alunos]].filter(([v])=>v!==''&&v!=null&&!isNaN(v));if(!parts.length)return null;const sw=parts.reduce((a,[,p])=>a+ +p,0);return parts.reduce((a,[v,p])=>a+v*p,0)/sw}
+function rankEd(eqs){const r=eqs.map(e=>({e,n:nf(e.avaliacao)})).filter(x=>x.n!=null&&x.n>0).sort((a,b)=>b.n-a.n);r.forEach((x,i)=>x.pos=i+1);return r}
+
+/* ===================== AMBIENTE PÚBLICO ===================== */
+async function renderPublico(){
+  const eqs=(await Store.list('equipes'));const pub=eqs.filter(e=>e.publico);
+  if(S.sub==='ver')return verPublico(eqs);
+  const tabs=`<div class="tabs"><button class="${S.sub==='dashboard'?'on':''}" data-ps="dashboard">Dashboard</button><button class="${S.sub==='orient'?'on':''}" data-ps="orient">Orientações do período vigente</button><button class="${S.sub==='acervo'?'on':''}" data-ps="acervo">Acervo de Planejamentos Estratégicos</button></div>`;
+  let body='';
+  if(S.sub==='orient'){
+    const ors=(await Store.list('orientacoes')).filter(o=>o.publicada);
+    const sems=[...new Set([S.cfg.semestre,...ors.map(o=>o.semestre)])].sort().reverse();
+    S.osem=S.osem&&sems.includes(S.osem)?S.osem:S.cfg.semestre;const vig=S.osem===S.cfg.semestre;
+    app.innerHTML=`<div class="wrap">${tabs}<div class="stack"><div class="sect-h"><div><div class="eyebrow">${vig?'Período vigente':'Período anterior'} · ${esc(S.osem)}</div><h2>Orientações da disciplina de Planejamento Estratégico</h2></div>
+      <label class="fld" style="max-width:220px"><span class="lbl">Semestre</span><select id="osem">${sems.map(x=>`<option value="${esc(x)}" ${x===S.osem?'selected':''}>${esc(x)}${x===S.cfg.semestre?' (vigente)':''}</option>`).join('')}</select></label></div>
+      <p class="muted">Desafio, meta, fases, prazos e critérios avaliativos definidos pelo professor para as equipes de consultores. ${vig?`Plano para o horizonte de ${S.cfg.anoInicio} a ${S.cfg.anoInicio+2}.`:''}</p>
+      <div id="opane"></div></div></div>`;
+    $$('[data-ps]').forEach(b=>b.onclick=()=>{S.sub=b.dataset.ps;render()});
+    $('#osem').onchange=e=>{S.osem=e.target.value;render()};
+    return orientView($('#opane'),S.osem);
+  }
+  if(S.sub==='dashboard'){
+    const eds={};eqs.forEach(e=>{(eds[e.semestre]=eds[e.semestre]||[]).push(e)});const edK=Object.keys(eds).sort();
+    const segs={};eqs.forEach(e=>{const s=e.segmento||'Não informado';segs[s]=(segs[s]||0)+1});const segK=Object.entries(segs).sort((a,b)=>b[1]-a[1]);
+    const orgs=new Set(eqs.map(e=>(e.organizacao||'').toLowerCase().trim()).filter(Boolean));
+    const cons=eqs.reduce((a,e)=>a+consultores(e).length,0);
+    const notas=eqs.map(e=>nf(e.avaliacao)).filter(n=>n>0);const media=notas.length?notas.reduce((a,b)=>a+b,0)/notas.length:null;
+    const atual=eqs.filter(e=>e.semestre===S.cfg.semestre&&!e.arquivado);const progM=atual.length?Math.round(atual.reduce((a,e)=>a+(e.progresso||0),0)/atual.length):0;
+    const lastEd=[...edK].reverse().find(k=>rankEd(eds[k]).length);const rk=lastEd?rankEd(eds[lastEd]):[];
+    const maxE=Math.max(1,...edK.map(k=>eds[k].length)),maxS=Math.max(1,...segK.map(x=>x[1]));
+    body=`<div class="stack">
+     <div class="sect-h"><div><div class="eyebrow">Mostra de Planejamento Estratégico</div><h2>Resultados acumulados das edições</h2></div><p>Indicadores de todos os Planejamentos Estratégicos elaborados pelos alunos de Engenharia de Produção para organizações reais de Manaus.</p></div>
+     <div class="g4"><div class="kpi"><b>${eqs.length}</b><span>Planejamentos Estratégicos elaborados</span></div><div class="kpi gold"><b>${orgs.size}</b><span>Organizações atendidas em Manaus</span></div><div class="kpi purple"><b>${cons}</b><span>Consultores (alunos) envolvidos</span></div><div class="kpi"><b>${media?n2(media):'—'}</b><span>Nota final média nas Mostras (0–10)</span></div></div>
+     <div class="g2">
+      <div class="card"><h3>PEs por semestre</h3><p class="help" style="margin:4px 0 6px">Quantidade de equipes por edição da disciplina.</p><div class="vbars">${edK.map(k=>`<div class="vbar"><b>${eds[k].length}</b><i style="height:${eds[k].length/maxE*100}%"></i></div>`).join('')||'<span class="muted">Sem dados</span>'}</div><div class="vlabels">${edK.map(k=>`<span>${esc(k)}</span>`).join('')}</div></div>
+      <div class="card"><h3>Segmentos das organizações</h3><p class="help" style="margin:4px 0 10px">Distribuição por setor de atuação.</p><div class="bars">${segK.map(([s,n],i)=>`<div class="bar ${i%3===1?'g':i%3===2?'p':''}"><span class="t" title="${esc(s)}">${esc(s)}</span><div class="tr"><i style="width:${n/maxS*100}%"></i></div><span class="v">${n}</span></div>`).join('')}</div></div>
+     </div>
+     <div class="g2">
+      <div class="card"><div class="row between"><h3>Ranking ${lastEd?'· '+esc(eds[lastEd][0].edicao||lastEd):''}</h3>${lastEd?`<span class="chip gold">${esc(lastEd)}</span>`:''}</div><p class="help" style="margin:4px 0 10px">Nota final = média ponderada (professores convidados ×${S.cfg.pesos.prof}, professor responsável ×${S.cfg.pesos.resp}, alunos ×${S.cfg.pesos.alunos}).</p>
+       ${rk.length?`<div class="stack" style="gap:8px">${rk.map(x=>`<div class="row" style="flex-wrap:nowrap"><span class="medal ${x.pos<=3?'m'+x.pos:''}">${x.pos}º</span><div style="flex:1;min-width:0"><b>${esc(x.e.organizacao)}</b>${x.e.nome?` <small>· ${esc(x.e.nome)}</small>`:''}<div class="prog" style="margin-top:4px"><i style="width:${x.n*10}%"></i></div></div><b class="num">${n2(x.n)}</b></div>`).join('')}</div>`:'<div class="empty">Nenhuma edição avaliada ainda.</div>'}</div>
+      <div class="card"><h3>Semestre vigente · ${esc(S.cfg.semestre)}</h3><p class="help" style="margin:4px 0 12px">${esc(S.cfg.edicao)} · horizonte do plano ${S.cfg.anoInicio} a ${S.cfg.anoInicio+2}</p>
+       <div class="g2" style="gap:12px"><div class="kpi flat"><b>${atual.length}</b><span>Equipes em andamento</span></div><div class="kpi flat gold"><b>${progM}%</b><span>Progresso médio dos PEs</span></div></div>
+       <div class="stack" style="gap:8px;margin-top:14px">${atual.map(e=>`<div><div class="row between"><b>${esc(e.nome)}</b><small>${esc(e.organizacao||'')}</small></div>${progBar(e.progresso||0)}</div>`).join('')||'<span class="muted">Nenhuma equipe cadastrada neste semestre.</span>'}</div></div>
+     </div></div>`;
+  } else {
+    const eds=[...new Set(pub.map(e=>e.semestre))].sort().reverse();const segs=[...new Set(pub.map(e=>e.segmento).filter(Boolean))].sort();
+    const q=S.filt.q.toLowerCase();const list=pub.filter(e=>(!S.filt.ed||e.semestre===S.filt.ed)&&(!S.filt.seg||e.segmento===S.filt.seg)&&(!q||[e.organizacao,e.nome,e.slogan,...consultores(e)].join(' ').toLowerCase().includes(q))).sort((a,b)=>(b.semestre||'').localeCompare(a.semestre||'')||(nf(b.avaliacao)||0)-(nf(a.avaliacao)||0));
+    const pes={};await Promise.all(list.map(async e=>pes[e.id]=await Store.get('pes',e.id)));
+    body=`<div class="stack"><div class="sect-h"><div><div class="eyebrow">Acervo público</div><h2>Planejamentos Estratégicos publicados</h2></div><p>PEs elaborados pelos alunos ao longo dos anos e liberados pelo professor para consulta da comunidade acadêmica e das organizações.</p></div>
+     <div class="card flat"><div class="fgrid"><label class="fld" style="grid-column:span 2"><span class="lbl">Buscar</span><input id="fq" value="${esc(S.filt.q)}" placeholder="Organização, start-up ou consultor"></label><label class="fld" style="grid-column:span 1"><span class="lbl">Semestre</span><select id="fed"><option value="">Todos</option>${eds.map(x=>`<option ${x===S.filt.ed?'selected':''}>${esc(x)}</option>`).join('')}</select></label><label class="fld" style="grid-column:span 1"><span class="lbl">Segmento</span><select id="fseg"><option value="">Todos</option>${segs.map(x=>`<option ${x===S.filt.seg?'selected':''}>${esc(x)}</option>`).join('')}</select></label></div></div>
+     ${list.length?`<div class="g3">${list.map(e=>{const n=nf(e.avaliacao);const mis=pes[e.id]?.proposito?.missao;return `<article class="card pe-card" data-ver="${e.id}" tabindex="0"><div class="row between"><span class="chip purple">${esc(e.semestre)}</span>${n>0?`<span class="chip gold">Nota ${n2(n)}</span>`:''}</div><div class="org">${esc(e.organizacao||'—')}</div><div class="row" style="gap:6px">${e.segmento?`<span class="chip">${esc(e.segmento)}</span>`:''}${e.nome?`<span class="chip wine">${esc(e.nome)}</span>`:''}</div>${mis?`<div class="mis">${esc(mis)}</div>`:'<div class="mis">Missão não registrada no acervo.</div>'}<small>${consultores(e).length} consultor(es) · ${esc(e.edicao||'')}</small></article>`}).join('')}</div>`:'<div class="empty"><b>Nenhum PE encontrado</b>Ajuste os filtros ou aguarde a publicação pelo professor.</div>'}</div>`;
+  }
+  app.innerHTML=`<div class="wrap">${tabs}${body}</div>`;
+  $$('[data-ps]').forEach(b=>b.onclick=()=>{S.sub=b.dataset.ps;render()});
+  $$('[data-ver]').forEach(c=>{const f=()=>{S.sub='ver';S.verId=c.dataset.ver;render()};c.onclick=f;c.onkeydown=e=>{if(e.key==='Enter')f()}});
+  const fq=$('#fq');if(fq){let t;fq.oninput=()=>{clearTimeout(t);t=setTimeout(()=>{S.filt.q=fq.value;render().then(()=>{const x=$('#fq');x.focus();x.setSelectionRange(x.value.length,x.value.length)})},350)};$('#fed').onchange=e=>{S.filt.ed=e.target.value;render()};$('#fseg').onchange=e=>{S.filt.seg=e.target.value;render()}}
+}
+async function verPublico(eqs){const eq=eqs.find(e=>e.id===S.verId&&e.publico);if(!eq){S.sub='acervo';return render()}
+  const pe=await Store.get('pes',eq.id)||{};const n=nf(eq.avaliacao);S.vtab=S.vtab||'completo';
+  app.innerHTML=`<div class="wrap stack"><div><button class="btn sm ghost" id="back">← Voltar ao acervo</button></div>
+   <div class="card"><div class="row between"><div><div class="eyebrow">${esc(eq.edicao||'')} · ${esc(eq.semestre)}</div><h2>${esc(eq.organizacao)}</h2><p class="muted" style="margin-top:4px">Start-up de consultoria: <b>${esc(eq.nome||'—')}</b>${eq.slogan?` · “${esc(eq.slogan)}”`:''}</p><p style="margin-top:6px">Consultores: ${esc(consultores(eq).join(', ')||'—')}</p></div><div class="stack" style="gap:6px;align-items:flex-end">${n>0?`<span class="chip gold" style="font-size:1rem">Nota final ${n2(n)}</span>`:''}${eq.segmento?`<span class="chip">${esc(eq.segmento)}</span>`:''}</div></div>
+   ${eq.link?`<p style="margin-top:10px">Arquivos originais: <a href="${esc(eq.link)}" target="_blank" rel="noopener">abrir planilhas e relatório</a></p>`:''}
+   ${eq.avaliacao?.recomendacoes?`<div class="fbk" style="margin-top:12px"><b>Recomendações dos avaliadores:</b> ${nl(eq.avaliacao.recomendacoes)}</div>`:''}</div>
+   <div class="tabs"><button data-vt="completo" class="${S.vtab==='completo'?'on':''}">PE Completo</button><button data-vt="basico" class="${S.vtab==='basico'?'on':''}">PE Básico (A1)</button></div><div id="vbody" class="stack"></div></div>`;
+  $('#back').onclick=()=>{S.sub='acervo';render()};$$('[data-vt]').forEach(b=>b.onclick=()=>{S.vtab=b.dataset.vt;render()});
+  const vb=$('#vbody');if(S.vtab==='basico')mountPoster(vb,eq,pe);else{vb.innerHTML=peView(eq,pe,{});hydrateImgs(vb)}}
+
+/* ===================== AMBIENTE DOS ALUNOS ===================== */
+async function renderAlunoLogin(){
+  const eqs=(await Store.list('equipes')).filter(e=>e.semestre===S.cfg.semestre&&!e.arquivado).sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR'));
+  app.innerHTML=`<div class="wrap"><div class="login stack">
+   <div class="sect-h"><div><div class="eyebrow">Ambiente dos alunos · ${esc(S.cfg.semestre)}</div><h2>Acesse ou crie a sua start-up de consultoria</h2></div><p>O representante cria a equipe e a senha. Depois repassa a senha aos membros e ao gestor da organização alvo para que todos possam contribuir.</p></div>
+   <div class="g2" style="align-items:start">
+    <form class="card stack" id="fLogin"><h3>Entrar na equipe</h3>
+     ${eqs.length?`<label class="fld"><span class="lbl">Equipe</span><select id="lgEq" required><option value="">Selecione a sua start-up…</option>${eqs.map(e=>`<option value="${e.id}">${esc(e.nome)} — ${esc(e.organizacao||'')}</option>`).join('')}</select></label>
+     <label class="fld"><span class="lbl">Seu nome</span><input id="lgNome" required placeholder="Como você aparece nas mensagens"></label>
+     <label class="fld"><span class="lbl">Perfil</span><select id="lgPapel"><option>Membro da equipe</option><option>Líder (representante)</option><option>Gestor da organização</option></select></label>
+     <label class="fld"><span class="lbl">Senha da equipe</span><input type="password" id="lgSenha" required autocomplete="current-password"></label>
+     ${Store.mode==='local'&&eqs.some(e=>e.demo)?'<p class="help"><span class="ex">Exemplo</span> Equipe de demonstração: “Rumo Consultoria”, senha <b>demo123</b>.</p>':''}
+     <button class="btn" type="submit">Entrar</button>`:'<div class="empty"><b>Nenhuma equipe criada neste semestre</b>Seja o representante e crie a primeira.</div>'}
+    </form>
+    <form class="card stack" id="fNova"><h3>Criar equipe (representante)</h3>
+     <div class="fgrid">
+      <label class="fld" style="grid-column:span 2"><span class="lbl">Nome da start-up</span><input id="nvNome" required></label>
+      <label class="fld" style="grid-column:span 2"><span class="lbl">Slogan</span><input id="nvSlogan" required></label>
+      <label class="fld" style="grid-column:span 2"><span class="lbl">Organização alvo</span><input id="nvOrg" placeholder="Pode definir depois"></label>
+      <label class="fld" style="grid-column:span 2"><span class="lbl">Segmento</span><select id="nvSeg"><option value="">Selecione…</option>${SEGMENTOS.map(s=>`<option>${s}</option>`).join('')}</select></label>
+      <label class="fld" style="grid-column:span 2"><span class="lbl">Seu nome (líder)</span><input id="nvLider" required></label>
+      <label class="fld" style="grid-column:span 2"><span class="lbl">Seu e-mail</span><input type="email" id="nvEmail" required></label>
+      <label class="fld"><span class="lbl">Demais membros (um por linha: nome; e-mail)</span><textarea id="nvMembros" rows="4" placeholder="Ana Souza; ana@ufam.edu.br"></textarea><span class="help">A equipe tem ${S.cfg.tamEquipe||5} membros, incluindo o líder.</span></label>
+      <label class="fld" style="grid-column:span 2"><span class="lbl">Senha da equipe</span><input type="password" id="nvS1" required minlength="6" autocomplete="new-password"></label>
+      <label class="fld" style="grid-column:span 2"><span class="lbl">Confirmar senha</span><input type="password" id="nvS2" required minlength="6" autocomplete="new-password"></label>
+     </div><button class="btn gold" type="submit">Criar equipe e entrar</button></form>
+   </div></div></div>`;
+  const fl=$('#fLogin');fl.onsubmit=async e=>{e.preventDefault();const id=$('#lgEq').value,eq=eqs.find(x=>x.id===id);if(!eq)return toast('Selecione a equipe.');
+    if(await sha($('#lgSenha').value)!==eq.senhaHash)return toast('Senha incorreta. Confira com o líder da equipe.');
+    setSess({role:'aluno',eqId:id,nome:$('#lgNome').value.trim(),papel:$('#lgPapel').value});S.atab='inicio';render()};
+  $('#fNova').onsubmit=async e=>{e.preventDefault();const nome=$('#nvNome').value.trim();if($('#nvS1').value!==$('#nvS2').value)return toast('As senhas não conferem.');
+    if(eqs.some(x=>x.nome.toLowerCase()===nome.toLowerCase()))return toast('Já existe uma equipe com este nome neste semestre.');
+    const membros=$('#nvMembros').value.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{const[n,m]=l.split(/[;,]/);return{nome:(n||'').trim(),email:(m||'').trim()}});
+    const id='eq_'+uid();const org=$('#nvOrg').value.trim();
+    await Store.set('equipes',id,{semestre:S.cfg.semestre,edicao:S.cfg.edicao,anoInicio:S.cfg.anoInicio,nome,slogan:$('#nvSlogan').value.trim(),organizacao:org,segmento:$('#nvSeg').value,lider:$('#nvLider').value.trim(),liderEmail:$('#nvEmail').value.trim(),membros,gestor:{},senhaHash:await sha($('#nvS1').value),criadaEm:Date.now(),atualizadoEm:Date.now(),progresso:0,publico:false,arquivado:false});
+    await Store.set('pes',id,{capa:{organizacao:org,cidade:'Manaus',codigo:'PE 01',revisao:1}});
+    setSess({role:'aluno',eqId:id,nome:$('#nvLider').value.trim(),papel:'Líder (representante)'});S.atab='inicio';toast('Equipe criada. Repasse a senha aos membros e ao gestor.');render()};
+}
+async function renderAluno(){
+  const eq=await Store.get('equipes',S.sess.eqId);if(!eq){setSess(null);return render()}
+  S.eq=eq;S.ano=eq.anoInicio||S.cfg.anoInicio;S.pe=await Store.get('pes',eq.id)||{};S.fb=await Store.get('feedback',eq.id)||{};
+  const msgs=(await Store.list('msgs')).filter(m=>m.canal==='prof'&&(m.equipeId===eq.id||m.equipeId==='*')&&m.papel==='professor');
+  const seen=ls('sispe_seen_'+eq.id)||0;const unread=msgs.filter(m=>m.em>seen).length;
+  const T=[['inicio','Início'],['orient','Orientações'],['completo','PE Completo · Modelo 2'],['basico','PE Básico A1 · Modelo 1'],['msgs','Mensagens'],['equipe','Equipe']];
+  app.innerHTML=`<div class="wrap"><div class="teambar"><div><div class="eyebrow">${esc(eq.edicao||'')} · ${esc(eq.semestre)}</div><div class="nm">${esc(eq.nome)}</div><div class="sl">${esc(eq.slogan||'')}</div></div><div class="row"><div style="min-width:200px"><small>Progresso do PE completo</small>${progBar(peProg(S.pe))}</div><button class="btn sm ghost" id="sair">Sair</button></div></div>
+   <div class="tabs">${T.map(([k,l])=>`<button data-at="${k}" class="${S.atab===k?'on':''}">${l}${k==='msgs'&&unread?`<span class="badge">${unread}</span>`:''}</button>`).join('')}</div><div id="pane"></div></div>`;
+  $('#sair').onclick=()=>{flushSave();setSess(null);render()};
+  $$('[data-at]').forEach(b=>b.onclick=()=>{flushSave();stopPoll();S.atab=b.dataset.at;render()});
+  const pane=$('#pane');
+  if(S.atab==='inicio')return alunoInicio(pane,eq);
+  if(S.atab==='orient')return orientView(pane,eq.semestre);
+  if(S.atab==='completo')return alunoCompleto(pane);
+  if(S.atab==='basico')return alunoBasico(pane,eq);
+  if(S.atab==='msgs')return alunoMsgs(pane,eq);
+  if(S.atab==='equipe')return alunoEquipe(pane,eq);
+}
+async function alunoInicio(pane,eq){
+  const ors=(await Store.list('orientacoes')).filter(o=>o.semestre===eq.semestre&&o.publicada);const fases=ors.flatMap(o=>o.fases||[]).filter(f=>f.prazo).sort((a,b)=>a.prazo.localeCompare(b.prazo));
+  const prox=fases.find(f=>f.prazo>=today());const dias=prox?Math.ceil((new Date(prox.prazo+'T23:59')-new Date())/864e5):null;
+  const pend=VIEWABLE.filter(s=>secProg(s,S.pe)<1).slice(0,6);const fbs=SECOES.filter(s=>S.fb[s.id]);
+  pane.innerHTML=`<div class="g3" style="margin-bottom:18px"><div class="kpi"><b>${peProg(S.pe)}%</b><span>PE completo preenchido</span></div><div class="kpi gold"><b>${dias!=null?dias:'—'}</b><span>${prox?`dias para: ${esc(prox.nome)} (${fmtD(prox.prazo)})`:'Sem prazos futuros cadastrados'}</span></div><div class="kpi purple"><b>${fbs.length}</b><span>Recomendações do professor</span></div></div>
+   <div class="g2"><div class="card stack"><h3>Próximas seções a completar</h3>${pend.map(s=>`<button class="btn ghost" style="justify-content:space-between" data-goto="${s.id}"><span>${esc(s.n)}</span><span class="num">${Math.round(secProg(s,S.pe)*100)}%</span></button>`).join('')||'<p>Todas as seções estão preenchidas. Revise o PE básico para a Mostra.</p>'}</div>
+   <div class="card stack"><h3>Recomendações do professor</h3>${fbs.map(s=>`<div class="fbk"><b>${esc(s.n)}:</b> ${nl(S.fb[s.id])}</div>`).join('')||'<p class="muted">Nenhuma recomendação até o momento.</p>'}</div></div>`;
+  $$('[data-goto]',pane).forEach(b=>b.onclick=()=>{S.sec=b.dataset.goto;S.atab='completo';render()});
+}
+async function orientView(pane,sem){
+  const ors=(await Store.list('orientacoes')).filter(o=>o.semestre===sem&&o.publicada).sort((a,b)=>(a.criadaEm||0)-(b.criadaEm||0));
+  if(!ors.length){pane.innerHTML='<div class="empty"><b>Ainda não há orientações publicadas</b>O professor publicará o desafio, a meta e as fases deste semestre.</div>';return}
+  const t=today();
+  pane.innerHTML=ors.map(o=>`<article class="card stack" style="margin-bottom:18px"><div class="row between"><div><div class="eyebrow">Desafio aos alunos</div><h2>${esc(o.titulo)}</h2></div>${o.pontos?`<span class="chip gold" style="font-size:1rem">${n2(o.pontos)} pontos</span>`:''}</div>
+   ${o.meta?`<div><h4>Meta</h4><p class="pre">${esc(o.meta)}</p></div>`:''}${o.simulacao?`<div><h4>Simulação</h4><p class="pre">${esc(o.simulacao)}</p></div>`:''}
+   ${(o.fases||[]).length?`<div><h4 style="margin-bottom:12px">Fases e prazos</h4><div class="tl">${o.fases.map(f=>{const st=f.prazo&&f.prazo<t?'done':(f.inicio&&f.inicio<=t)||(!f.inicio&&f.prazo>=t)?'now':'';return `<div class="tli ${st}"><div class="dt">${f.inicio?fmtD(f.inicio)+'<br>a ':''}${fmtD(f.prazo)}</div><div class="ax"><i></i></div><div class="bd"><h4>${esc(f.nome)}</h4><p class="pre">${esc(f.descricao||'')}</p>${f.atencao?`<div class="fbk"><b>Atenção:</b> ${nl(f.atencao)}</div>`:''}</div></div>`}).join('')}</div></div>`:''}
+   ${o.criterios?`<div><h4>Critérios avaliativos</h4><p class="pre">${esc(o.criterios)}</p></div>`:''}
+   ${o.premio?`<div class="fbk"><b>Premiação:</b> ${nl(o.premio)}</div>`:''}</article>`).join('');
+}
+function secNavHTML(){let g='';return SECOES.map(s=>{let h='';if(s.g&&s.g!==g){g=s.g;h=`<div class="gh">${esc(g)}</div>`}const p=s.t==='auto'?-1:secProg(s,S.pe);return `${h}<button data-sec="${s.id}" class="${S.sec===s.id?'on':''}"><span class="dot ${p<0?'auto':p>=.99?'full':p>0?'half':''}"></span>${esc(s.n)}</button>`}).join('')}
+function alunoCompleto(pane){
+  pane.innerHTML=`<div class="pe-layout"><aside class="card secnav" aria-label="Seções do PE">${secNavHTML()}</aside>
+   <div class="stack" style="min-width:0"><label class="fld secsel"><span class="lbl">Seção</span><select id="secSel">${SECOES.map(s=>`<option value="${s.id}" ${S.sec===s.id?'selected':''}>${esc(s.n)}</option>`).join('')}</select></label><div id="secpane" class="stack"></div></div></div>`;
+  $$('[data-sec]',pane).forEach(b=>b.onclick=()=>openSec(b.dataset.sec));$('#secSel').onchange=e=>openSec(e.target.value);
+  drawSec();
+}
+async function openSec(id){await flushSave();const fresh=await Store.get('pes',S.eq.id);if(fresh)S.pe=fresh;S.sec=id;$$('.secnav [data-sec]').forEach(b=>b.classList.toggle('on',b.dataset.sec===id));const sel=$('#secSel');if(sel)sel.value=id;drawSec();window.scrollTo({top:Math.min(window.scrollY,$('.teambar').offsetTop),behavior:'smooth'})}
+function refreshDots(){const nav=$('.secnav');if(nav){nav.innerHTML=secNavHTML();$$('[data-sec]',nav).forEach(b=>b.onclick=()=>openSec(b.dataset.sec))}}
+function drawSec(){
+  const sec=SECOES.find(s=>s.id===S.sec)||SECOES[0];const sp=$('#secpane');const i=SECOES.indexOf(sec);const upd=S.pe['upd_'+sec.id];
+  sp.innerHTML=`<div class="card stack"><div class="row between"><div><div class="eyebrow">${esc(sec.g||SECOES.slice(0,i).reverse().find(s=>s.g)?.g||'')}</div><h2>${esc(sec.n)}</h2></div><span class="savest" id="savest">${upd?`Última edição: ${esc(upd.por)} · ${fmtDT(upd.em)}`:''}</span></div><p>${esc(sec.d||'')}</p>
+   ${S.fb[sec.id]?`<div class="fbk"><b>Recomendação do professor:</b> ${nl(S.fb[sec.id])}</div>`:''}<div id="secbody"></div></div>
+   <div class="row between"><button class="btn ghost" id="prevS" ${i===0?'disabled':''}>← Seção anterior</button><button class="btn" id="nextS" ${i===SECOES.length-1?'disabled':''}>Próxima seção →</button></div>`;
+  $('#prevS').onclick=()=>openSec(SECOES[i-1].id);$('#nextS').onclick=()=>openSec(SECOES[i+1].id);
+  const body=$('#secbody');const ch=()=>queueSave(sec.id);const ctx={imgp:S.eq.id+'_'+sec.id};
+  if(sec.t==='auto'){body.innerHTML=(sec.id==='mapa'?mapaHTML(S.pe):matrizXHTML(S.pe)+'<div style="margin-top:14px">'+desdobHTML(S.pe)+'</div>')+'<p class="help" style="margin-top:10px">Para alterar, edite a seção “4.1 e 4.3 Diretrizes e Balanced Scorecard”.</p>';return}
+  const d=S.pe[sec.id]||(S.pe[sec.id]={});
+  if(sec.t==='raci')return mountRaci(body,d,ch);
+  if(sec.persp){
+    if(sec.tabs){body.innerHTML=`<div class="ptabs" role="tablist">${PERSP.map(p=>`<button data-pt="${p.k}" class="${S.ptab===p.k?'on':''}">${p.k} · ${p.n}</button>`).join('')}</div><p class="help" id="pq"></p><div id="pform"></div>`;
+      const draw=()=>{const p=PERSP.find(x=>x.k===S.ptab);$('#pq').textContent=p.q;d[p.k]=d[p.k]||{};mountForm($('#pform'),sec.f,d[p.k],{...ctx,idp:p.k+'_',imgp:ctx.imgp+'_'+p.k},ch)};
+      $$('[data-pt]',body).forEach(b=>b.onclick=()=>{S.ptab=b.dataset.pt;$$('[data-pt]',body).forEach(x=>x.classList.toggle('on',x===b));draw()});draw();
+    } else {body.innerHTML=PERSP.map(p=>`<div class="card flat stack" style="background:var(--surface2)"><div><h4>${p.ob} · ${p.k} = ${p.n}</h4><p class="help">${esc(p.q)}</p></div><div id="pf_${p.k}"></div></div>`).join('');
+      PERSP.forEach(p=>{d[p.k]=d[p.k]||{};mountForm($('#pf_'+p.k),sec.f,d[p.k],{...ctx,idp:p.k+'_',imgp:ctx.imgp+'_'+p.k},ch)})}
+    return}
+  mountForm(body,sec.f,d,ctx,ch);
+}
+function mountRaci(el,d,ch){d.linhas=d.linhas||[{resp:'Executar compras'},{resp:'Elaborar padrões'},{resp:'Contratar'}];
+  const cargos=(S.pe.gestores?.gestores||[]).filter(g=>g.cargo).map(g=>g.cargo);
+  const draw=()=>{el.innerHTML=cargos.length?`<div class="tbl-wrap"><table><thead><tr><th style="min-width:200px">Responsabilidade</th>${cargos.map(c=>`<th>${esc(c)}</th>`).join('')}<th></th></tr></thead><tbody>${d.linhas.map((r,i)=>`<tr><td><input data-k="linhas.${i}.resp" id="rc_${i}" value="${esc(r.resp)}" aria-label="Responsabilidade ${i+1}"></td>${cargos.map((c,j)=>`<td><select data-k="linhas.${i}.c${j}" id="rc_${i}_${j}" aria-label="${esc(c)}">${['','R','A','C','I'].map(o=>`<option ${r['c'+j]===o?'selected':''}>${o}</option>`).join('')}</select></td>`).join('')}<td><button class="icon" data-del="${i}" aria-label="Remover linha">×</button></td></tr>`).join('')}</tbody></table></div><button class="btn sm ghost" id="raciAdd" style="margin-top:10px">+ Adicionar responsabilidade</button>`:'<div class="empty"><b>Cadastre primeiro os gestores</b>A matriz usa os cargos da seção 2.5.</div>'};
+  draw();el.oninput=e=>{const k=e.target.dataset.k;if(k){setPath(d,k,e.target.value);ch()}};
+  el.onclick=e=>{if(e.target.id==='raciAdd'){d.linhas.push({resp:''});draw();ch()}else if(e.target.dataset.del){d.linhas.splice(+e.target.dataset.del,1);draw();ch()}}}
+function queueSave(secId){S.dirty[secId]=true;const st=$('#savest');if(st){st.textContent='Salvando…';st.className='savest ing'}clearTimeout(S.saveT);S.saveT=setTimeout(flushSave,1200)}
+async function flushSave(){clearTimeout(S.saveT);const ks=Object.keys(S.dirty);if(!ks.length||!S.eq)return;S.dirty={};const part={};const now=Date.now();
+  ks.forEach(k=>{part[k]=S.pe[k];part['upd_'+k]={por:S.sess?.nome||'—',em:now};S.pe['upd_'+k]=part['upd_'+k]});
+  try{await Store.patch('pes',S.eq.id,part);const prog=peProg(S.pe);const up={atualizadoEm:now,progresso:prog};if(ks.includes('capa')&&S.pe.capa?.organizacao)up.organizacao=S.pe.capa.organizacao;await Store.patch('equipes',S.eq.id,up);
+    const st=$('#savest');if(st){st.textContent='Salvo às '+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});st.className='savest'}refreshDots();
+    const tb=$('.teambar .prog i');if(tb){tb.style.width=prog+'%';tb.parentElement.nextElementSibling.textContent=prog+'%'}}
+  catch(e){console.error(e);ks.forEach(k=>S.dirty[k]=true);toast('Falha ao salvar. Verifique a conexão; tentaremos de novo.');S.saveT=setTimeout(flushSave,5000)}}
+window.addEventListener('beforeunload',()=>{flushSave()});
+function alunoBasico(pane,eq){
+  const b=S.pe.basico||(S.pe.basico={});
+  pane.innerHTML=`<div class="stack"><div class="card stack"><div class="row between"><div><div class="eyebrow">Modelo 1 · síntese do PE completo</div><h2>PE Básico para a Mostra (folha A1)</h2></div><span class="savest" id="savest"></span></div>
+   <p>Missão, visão, valores, áreas, equipe gestora, mapa estratégico, Matriz X e planejamento de curto prazo vêm automaticamente do PE completo. Aqui você preenche apenas o que é exclusivo do pôster: a atratividade do empreendimento e o espaço “Plus” da equipe.</p>
+   ${S.fb.basico?`<div class="fbk"><b>Recomendação do professor:</b> ${nl(S.fb.basico)}</div>`:''}<div id="bform"></div></div>
+   <div class="card"><div class="row between" style="margin-bottom:10px"><h3>Pré-visualização do pôster</h3><button class="btn sm ghost" id="refP">Atualizar pré-visualização</button></div><div id="pbox"></div></div></div>`;
+  mountForm($('#bform'),BASICO.f,b,{imgp:eq.id+'_basico'},()=>queueSave('basico'));
+  const draw=()=>mountPoster($('#pbox'),eq,S.pe);draw();$('#refP').onclick=async()=>{await flushSave();draw()};
+}
+async function alunoMsgs(pane,eq){
+  const draw=async(scroll)=>{const all=(await Store.list('msgs')).sort((a,b)=>a.em-b.em);
+    const m=all.filter(x=>S.msgCanal==='prof'?(x.canal==='prof'&&(x.equipeId===eq.id||x.equipeId==='*')):(x.canal==='equipe'&&x.equipeId===eq.id));
+    if(S.msgCanal==='prof')ls('sispe_seen_'+eq.id,Date.now());
+    const box=$('#msgs',pane);if(!box){
+      pane.innerHTML=`<div class="card stack"><div class="ptabs"><button data-ch="prof" class="${S.msgCanal==='prof'?'on':''}">Com o professor</button><button data-ch="equipe" class="${S.msgCanal==='equipe'?'on':''}">Equipe (membros e gestor)</button></div>
+       <p class="help">${S.msgCanal==='prof'?'Mensagens privadas entre a equipe e o professor, além dos avisos gerais da disciplina.':'Canal interno da equipe e do gestor da organização. O professor também pode ler este canal.'}</p>
+       <div class="msgs" id="msgs" aria-live="polite"></div><form class="compose" id="cmp"><textarea id="cmpT" rows="2" placeholder="Escreva sua mensagem…" required></textarea><button class="btn" type="submit">Enviar</button></form></div>`;
+      $$('[data-ch]',pane).forEach(b=>b.onclick=()=>{S.msgCanal=b.dataset.ch;pane.innerHTML='';draw(true)});
+      $('#cmp',pane).onsubmit=async e=>{e.preventDefault();const t=$('#cmpT').value.trim();if(!t)return;await Store.set('msgs','m_'+uid(),{equipeId:eq.id,canal:S.msgCanal,de:S.sess.nome,papel:'aluno',perfil:S.sess.papel,texto:t,em:Date.now(),lidaProf:false});$('#cmpT').value='';draw(true)};
+    }
+    const b2=$('#msgs',pane);if(b2.dataset.n===String(m.length)&&!scroll)return;b2.dataset.n=m.length;
+    b2.innerHTML=m.map(x=>`<div class="bub ${x.papel==='professor'?'prof':''} ${x.papel!=='professor'&&x.de===S.sess.nome?'me':''}"><div class="meta">${esc(x.papel==='professor'?(x.equipeId==='*'?'Professor · aviso geral':'Professor'):x.de+' · '+(x.perfil||''))} · ${fmtDT(x.em)}</div><div class="tx">${esc(x.texto)}</div></div>`).join('')||'<p class="muted" style="text-align:center">Nenhuma mensagem ainda.</p>';
+    b2.scrollTop=b2.scrollHeight};
+  await draw(true);stopPoll();S.poll=setInterval(()=>{if(S.view==='aluno'&&S.atab==='msgs')draw(false);else stopPoll()},10000);
+}
+function alunoEquipe(pane,eq){const lider=/Líder/.test(S.sess.papel||'');
+  const obj={nome:eq.nome,slogan:eq.slogan,organizacao:eq.organizacao,segmento:eq.segmento,lider:eq.lider,liderEmail:eq.liderEmail,membros:clone(eq.membros||[]),gestor:clone(eq.gestor||{})};
+  const F=[{k:'nome',l:'Nome da start-up',w:2},{k:'slogan',l:'Slogan',w:2},{k:'organizacao',l:'Organização alvo',w:2},{k:'segmento',l:'Segmento',t:'select',opts:SEGMENTOS,w:2},{k:'lider',l:'Líder (representante)',w:2},{k:'liderEmail',l:'E-mail do líder',t:'email',w:2},
+   {k:'membros',l:'Demais membros da equipe',t:'list',max:8,item:'membro',sub:[{k:'nome',l:'Nome',w:2},{k:'email',l:'E-mail',t:'email',w:2}]},{k:'gestor.nome',l:'Gestor da organização alvo',w:2},{k:'gestor.email',l:'E-mail do gestor',t:'email',w:2}];
+  pane.innerHTML=`<div class="g2" style="align-items:start"><div class="card stack"><h3>Dados da equipe</h3><div id="eqf"></div><button class="btn" id="eqSave">Salvar dados da equipe</button></div>
+   <div class="stack"><div class="card stack"><h3>Senha de acesso</h3><p>Todos os membros e o gestor da organização entram com a mesma senha. ${lider?'Como líder, você pode trocá-la e repassar a nova senha.':'Apenas o líder pode trocar a senha.'}</p>
+   ${lider?`<form class="stack" id="pwF"><label class="fld"><span class="lbl">Nova senha</span><input type="password" id="pw1" minlength="6" required autocomplete="new-password"></label><label class="fld"><span class="lbl">Confirmar</span><input type="password" id="pw2" minlength="6" required autocomplete="new-password"></label><button class="btn gold" type="submit">Trocar senha</button></form>`:''}</div>
+   <div class="card stack"><h3>Mensagem pronta para os membros</h3><p class="help">Copie e envie pelo grupo da equipe (sem a senha; informe-a pessoalmente).</p><div class="code" id="convite" style="white-space:pre-wrap">Olá! Nossa start-up “${esc(eq.nome)}” já está cadastrada no Sistema de Elaboração de Planejamento Estratégico (Engenharia de Produção – UFAM).\nAcesse “Ambiente dos alunos”, escolha a equipe “${esc(eq.nome)}”, informe seu nome e a senha da equipe.</div><button class="btn sm ghost" id="cpy">Copiar mensagem</button></div></div></div>`;
+  mountForm($('#eqf'),F,obj,{imgp:'eq'});
+  $('#eqSave').onclick=async()=>{await Store.patch('equipes',eq.id,obj);toast('Dados da equipe salvos.');render()};
+  $('#cpy').onclick=()=>{const t=$('#convite').textContent;navigator.clipboard?.writeText(t).then(()=>toast('Mensagem copiada.'),()=>{getSelection().selectAllChildren($('#convite'));toast('Selecione e copie o texto.')})};
+  const pf=$('#pwF');if(pf)pf.onsubmit=async e=>{e.preventDefault();if($('#pw1').value!==$('#pw2').value)return toast('As senhas não conferem.');await Store.patch('equipes',eq.id,{senhaHash:await sha($('#pw1').value)});toast('Senha alterada. Informe a nova senha à equipe.');pf.reset()};
+}
+
+/* ===================== AMBIENTE DO PROFESSOR ===================== */
+async function renderProfLogin(){const first=!S.cfg.profHash;
+  app.innerHTML=`<div class="wrap"><form class="card stack" id="pl" style="max-width:440px;margin:30px auto"><div class="eyebrow">Ambiente do professor</div><h2>${first?'Primeiro acesso':'Entrar'}</h2>
+   <p>${first?'Defina a senha do professor. Ela protege a gestão das orientações, equipes, notas e do acervo.':'Informe a senha do professor para gerenciar a disciplina.'}</p>
+   <label class="fld"><span class="lbl">Senha</span><input type="password" id="pp1" required ${first?'minlength="6" autocomplete="new-password"':'autocomplete="current-password"'}></label>
+   ${first?'<label class="fld"><span class="lbl">Confirmar senha</span><input type="password" id="pp2" required minlength="6" autocomplete="new-password"></label>':''}
+   ${Store.mode==='local'&&S.cfg.demoProf?'<p class="help"><span class="ex">Demonstração</span> Senha inicial do modo local: <b>ufam2026</b>. Troque em Configurações.</p>':''}
+   <button class="btn" type="submit">${first?'Definir senha e entrar':'Entrar'}</button></form></div>`;
+  $('#pl').onsubmit=async e=>{e.preventDefault();const h=await sha($('#pp1').value);
+    if(first){if($('#pp1').value!==$('#pp2').value)return toast('As senhas não conferem.');await Store.patch('config','geral',{profHash:h});S.cfg.profHash=h}
+    else if(h!==S.cfg.profHash)return toast('Senha incorreta.');
+    setSess({role:'prof',nome:'Prof. Jonas Gomes da Silva'});render()};
+}
+async function renderProf(){
+  const eqs=await Store.list('equipes');const msgs=await Store.list('msgs');const unread=msgs.filter(m=>m.papel==='aluno'&&m.canal==='prof'&&!m.lidaProf).length;
+  const T=[['painel','Painel'],['orient','Orientações'],['equipes','Equipes e PEs'],['aval','Avaliação da Mostra'],['acervo','Acervo histórico'],['msgs','Mensagens'],['config','Semestre e configurações']];
+  if(S.ptabProf==='revisar')return profRevisar(eqs);
+  app.innerHTML=`<div class="wrap"><div class="teambar"><div><div class="eyebrow">Ambiente do professor</div><div class="nm">Semestre ${esc(S.cfg.semestre)}</div><div class="sl">${esc(S.cfg.edicao)} · horizonte ${S.cfg.anoInicio}–${S.cfg.anoInicio+2}</div></div><button class="btn sm ghost" id="sair">Sair</button></div>
+   <div class="tabs">${T.map(([k,l])=>`<button data-pt="${k}" class="${S.ptabProf===k?'on':''}">${l}${k==='msgs'&&unread?`<span class="badge">${unread}</span>`:''}</button>`).join('')}</div><div id="pane"></div></div>`;
+  $('#sair').onclick=()=>{setSess(null);render()};$$('[data-pt]').forEach(b=>b.onclick=()=>{stopPoll();S.ptabProf=b.dataset.pt;render()});
+  const pane=$('#pane'),cur=eqs.filter(e=>e.semestre===S.cfg.semestre&&!e.arquivado);
+  ({painel:()=>profPainel(pane,cur,msgs),orient:()=>profOrient(pane),equipes:()=>profEquipes(pane,eqs),aval:()=>profAval(pane,eqs),acervo:()=>profAcervo(pane,eqs),msgs:()=>profMsgs(pane,cur,msgs),config:()=>profConfig(pane)})[S.ptabProf]();
+}
+async function profPainel(pane,cur,msgs){
+  const ors=(await Store.list('orientacoes')).filter(o=>o.semestre===S.cfg.semestre);const fases=ors.flatMap(o=>o.fases||[]).filter(f=>f.prazo&&f.prazo>=today()).sort((a,b)=>a.prazo.localeCompare(b.prazo));
+  const pm=cur.length?Math.round(cur.reduce((a,e)=>a+(e.progresso||0),0)/cur.length):0;const un=msgs.filter(m=>m.papel==='aluno'&&m.canal==='prof'&&!m.lidaProf).length;
+  pane.innerHTML=`<div class="g4" style="margin-bottom:18px"><div class="kpi"><b>${cur.length}</b><span>Equipes no semestre</span></div><div class="kpi gold"><b>${pm}%</b><span>Progresso médio dos PEs</span></div><div class="kpi purple"><b>${un}</b><span>Mensagens não lidas</span></div><div class="kpi"><b>${fases[0]?fmtD(fases[0].prazo):'—'}</b><span>${fases[0]?'Próximo prazo: '+esc(fases[0].nome):'Sem prazos futuros'}</span></div></div>
+   <div class="card stack"><div class="row between"><h3>Andamento das equipes</h3><button class="btn sm ghost" id="toEq">Gerenciar equipes</button></div>
+   ${cur.length?`<div class="tbl-wrap"><table><thead><tr><th>Start-up</th><th>Organização</th><th>Líder</th><th style="min-width:180px">Progresso</th><th>Última edição</th><th></th></tr></thead><tbody>${cur.sort((a,b)=>(b.progresso||0)-(a.progresso||0)).map(e=>`<tr><td><b>${esc(e.nome)}</b><br><small>${esc(e.slogan||'')}</small></td><td>${esc(e.organizacao||'—')}</td><td>${esc(e.lider||'')}</td><td>${progBar(e.progresso||0)}</td><td class="num">${fmtDT(e.atualizadoEm)}</td><td><button class="btn sm" data-rev="${e.id}">Revisar PE</button></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty"><b>Nenhuma equipe ainda</b>As equipes aparecem aqui assim que o representante as cria no ambiente dos alunos.</div>'}</div>`;
+  $('#toEq').onclick=()=>{S.ptabProf='equipes';render()};$$('[data-rev]',pane).forEach(b=>b.onclick=()=>{S.revId=b.dataset.rev;S.ptabProf='revisar';S.rtab='completo';render()});
+}
+async function profOrient(pane){
+  const ors=(await Store.list('orientacoes')).sort((a,b)=>(b.semestre||'').localeCompare(a.semestre||'')||(b.criadaEm||0)-(a.criadaEm||0));
+  pane.innerHTML=`<div class="row between" style="margin-bottom:14px"><p class="muted">Crie o desafio do semestre com meta, simulação, fases, prazos e critérios. Somente orientações publicadas aparecem para os alunos.</p><div class="row"><button class="btn" id="novaO">+ Nova orientação</button></div></div>
+   <div class="tbl-wrap"><table><thead><tr><th>Semestre</th><th>Título</th><th>Fases</th><th>Último prazo</th><th>Situação</th><th></th></tr></thead><tbody>${ors.map(o=>{const last=(o.fases||[]).map(f=>f.prazo).filter(Boolean).sort().pop();return `<tr><td>${esc(o.semestre)}</td><td><b>${esc(o.titulo)}</b></td><td class="num">${(o.fases||[]).length}</td><td class="num">${fmtD(last)}</td><td>${o.publicada?'<span class="chip ok">Publicada</span>':'<span class="chip">Rascunho</span>'}</td><td><div class="row" style="flex-wrap:nowrap"><button class="btn sm ghost" data-ed="${o.id}">Editar</button><button class="btn sm ghost" data-dup="${o.id}" title="Copiar para o semestre vigente">Duplicar</button></div></td></tr>`}).join('')||'<tr><td colspan="6" class="muted">Nenhuma orientação cadastrada.</td></tr>'}</tbody></table></div>`;
+  $('#novaO').onclick=()=>editOrient({semestre:S.cfg.semestre,titulo:'',fases:[],publicada:false});
+  $$('[data-ed]',pane).forEach(b=>b.onclick=()=>editOrient(clone(ors.find(o=>o.id===b.dataset.ed))));
+  $$('[data-dup]',pane).forEach(b=>b.onclick=()=>{const o=clone(ors.find(x=>x.id===b.dataset.dup));delete o.id;o.semestre=S.cfg.semestre;o.titulo+=' (cópia)';o.publicada=false;editOrient(o)});
+}
+function editOrient(o){const F=[{k:'semestre',l:'Semestre',w:1},{k:'pontos',l:'Valor (pontos)',t:'number',w:1},{k:'titulo',l:'Título',w:2,ph:'Exercício 6 – Planejamento Estratégico'},{k:'meta',l:'Meta',t:'textarea'},{k:'simulacao',l:'Simulação / contexto',t:'textarea',rows:4},
+  {k:'fases',l:'Fases e prazos',t:'list',max:12,item:'fase',sub:[{k:'nome',l:'Fase',w:2},{k:'inicio',l:'Início',t:'date',w:1},{k:'prazo',l:'Prazo final',t:'date',w:1},{k:'descricao',l:'O que fazer',t:'textarea',w:2,rows:3},{k:'atencao',l:'Atenção!',t:'textarea',w:2,rows:3}]},
+  {k:'criterios',l:'Critérios avaliativos',t:'textarea'},{k:'premio',l:'Premiação',t:'textarea',rows:2},{k:'publicada',l:'Publicar para os alunos',t:'check'}];
+  const m=modal(`<div class="row between"><h3>${o.id?'Editar':'Nova'} orientação</h3><button class="btn sm ghost" data-close>Fechar</button></div><div id="of"></div><div class="row between">${o.id?'<button class="btn danger" id="oDel">Excluir</button>':'<span></span>'}<button class="btn" id="oSave">Salvar orientação</button></div>`);
+  mountForm($('#of',m),F,o,{imgp:'or'});
+  $('#oSave',m).onclick=async()=>{if(!o.titulo)return toast('Informe o título.');const id=o.id||'or_'+uid();o.criadaEm=o.criadaEm||Date.now();await Store.set('orientacoes',id,o);closeModal();toast('Orientação salva.');render()};
+  const d=$('#oDel',m);if(d)d.onclick=async()=>{if(await confirmBox('Excluir esta orientação? Os alunos deixarão de vê-la.','Excluir')){await Store.del('orientacoes',o.id);toast('Orientação excluída.');render()}};
+}
+async function profEquipes(pane,eqs){const sems=[...new Set(eqs.map(e=>e.semestre))].sort().reverse();S.fsem=S.fsem||S.cfg.semestre;
+  const list=eqs.filter(e=>e.semestre===S.fsem).sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR'));
+  pane.innerHTML=`<div class="row between" style="margin-bottom:14px"><label class="fld" style="max-width:220px"><span class="lbl">Semestre</span><select id="fsem">${sems.map(s=>`<option ${s===S.fsem?'selected':''}>${esc(s)}</option>`).join('')}</select></label><p class="help" style="max-width:60ch">Revise o conteúdo dos PEs, deixe recomendações por seção, publique no acervo público, redefina a senha de uma equipe ou exclua cadastros indevidos.</p></div>
+   ${list.length?`<div class="tbl-wrap"><table><thead><tr><th>Start-up</th><th>Organização / segmento</th><th>Consultores</th><th style="min-width:150px">Progresso</th><th>Acervo público</th><th>Ações</th></tr></thead><tbody>${list.map(e=>`<tr><td><b>${esc(e.nome||'—')}</b><br><small>${esc(e.slogan||'')}</small></td><td>${esc(e.organizacao||'—')}<br><small>${esc(e.segmento||'')}</small></td><td><small>${esc(consultores(e).join(', '))}</small>${e.gestor?.nome?`<br><small>Gestor: ${esc(e.gestor.nome)}</small>`:''}</td><td>${e.arquivado?'<span class="chip purple">Acervo</span>':progBar(e.progresso||0)}</td><td><label class="chk"><input type="checkbox" data-pub="${e.id}" ${e.publico?'checked':''}> ${e.publico?'Publicado':'Oculto'}</label></td><td><div class="row" style="flex-wrap:nowrap"><button class="btn sm" data-rev="${e.id}">Revisar</button><button class="btn sm ghost" data-pw="${e.id}">Senha</button><button class="btn sm danger" data-rm="${e.id}">Excluir</button></div></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty"><b>Nenhuma equipe neste semestre</b></div>'}`;
+  $('#fsem').onchange=e=>{S.fsem=e.target.value;render()};
+  $$('[data-rev]',pane).forEach(b=>b.onclick=()=>{S.revId=b.dataset.rev;S.ptabProf='revisar';S.rtab='completo';render()});
+  $$('[data-pub]',pane).forEach(c=>c.onchange=async()=>{await Store.patch('equipes',c.dataset.pub,{publico:c.checked});toast(c.checked?'PE publicado no acervo público.':'PE retirado do acervo público.');render()});
+  $$('[data-pw]',pane).forEach(b=>b.onclick=()=>{const m=modal(`<h3>Redefinir senha da equipe</h3><p>Use quando o líder esquecer a senha. Informe a nova senha à equipe.</p><label class="fld"><span class="lbl">Nova senha</span><input type="password" id="npw" minlength="6" autocomplete="new-password"></label><div class="row" style="justify-content:flex-end"><button class="btn ghost" data-close>Cancelar</button><button class="btn" id="npwOk">Redefinir</button></div>`,'sm');
+    $('#npwOk',m).onclick=async()=>{const v=$('#npw',m).value;if(v.length<6)return toast('Use pelo menos 6 caracteres.');await Store.patch('equipes',b.dataset.pw,{senhaHash:await sha(v)});closeModal();toast('Senha redefinida.')}});
+  $$('[data-rm]',pane).forEach(b=>b.onclick=async()=>{const e=list.find(x=>x.id===b.dataset.rm);if(await confirmBox(`Excluir a equipe <b>${esc(e.nome||e.organizacao)}</b> e todo o seu PE? Esta ação não pode ser desfeita.`,'Excluir equipe')){await Promise.all([Store.del('equipes',e.id),Store.del('pes',e.id),Store.del('feedback',e.id)]);toast('Equipe excluída.');render()}});
+}
+async function profRevisar(eqs){const eq=eqs.find(e=>e.id===S.revId);if(!eq){S.ptabProf='equipes';return render()}
+  const pe=await Store.get('pes',eq.id)||{};const fb=await Store.get('feedback',eq.id)||{};S.rtab=S.rtab||'completo';
+  app.innerHTML=`<div class="wrap stack"><div><button class="btn sm ghost" id="back">← Voltar</button></div>
+   <div class="card"><div class="row between"><div><div class="eyebrow">Revisão do PE · ${esc(eq.semestre)}</div><h2>${esc(eq.nome||'—')} · ${esc(eq.organizacao||'organização não definida')}</h2><p class="muted" style="margin-top:4px">Consultores: ${esc(consultores(eq).join(', '))}${eq.gestor?.nome?` · Gestor: ${esc(eq.gestor.nome)}`:''}</p></div><div style="min-width:220px">${progBar(peProg(pe))}<small>Última edição: ${fmtDT(eq.atualizadoEm)}</small></div></div></div>
+   <div class="tabs"><button data-rt="completo" class="${S.rtab==='completo'?'on':''}">PE Completo + recomendações</button><button data-rt="basico" class="${S.rtab==='basico'?'on':''}">PE Básico A1</button></div>
+   <div id="rbody" class="stack"></div></div>`;
+  $('#back').onclick=()=>{S.ptabProf='equipes';render()};$$('[data-rt]').forEach(b=>b.onclick=()=>{S.rtab=b.dataset.rt;render()});
+  const rb=$('#rbody');
+  if(S.rtab==='basico'){rb.innerHTML=`<div class="card"><label class="fld"><span class="lbl">Recomendação para o PE básico</span><textarea data-fb="basico" rows="2">${esc(fb.basico||'')}</textarea></label></div><div class="card" id="pbx"></div>`;mountPoster($('#pbx'),eq,pe)}
+  else{rb.innerHTML=`<div class="fbk">As recomendações são salvas automaticamente ao sair de cada campo e aparecem para a equipe na seção correspondente.</div>`+peView(eq,pe,{feedback:true,fb,prog:true});hydrateImgs(rb)}
+  rb.addEventListener('change',async e=>{const k=e.target.dataset.fb;if(!k)return;await Store.patch('feedback',eq.id,{[k]:e.target.value.trim()});toast('Recomendação salva.')});
+}
+async function profAval(pane,eqs){const sems=[...new Set(eqs.map(e=>e.semestre))].sort().reverse();S.asem=S.asem||S.cfg.semestre;
+  const list=eqs.filter(e=>e.semestre===S.asem);const w=S.cfg.pesos;const pts=S.cfg.pontos||5;
+  const rows=list.map(e=>({e,a:Object.assign({prof:'',resp:'',alunos:'',recomendacoes:''},e.avaliacao||{})}));
+  const draw=()=>{const rk=rankEd(rows.map(r=>({...r.e,avaliacao:r.a})));const pos={};rk.forEach(x=>pos[x.e.id]=x.pos);
+    $('#avt').innerHTML=rows.map((r,i)=>{const n=nf(r.a);return `<tr><td><b>${esc(r.e.organizacao||'—')}</b><br><small>${esc(r.e.nome||'')}</small></td><td><input type="text" inputmode="decimal" data-i="${i}" data-f="prof" value="${esc(numBR(r.a.prof))}" id="av_${i}_p" aria-label="Média dos professores convidados" style="width:90px"></td><td><input type="text" inputmode="decimal" data-i="${i}" data-f="resp" value="${esc(numBR(r.a.resp))}" id="av_${i}_r" aria-label="Nota do professor responsável" style="width:90px"></td><td><input type="text" inputmode="decimal" data-i="${i}" data-f="alunos" value="${esc(numBR(r.a.alunos))}" id="av_${i}_a" aria-label="Média dos alunos" style="width:90px"></td><td class="num"><b>${n!=null?n2(n):'—'}</b></td><td class="num">${n!=null?n2(n*pts/10):'—'}</td><td class="num">${pos[r.e.id]?pos[r.e.id]+'º':'—'}</td><td style="min-width:240px"><textarea data-i="${i}" data-f="recomendacoes" rows="2" id="av_${i}_rec" aria-label="Recomendações">${esc(r.a.recomendacoes)}</textarea></td></tr>`}).join('')};
+  pane.innerHTML=`<div class="row between" style="margin-bottom:14px"><label class="fld" style="max-width:220px"><span class="lbl">Semestre</span><select id="asem">${sems.map(s=>`<option ${s===S.asem?'selected':''}>${esc(s)}</option>`).join('')}</select></label><p class="help" style="max-width:62ch">Lance as médias da defesa pública. Nota final (NF) = (professores convidados × ${w.prof} + professor responsável × ${w.resp} + alunos × ${w.alunos}) ÷ ${(+w.prof)+(+w.resp)+(+w.alunos)}. Nota lançada = NF × ${pts} ÷ 10. Pesos e pontos são ajustáveis em Configurações.</p></div>
+   ${rows.length?`<div class="tbl-wrap"><table><thead><tr><th>Empreendimento</th><th>Prof. convidados (×${w.prof})</th><th>Prof. responsável (×${w.resp})</th><th>Alunos (×${w.alunos})</th><th>NF</th><th>Nota (${pts} pts)</th><th>Ranking</th><th>Recomendações dos avaliadores</th></tr></thead><tbody id="avt"></tbody></table></div><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn" id="avSave">Salvar avaliações</button></div>`:'<div class="empty"><b>Nenhuma equipe neste semestre</b></div>'}`;
+  $('#asem').onchange=e=>{S.asem=e.target.value;render()};if(!rows.length)return;draw();
+  $('#avt').oninput=e=>{const t=e.target,i=t.dataset.i;if(i==null)return;if(t.dataset.f==='recomendacoes'){rows[i].a.recomendacoes=t.value;return}const n=parseBR(t.value);t.classList.toggle('bad',n===null||n>10);if(n!==null)rows[i].a[t.dataset.f]=n};
+  $('#avt').onchange=e=>{if(e.target.dataset.f&&e.target.dataset.f!=='recomendacoes'){const f=document.activeElement?.id;draw();if(f)$('#'+f)?.focus()}};
+  $('#avSave').onclick=async()=>{await Promise.all(rows.map(r=>Store.patch('equipes',r.e.id,{avaliacao:{...r.a,nf:nf(r.a)}})));toast('Avaliações salvas.');render()};
+}
+async function profAcervo(pane,eqs){const arq=eqs.filter(e=>e.arquivado).sort((a,b)=>(b.semestre||'').localeCompare(a.semestre||''));
+  pane.innerHTML=`<div class="row between" style="margin-bottom:14px"><p class="muted" style="max-width:70ch">Cadastre os Planejamentos Estratégicos de anos anteriores, elaborados antes deste sistema. Informe os dados principais e o link para os arquivos originais (Drive, OneDrive etc.). As equipes do semestre vigente também podem ser publicadas em “Equipes e PEs”.</p><button class="btn" id="novoA">+ Cadastrar PE anterior</button></div>
+   <div class="tbl-wrap"><table><thead><tr><th>Semestre</th><th>Organização</th><th>Start-up</th><th>Segmento</th><th>NF</th><th>Público</th><th></th></tr></thead><tbody>${arq.map(e=>`<tr><td>${esc(e.semestre)}</td><td><b>${esc(e.organizacao)}</b></td><td>${esc(e.nome||'—')}</td><td>${esc(e.segmento||'')}</td><td class="num">${n2(nf(e.avaliacao))}</td><td>${e.publico?'<span class="chip ok">Sim</span>':'<span class="chip">Não</span>'}</td><td><div class="row" style="flex-wrap:nowrap"><button class="btn sm ghost" data-ea="${e.id}">Editar</button><button class="btn sm" data-rev="${e.id}">Conteúdo</button></div></td></tr>`).join('')||'<tr><td colspan="7" class="muted">Nenhum PE anterior cadastrado.</td></tr>'}</tbody></table></div>`;
+  $('#novoA').onclick=()=>editAcervo(null);$$('[data-ea]',pane).forEach(b=>b.onclick=()=>editAcervo(arq.find(e=>e.id===b.dataset.ea)));
+  $$('[data-rev]',pane).forEach(b=>b.onclick=()=>{S.revId=b.dataset.rev;S.ptabProf='revisar';S.rtab='completo';render()});
+}
+async function editAcervo(eq){const pe=eq?await Store.get('pes',eq.id)||{}:{};
+  const o={semestre:eq?.semestre||'',edicao:eq?.edicao||'',anoInicio:eq?.anoInicio||'',organizacao:eq?.organizacao||'',segmento:eq?.segmento||'',nome:eq?.nome||'',slogan:eq?.slogan||'',consult:[eq?.lider,...(eq?.membros||[]).map(m=>m.nome)].filter(Boolean).join('\n'),missao:pe.proposito?.missao||'',visao:pe.proposito?.visao||'',link:eq?.link||'',prof:eq?.avaliacao?.prof??'',resp:eq?.avaliacao?.resp??'',alunos:eq?.avaliacao?.alunos??'',recomendacoes:eq?.avaliacao?.recomendacoes||'',publico:eq?eq.publico:true};
+  const F=[{k:'semestre',l:'Semestre',w:1,ph:'2023/2'},{k:'edicao',l:'Edição da Mostra',w:2,ph:'VII Mostra de PE'},{k:'anoInicio',l:'1º ano do plano',t:'number',w:1,ph:'2025'},{k:'organizacao',l:'Organização alvo',w:2},{k:'segmento',l:'Segmento',t:'select',opts:SEGMENTOS,w:2},{k:'nome',l:'Start-up de consultoria',w:2},{k:'slogan',l:'Slogan',w:2},
+   {k:'consult',l:'Consultores (um por linha)',t:'textarea',w:4,rows:3},{k:'missao',l:'Missão',t:'textarea',w:2},{k:'visao',l:'Visão',t:'textarea',w:2},{k:'link',l:'Link para os arquivos originais',t:'url',ph:'https://…'},
+   {k:'prof',l:'Média prof. convidados',t:'number',w:1},{k:'resp',l:'Nota prof. responsável',t:'number',w:1},{k:'alunos',l:'Média alunos',t:'number',w:2},{k:'recomendacoes',l:'Recomendações dos avaliadores',t:'textarea'},{k:'publico',l:'Exibir no acervo público',t:'check'}];
+  const m=modal(`<div class="row between"><h3>${eq?'Editar':'Cadastrar'} PE de edição anterior</h3><button class="btn sm ghost" data-close>Fechar</button></div><div id="af"></div><div class="row between">${eq?'<button class="btn danger" id="aDel">Excluir</button>':'<span></span>'}<button class="btn" id="aSave">Salvar no acervo</button></div>`);
+  mountForm($('#af',m),F,o,{imgp:'ac'});
+  $('#aSave',m).onclick=async()=>{if(!o.semestre||!o.organizacao)return toast('Informe semestre e organização.');const cs=o.consult.split('\n').map(s=>s.trim()).filter(Boolean);const id=eq?.id||'arq_'+uid();
+    const num=v=>v===''||v==null?'':Number(v);
+    await Store.set('equipes',id,{...(eq||{}),semestre:o.semestre,edicao:o.edicao,anoInicio:Number(o.anoInicio)||null,organizacao:o.organizacao,segmento:o.segmento,nome:o.nome,slogan:o.slogan,lider:cs[0]||'',membros:cs.slice(1).map(n=>({nome:n})),link:o.link,publico:!!o.publico,arquivado:true,criadaEm:eq?.criadaEm||Date.now(),atualizadoEm:Date.now(),avaliacao:{prof:num(o.prof),resp:num(o.resp),alunos:num(o.alunos),recomendacoes:o.recomendacoes}});
+    await Store.patch('pes',id,{proposito:{...(pe.proposito||{}),missao:o.missao,visao:o.visao},capa:{...(pe.capa||{}),organizacao:o.organizacao}});closeModal();toast('PE salvo no acervo.');render()};
+  const d=$('#aDel',m);if(d)d.onclick=async()=>{if(await confirmBox('Excluir este PE do acervo?','Excluir')){await Promise.all([Store.del('equipes',eq.id),Store.del('pes',eq.id)]);toast('Excluído.');render()}};
+}
+async function profMsgs(pane,cur,msgs){
+  cur=[...cur].sort((a,b)=>(a.nome||'').localeCompare(b.nome||'','pt-BR'));
+  const nomeEq=id=>id==='*'?'Todas as equipes':cur.find(e=>e.id===id)?.nome||'Equipe';
+  const enviar=async(ids,t)=>{const now=Date.now();await Promise.all(ids.map((id,k)=>Store.set('msgs','m_'+uid()+k,{equipeId:id,canal:'prof',de:'Professor',papel:'professor',texto:t,em:now+k,semestre:S.cfg.semestre})))};
+  const novaMsg=()=>{const pre=S.msgThread&&S.msgThread!=='*'?[S.msgThread]:[];
+    const m=modal(`<div class="row between"><h3>Nova mensagem</h3><button class="btn sm ghost" data-close>Fechar</button></div>
+     <fieldset class="stack" style="border:1px solid var(--line);border-radius:10px;padding:12px 14px;gap:8px"><legend class="lbl" style="padding:0 6px">Destinatários</legend>
+      <label class="chk"><input type="radio" name="dst" value="todas" id="dstAll" ${pre.length?'':'checked'}> Todas as equipes do semestre ${esc(S.cfg.semestre)} (aviso geral)</label>
+      <label class="chk"><input type="radio" name="dst" value="sel" id="dstSel" ${pre.length?'checked':''} ${cur.length?'':'disabled'}> Equipes selecionadas</label>
+      <div id="dstList" class="stack" style="gap:6px;padding-left:26px">${cur.length?`<div class="row" style="gap:8px"><button type="button" class="btn sm ghost" id="mkAll">Marcar todas</button><button type="button" class="btn sm ghost" id="mkNone">Desmarcar</button></div>`+cur.map(e=>`<label class="chk" style="font-weight:500"><input type="checkbox" class="dstEq" value="${e.id}" ${pre.includes(e.id)?'checked':''}> <b>${esc(e.nome)}</b> <small>· ${esc(e.organizacao||'organização a definir')} · líder ${esc(e.lider||'—')}</small></label>`).join(''):'<p class="help">Nenhuma equipe cadastrada neste semestre ainda. As equipes aparecem aqui assim que o representante as cria no ambiente dos alunos.</p>'}</div></fieldset>
+     <label class="fld"><span class="lbl">Mensagem</span><textarea id="nmT" rows="5" placeholder="Escreva a mensagem"></textarea></label>
+     <p class="help">Para equipes selecionadas, cada equipe recebe a mensagem no seu canal privado com o professor. O aviso geral aparece para todas as equipes do semestre.</p>
+     <div class="row" style="justify-content:flex-end"><button class="btn ghost" data-close>Cancelar</button><button class="btn" id="nmSend">Enviar mensagem</button></div>`);
+    const sync=()=>{const sel=$('#dstSel',m).checked;$('#dstList',m).style.opacity=sel?1:.5;$$('.dstEq',m).forEach(c=>c.disabled=!sel)};sync();
+    $$('[name=dst]',m).forEach(r=>r.onchange=sync);
+    $('#mkAll',m)&&($('#mkAll',m).onclick=()=>$$('.dstEq',m).forEach(c=>c.checked=true));$('#mkNone',m)&&($('#mkNone',m).onclick=()=>$$('.dstEq',m).forEach(c=>c.checked=false));
+    $('#nmSend',m).onclick=async()=>{const t=$('#nmT',m).value.trim();if(!t)return toast('Escreva a mensagem.');
+      let ids=$('#dstAll',m).checked?['*']:$$('.dstEq:checked',m).map(c=>c.value);if(!ids.length)return toast('Selecione ao menos uma equipe.');
+      await enviar(ids,t);closeModal();S.msgThread=ids.length===1?ids[0]:S.msgThread||'*';S.profCanal='prof';
+      toast(ids[0]==='*'?'Aviso enviado a todas as equipes.':`Mensagem enviada para ${ids.length} equipe(s).`);pane.innerHTML='';draw(true)}};
+  const draw=async(scroll)=>{const all=(await Store.list('msgs')).sort((a,b)=>a.em-b.em);
+    const th=S.msgThread||'*';const canal=th==='*'?'prof':(S.profCanal||'prof');
+    const unr=id=>all.filter(m=>m.equipeId===id&&m.papel==='aluno'&&m.canal==='prof'&&!m.lidaProf).length;
+    const last=id=>all.filter(m=>m.equipeId===id&&m.canal==='prof').pop();
+    const list=th==='*'?all.filter(m=>m.equipeId==='*'):all.filter(m=>m.equipeId===th&&m.canal===canal);
+    if(!$('#thr',pane)){
+      pane.innerHTML=`<div class="row between" style="margin-bottom:12px"><p class="muted" style="max-width:70ch">Converse com cada equipe em particular ou envie avisos gerais. Uma mesma mensagem pode ir para várias equipes de uma vez.</p><button class="btn" id="novaM">+ Nova mensagem</button></div><div class="chat"><div class="card threads" id="thr"></div><div class="card thread" id="tbox"></div></div>`;
+      $('#novaM',pane).onclick=novaMsg}
+    $('#thr',pane).innerHTML=`<div class="eyebrow" style="margin:2px 6px 6px">Avisos</div><button data-th="*" class="${th==='*'?'on':''}"><span>Todas as equipes</span></button><div class="eyebrow" style="margin:12px 6px 6px">Equipes · ${esc(S.cfg.semestre)}</div>${cur.map(e=>{const l=last(e.id);return `<button data-th="${e.id}" class="${th===e.id?'on':''}"><span style="min-width:0"><span style="display:block">${esc(e.nome)}</span><small style="font-weight:500">${l?fmtDT(l.em):esc(e.organizacao||'sem mensagens')}</small></span>${unr(e.id)?`<span class="chip wine">${unr(e.id)}</span>`:''}</button>`}).join('')||'<p class="help" style="padding:6px">Nenhuma equipe cadastrada neste semestre.</p>'}`;
+    $$('[data-th]',pane).forEach(b=>b.onclick=()=>{S.msgThread=b.dataset.th;S.profCanal='prof';$('#tbox',pane).innerHTML='';draw(true)});
+    const tb=$('#tbox',pane);const eq=cur.find(e=>e.id===th);
+    if(!$('#msgs',tb)){tb.innerHTML=`<div class="row between"><div><h3>${th==='*'?'Avisos a todas as equipes':esc(nomeEq(th))}</h3>${eq?`<small>${esc(eq.organizacao||'')} · líder ${esc(eq.lider||'—')}</small>`:'<small>Visível para todas as equipes do semestre</small>'}</div>${th!=='*'?`<div class="ptabs"><button data-pc="prof" class="${canal==='prof'?'on':''}">Com o professor</button><button data-pc="equipe" class="${canal==='equipe'?'on':''}">Canal interno (leitura)</button></div>`:''}</div><div class="msgs" id="msgs"></div>${canal==='prof'?`<form class="compose" id="pc"><textarea id="pcT" rows="2" required placeholder="${th==='*'?'Aviso para todas as equipes do semestre':'Mensagem só para a equipe '+esc(nomeEq(th))}"></textarea><button class="btn" type="submit">Enviar</button></form>`:''}`;
+      $$('[data-pc]',tb).forEach(b=>b.onclick=()=>{S.profCanal=b.dataset.pc;tb.innerHTML='';draw(true)});
+      const f=$('#pc',tb);if(f)f.onsubmit=async e=>{e.preventDefault();const t=$('#pcT').value.trim();if(!t)return;await enviar([th],t);$('#pcT').value='';draw(true)}}
+    const box=$('#msgs',tb);if(box.dataset.n!==String(list.length)||scroll){box.dataset.n=list.length;box.innerHTML=list.map(x=>`<div class="bub ${x.papel==='professor'?'me prof':''}"><div class="meta">${esc(x.papel==='professor'?'Professor':x.de+' · '+(x.perfil||''))} · ${fmtDT(x.em)}</div><div class="tx">${esc(x.texto)}</div></div>`).join('')||'<p class="muted" style="text-align:center">Nenhuma mensagem nesta conversa.</p>';box.scrollTop=box.scrollHeight}
+    const toRead=list.filter(m=>m.papel==='aluno'&&m.canal==='prof'&&!m.lidaProf);if(toRead.length){await Promise.all(toRead.map(m=>Store.patch('msgs',m.id,{lidaProf:true})));$('#thr [data-th="'+th+'"] .chip',pane)?.remove()}
+  };
+  await draw(true);stopPoll();S.poll=setInterval(()=>{if(S.view==='prof'&&S.ptabProf==='msgs'&&!$('#ov'))draw(false);else if(S.view!=='prof'||S.ptabProf!=='msgs')stopPoll()},10000);
+}
+async function profConfig(pane){const c=clone(S.cfg);
+  const F=[{k:'semestre',l:'Semestre vigente',w:1,ph:'2026/2'},{k:'edicao',l:'Nome da edição da Mostra',w:2},{k:'anoInicio',l:'1º ano do plano (horizonte de 3 anos)',t:'number',w:1},{k:'tamEquipe',l:'Membros por equipe',t:'number',w:1},{k:'pontos',l:'Valor do exercício (pontos)',t:'number',w:1},{k:'pesos.prof',l:'Peso prof. convidados',t:'number',w:1},{k:'pesos.resp',l:'Peso prof. responsável',t:'number',w:1},{k:'pesos.alunos',l:'Peso alunos',t:'number',w:1}];
+  pane.innerHTML=`<div class="g2" style="align-items:start"><div class="stack"><div class="card stack"><h3>Semestre e Mostra</h3><p class="help">Ao mudar o semestre, as equipes anteriores ficam preservadas e continuam acessíveis em “Equipes e PEs” e “Avaliação”. Os alunos passam a ver apenas as orientações e equipes do novo semestre.</p><div id="cf"></div><button class="btn" id="cfSave">Salvar configurações</button></div>
+   <div class="card stack"><h3>Senha do professor</h3><form class="stack" id="pwP"><label class="fld"><span class="lbl">Nova senha</span><input type="password" id="pq1" minlength="6" required autocomplete="new-password"></label><label class="fld"><span class="lbl">Confirmar</span><input type="password" id="pq2" minlength="6" required autocomplete="new-password"></label><button class="btn gold" type="submit">Trocar senha</button></form></div></div>
+   <div class="stack"><div class="card stack"><h3>Banco de dados</h3><p>Situação: ${Store.mode==='firebase'?'<span class="chip ok">Firebase conectado</span> Os dados ficam no Firestore e são compartilhados entre todos os usuários.':'<span class="chip gold">Modo local</span> Os dados ficam apenas neste navegador. Para uso real com os alunos, conecte o Firebase.'}</p>
+    <details><summary><b>Como conectar o Firebase (gratuito)</b></summary><ol class="stack" style="gap:6px;margin-top:8px;padding-left:1.2em">
+     <li>Acesse console.firebase.google.com e crie um projeto (ex.: sistema-pe-ufam).</li><li>Em “Criar → Firestore Database”, crie o banco em modo de produção (região southamerica-east1).</li>
+     <li>Em “Configurações do projeto → Seus apps”, adicione um app Web e copie o objeto <b>firebaseConfig</b>.</li><li>Abra este arquivo HTML em um editor de texto e cole o objeto na constante <b>FIREBASE_CONFIG</b> no início do script.</li>
+     <li>Em “Firestore → Regras”, cole as regras abaixo e publique.</li><li>Hospede o arquivo (Firebase Hosting, GitHub Pages ou o servidor do curso) e divulgue o endereço aos alunos.</li><li>Use “Exportar” abaixo para migrar os dados de demonstração, se desejar.</li></ol>
+     <div class="code" style="margin-top:8px">rules_version = '2';
+service cloud.firestore {
+  match /databases/{db}/documents {
+    match /{col}/{doc} {
+      allow read, write: if col in ['config','orientacoes','equipes',
+        'pes','feedback','msgs','imgs'];
+    }
+  }
+}</div><p class="help" style="margin-top:6px">As senhas são guardadas apenas como código criptográfico (hash). Para um controle mais rígido, o próximo passo é ativar o Firebase Authentication.</p></details></div>
+   <div class="card stack"><h3>Cópia de segurança</h3><p class="help">Exporte todos os dados em JSON (para guardar ou migrar do modo local para o Firebase) e importe quando precisar.</p><div class="row"><button class="btn ghost" id="bkE">Exportar dados</button><button class="btn ghost" id="bkO">Exportar só as orientações</button><button class="btn ghost" id="bkI">Importar dados</button></div><textarea id="bkT" rows="6" placeholder="O JSON exportado aparece aqui. Para importar, cole o JSON e clique em Importar dados." aria-label="JSON de backup"></textarea><div class="row"><button class="btn sm ghost" id="bkC">Copiar JSON</button></div></div></div></div>`;
+  mountForm($('#cf'),F,c,{imgp:'cfg'});
+  $('#cfSave').onclick=async()=>{['anoInicio','tamEquipe','pontos'].forEach(k=>c[k]=Number(c[k]));Object.keys(c.pesos).forEach(k=>c.pesos[k]=Number(c.pesos[k]));await Store.set('config','geral',c);S.cfg=c;S.ano=c.anoInicio;toast('Configurações salvas.');render()};
+  $('#pwP').onsubmit=async e=>{e.preventDefault();if($('#pq1').value!==$('#pq2').value)return toast('As senhas não conferem.');await Store.patch('config','geral',{profHash:await sha($('#pq1').value),demoProf:false});S.cfg.profHash=await sha($('#pq1').value);S.cfg.demoProf=false;toast('Senha do professor alterada.');e.target.reset()};
+  const COLS=['config','orientacoes','equipes','pes','feedback','msgs','imgs'];
+  $('#bkE').onclick=async()=>{const o={};for(const col of COLS){o[col]={};(await Store.list(col)).forEach(d=>{const{id,...r}=d;o[col][id]=r})}$('#bkT').value=JSON.stringify(o);toast('Dados exportados. Copie o JSON e guarde em um arquivo .json.')};
+  $('#bkO').onclick=async()=>{const o={orientacoes:{}};(await Store.list('orientacoes')).forEach(d=>{const{id,...r}=d;o.orientacoes[id]=r});$('#bkT').value=JSON.stringify(o,null,1);toast('Orientações exportadas. Copie o JSON.')};
+  $('#bkC').onclick=()=>{const t=$('#bkT');navigator.clipboard?.writeText(t.value).then(()=>toast('JSON copiado.'),()=>{t.select();toast('Selecione e copie o texto.')})};
+  $('#bkI').onclick=async()=>{let o;try{o=JSON.parse($('#bkT').value)}catch(e){return toast('Cole um JSON válido exportado por este sistema.')}if(!await confirmBox('Importar os dados? Documentos com o mesmo identificador serão substituídos.','Importar'))return;
+    for(const col of COLS)for(const[id,d] of Object.entries(o[col]||{}))await Store.set(col,id,d);await loadCfg();toast('Dados importados.');render()};
+}
+
+/* ===================== Dados iniciais ===================== */
+async function seed(){const local=Store.mode==='local';
+  await Store.set('config','geral',{semestre:'2026/2',edicao:'Mostra de Planejamento Estratégico 2026/2',anoInicio:2028,tamEquipe:5,pontos:5,pesos:{prof:2,resp:3,alunos:1},...(local?{profHash:await sha('ufam2026'),demoProf:true}:{})});
+  const fases23=[{nome:'Fase 1 – Montar a equipe',inicio:'',prazo:'2023-12-21',descricao:'Montar a equipe com cinco membros, que representará uma start-up de consultoria.',atencao:'Escolher nome e slogan da start-up. Entrar em contato e definir a organização alvo. Até as aulas 15 e 16, enviar para jgsilva@ufam.edu.br.'},
+   {nome:'Fase 2 – Construir o PE',inicio:'2024-01-01',prazo:'2024-03-12',descricao:'Construir o PE da organização alvo escolhida.',atencao:'Há dois modelos de PE: um básico e um completo. Elaborar o PE completo ao longo da disciplina, à medida que os assuntos são ensinados. O PE básico será a síntese do completo, defendido em público para os avaliadores e a comunidade acadêmica.'},
+   {nome:'Fase 3 – Concluir os PEs',inicio:'',prazo:'2024-03-14',descricao:'Concluir o PE completo e o PE básico.',atencao:''},
+   {nome:'VII Mostra de PE – defesa pública',inicio:'',prazo:'2024-03-19',descricao:'Apresentar o PE básico (papel A1) na VII Mostra de PE. Defesa pública conforme aulas 57 e 58 do plano de ensino. Anotar as recomendações de melhorias dos avaliadores.',atencao:''},
+   {nome:'Entrega final e premiação',inicio:'',prazo:'2024-03-21',descricao:'Melhorar a versão básica e a completa e entregar ao professor nas aulas 59 e 60. Participar da premiação.',atencao:''}];
+  const base={titulo:'Exercício 6 – Planejamento Estratégico: Desafio aos Alunos',pontos:5,meta:'Desenvolver um Planejamento Estratégico para micro, pequena ou média empresa, organização não governamental, igreja, escola etc.',
+   criterios:'Propósito Organizacional; Atratividade do Empreendimento (Análise do Ambiente Interno e Externo); Matriz X; Mapa Estratégico; e Planejamento de Curto Prazo.',premio:'Ao término, o PE, em versões básica e completa, será entregue a cada organização, e a equipe mais destacada será premiada com R$ 500, doados pelo professor.'};
+  await Store.set('orientacoes','or_2023_2',{...base,semestre:'2023/2',simulacao:'A FT/UFAM lançará um Edital para convocar consultores a apresentarem propostas de Planejamento Estratégico (PE), sujeitas à avaliação do público. O plano selecionado será implementado a partir de janeiro de 2025, com duração de três anos (de janeiro de 2025 a dezembro de 2027).',fases:fases23,publicada:true,criadaEm:Date.parse('2023-10-01')});
+  await Store.set('orientacoes','or_2026_2',{...base,semestre:'2026/2',simulacao:'A FT/UFAM lançará um Edital para convocar consultores a apresentarem propostas de Planejamento Estratégico (PE), sujeitas à avaliação do público. O plano selecionado será implementado a partir de janeiro de 2028, com duração de três anos (de janeiro de 2028 a dezembro de 2030).',
+   fases:[{...fases23[0],prazo:'2026-12-18',atencao:'Escolher nome e slogan da start-up. Entrar em contato e definir a organização alvo. O representante deve criar a equipe neste sistema.'},{...fases23[1],inicio:'2027-01-04',prazo:'2027-03-12'},{...fases23[2],prazo:'2027-03-15'},{...fases23[3],nome:'Mostra de PE – defesa pública',prazo:'2027-03-19',descricao:'Apresentar o PE básico (papel A1) na Mostra de PE. Defesa pública. Anotar as recomendações de melhorias dos avaliadores.'},{...fases23[4],prazo:'2027-03-22'}],publicada:true,criadaEm:Date.parse('2026-10-22')});
+  const M=[['Açaí Legal','Alimentação',8.375,8.5,9.4225,'Melhorar objetivo e incluir ranking atual da empresa no PE; metodologia dos KPIs não está clara. Explorar mais o plano de ação; equilibrar a participação dos membros na apresentação.'],
+   ['Automattus Engenharia','Serviços',8.56,7.8,8.355,'Incluir ranking da empresa no mercado; melhorar o lucro com a otimização dos processos. Colocar nome da empresa e melhorar a formatação do cartaz.'],
+   ['Comércio Boi Zebu','Comércio',8.3,6.7,9.15,'Melhorar objetivo e incluir ranking atual da empresa no PE; metodologia dos KPIs não está clara. Melhorar o sistema de cashback.'],
+   ['Distribuidora Ponto do Ovo','Transporte e logística',8.375,7.5,8.3,'Incluir ranking e plano para voz do cliente; melhorar os gráficos.'],
+   ['Navegação Natal','Transporte e logística',9.075,7.8,8.642857,'Adicionar no gráfico o percentual de demanda.'],
+   ['Paróquia Santo Benedito','Organização religiosa',8.275,8.1,8.614286,'Reduzir o tamanho das letras de alguns campos para que caibam; citar as fontes na atratividade.'],
+   ['Patrícia Bolo','Alimentação',8.066667,7.7,8.8,'Empresa precisa ter CNPJ para ser inserida no mercado; comunicação restrita ao Instagram; metodologia dos KPIs não está clara.'],
+   ['Tucandeira Films','Cultura e audiovisual','','','','Não apresentou na Mostra.']];
+  for(const [i,[org,seg,p,r,a,rec]] of M.entries()){const id='arq_2023_'+(i+1);
+    await Store.set('equipes',id,{semestre:'2023/2',edicao:'VII Mostra de PE',anoInicio:2025,organizacao:org,segmento:seg,nome:'',slogan:'',lider:'',membros:[],publico:true,arquivado:true,criadaEm:Date.parse('2024-03-21'),atualizadoEm:Date.parse('2024-03-21'),avaliacao:{prof:p,resp:r,alunos:a,recomendacoes:rec}});
+    if(i>0)await Store.set('pes',id,{capa:{organizacao:org}})}
+  await Store.set('pes','arq_2023_1',ACAI);
+  if(local)await seedDemo();
+}
+const ACAI={capa:{organizacao:'Açaí Legal',cidade:'Manaus',codigo:'PE 01',revisao:4,dataRevisao:'2024-03-04',representante:'Manoel Eduardo'},
+ perfil:{endereco:'Rua Sete Quedas, 75 – Coroado, Manaus – AM',diretor:'Manoel Eduardo',natureza:'LTDA – Sociedade Limitada',atividade:'Atua no mercado de frozen de açaí (principal produto) e de cupuaçu. Para gerar comodidade ao cliente, recebe pedidos por plataforma digital e faz entregas.',recBanco:40,recProprios:60,
+  historico:[{quando:'2020',fato:'Primeira unidade no bairro Hiléia, já como delivery, adaptada à pandemia.'},{quando:'Set/2020',fato:'Abertura da segunda loja, no bairro da Paz.'},{quando:'Dez/2023',fato:'Abertura da terceira unidade, no bairro Coroado.'},{quando:'Fev/2024',fato:'Abertura da quarta loja, no bairro Torquato Tapajós.'}]},
+ proposito:{missao:'Oferecer açaí de qualidade superior, preparado com cuidado e com ingredientes selecionados, visando encantar os manauaras, mantendo a excelência e a satisfação do cliente como pilares fundamentais de nossa jornada.',visao:'Até 2027, expandir nossas operações e ser reconhecida como a principal açaiteria de Manaus.',slogan:'Maior delivery de açaí de Manaus',
+  valores:[{palavra:'Qualidade',descricao:'Açaí da mais alta qualidade, com ingredientes frescos e naturais.'},{palavra:'Transparência',descricao:'Clareza em todas as operações, da origem dos ingredientes à produção.'},{palavra:'Feedback',descricao:'Escuta contínua de clientes e colaboradores para melhorar produtos e serviços.'},{palavra:'Inovação',descricao:'Busca constante de inovações em produtos e processos.'},{palavra:'Sustentabilidade',descricao:'Responsabilidade com o meio ambiente e com as comunidades onde atuamos.'}]},
+ areas:{areas:[{area:'Açaí natural',publico:'Pessoas de 35 a 60 anos',produtos:'Açaí natural em diversos tamanhos, com entrega em toda a cidade.'},{area:'Açaí frozen',publico:'Pessoas de 10 a 35 anos',produtos:'Açaí e cupuaçu frozen com complementos.'}]},
+ gestores:{gestores:[{cargo:'CEO',nome:'Manoel Eduardo'},{cargo:'Supervisor geral de operações',nome:''},{cargo:'Supervisor loja Hiléia',nome:''},{cargo:'Supervisor loja Bairro da Paz',nome:''},{cargo:'Supervisor loja Coroado',nome:''},{cargo:'Supervisor loja Torquato Tapajós',nome:''}]},
+ swot:{fortes:[{item:'Qualidade do produto'},{item:'Anúncios pagos em redes sociais'},{item:'Serviço de delivery para toda a cidade'},{item:'Fornecedor conhecido'},{item:'Operacional fortificado'},{item:'Estrutura do maquinário'}],fracos:[{item:'Poucos processos documentados'},{item:'Ausência de e-mail marketing'},{item:'Pouca diversidade de produtos'},{item:'Erros e retrabalhos'},{item:'Dificuldade de atender a demanda local'}]},
+ oport:{oportunidades:[{item:'Aumento de consumo de produtos da região',sf:'Ampliar anúncios e divulgação para prospectar e engajar mais clientes.',sw:'Documentar processos em sistema online para reduzir custos e elevar a satisfação.'},{item:'Parcerias estratégicas',sf:'Parcerias com academias, escolas e universidades.',sw:'Usar as parcerias para ampliar a divulgação do produto.'},{item:'Inovação do produto',sf:'Inovar por meio de benchmarking.',sw:'Monitorar a manutenção preventiva do maquinário para reduzir erros e retrabalhos.'}],
+  ameacas:[{item:'Concorrentes com maior diversidade de produtos',sf:'Implementar novos produtos aproveitando o delivery para toda a cidade.',sw:'Ampliar o menu com produtos inéditos.'},{item:'Inflação no preço do produto',sf:'Planejamento anual com o fornecedor.',sw:'E-mail marketing e promoções para driblar a inflação.'},{item:'Falta do produto em determinadas épocas do ano',sf:'Formar estoque dos insumos de maior demanda.',sw:'Diversificar os produtos do estabelecimento.'}]},
+ bsc:{SF:{objetivo:'Expandir o capital para viabilizar a abertura de novas filiais.',metas:[{meta:'Reduzir despesas operacionais identificando e eliminando desperdícios',indicador:'Custos operacionais',formula:'(Custos anteriores − custos atuais) / custos anteriores × 100%',m1:'5%',m2:'10%',m3:'15%',plano:'Treinamentos e workshops sobre redução de desperdício.',resp:'CEO'},{meta:'Aumentar o market share da empresa em 20%',indicador:'Market share',formula:'(Market share atual − anterior) / anterior × 100%',m1:'10%',m2:'15%',m3:'20%',plano:'Desenvolver uma proposta de valor única que diferencie a empresa da concorrência.',resp:'CEO'}]},
+  C:{objetivo:'Estimular a lealdade e o engajamento dos clientes por meio de interações significativas.',metas:[{meta:'Desenvolver novas ferramentas de interação para 30% dos clientes',indicador:'Taxa de retenção de clientes',formula:'(Clientes no fim − novos clientes) / clientes no início × 100%',m1:'50%',m2:'60%',m3:'70%',plano:'Testes beta das novas ferramentas com um grupo seleto de clientes.',resp:'Supervisor geral de operações'},{meta:'Promover a responsabilidade social corporativa em 25%',indicador:'Atividades de RSC realizadas',formula:'Atividades realizadas / atividades planejadas × 100%',m1:'30%',m2:'70%',m3:'100%',plano:'Envolver as partes interessadas para obter feedback.',resp:'CEO'}]},
+  PI:{objetivo:'Refinar os procedimentos internos para aumentar a eficiência operacional.',metas:[{meta:'Reduzir erros e retrabalho em 50%',indicador:'Taxa de defeitos',formula:'(1 − defeitos / total produzido) × 100%',m1:'95%',m2:'97%',m3:'99%',plano:'Diminuir erros na montagem dos copos.',resp:'Supervisor geral de operações'},{meta:'Aumentar a produtividade em 35%',indicador:'Produção',formula:'(Produção atual − anterior) / anterior × 100%',m1:'10%',m2:'30%',m3:'35%',plano:'Treinamento e melhoria do fluxo na área de produção.',resp:'Supervisor geral de operações'}]},
+  AC:{objetivo:'Aumentar a quantidade de produtos e de lojas.',metas:[{meta:'Diversificar o menu de produtos para atrair uma base de clientes mais ampla (25%)',indicador:'Novos produtos',formula:'Novos produtos / total oferecido × 100%',m1:'5%',m2:'20%',m3:'25%',plano:'Pesquisa de mercado sobre tendências e preferências dos consumidores.',resp:'CEO'},{meta:'Expandir em 40% a presença da empresa abrindo lojas em regiões estratégicas',indicador:'Novas lojas',formula:'Novas lojas / total de lojas × 100%',m1:'10%',m2:'20%',m3:'40%',plano:'Sistema de feedback dos funcionários para melhorar processos.',resp:'CEO'}]}},
+ planos:{PI:{gestor:'Gerente de operações',nome:'Aprimoramento dos processos operacionais para a produção de açaí',objetivo:'Refinar os procedimentos internos para aumentar a eficiência operacional.',meta:'Aumentar a produtividade em 35%',cargos:'CEO, gerente de operações e gerentes de loja',versao:'1',vigencia:'1 ano',ind1:'Produção de copos de açaí',ind2:'Quantidade de desperdício semanal',
+  acoes:[{acao:'Analisar processos de produção',quem:'Gerente de operações',inicio:'Jan',termino:'Fev',onde:'Lojas',status:'Em andamento',como:'Observar cada etapa, identificar gargalos e coletar feedback da equipe.'},{acao:'Implementar melhorias identificadas',quem:'Gerentes',inicio:'Mar',termino:'Jun',onde:'Lojas',status:'Em andamento',como:'Treinamentos específicos e novas ferramentas de produção.'},{acao:'Desenvolver manuais de produto',quem:'Gerentes de loja',inicio:'Fev',termino:'Abr',onde:'Central',status:'Em andamento',como:'Manuais detalhados para cada etapa da produção.'},{acao:'Estabelecer manutenção preventiva do maquinário',quem:'Gerente de operações e CEO',inicio:'Mai',termino:'Ago',onde:'Lojas',status:'Não iniciado',como:'Plano de manutenção periódica e checklist de inspeção.'}]}}};
+async function seedDemo(){const id='eq_demo';
+  await Store.set('equipes',id,{demo:true,semestre:'2026/2',edicao:'Mostra de Planejamento Estratégico 2026/2',anoInicio:2028,nome:'Rumo Consultoria',slogan:'Estratégia que vira resultado',organizacao:'Padaria Pão da Terra (exemplo)',segmento:'Alimentação',lider:'Ana Beatriz (exemplo)',liderEmail:'',membros:[{nome:'Bruno Lima (exemplo)'},{nome:'Carla Reis (exemplo)'},{nome:'Diego Souza (exemplo)'},{nome:'Elisa Prado (exemplo)'}],gestor:{nome:'Gestor da padaria (exemplo)'},senhaHash:await sha('demo123'),criadaEm:Date.now()-864e5*20,atualizadoEm:Date.now()-36e5*5,publico:false,arquivado:false});
+  const pe={capa:{organizacao:'Padaria Pão da Terra (exemplo)',cidade:'Manaus',codigo:'PE 01',revisao:1},
+   proposito:{missao:'Produzir pães e lanches regionais frescos, com ingredientes amazônicos e atendimento acolhedor, tornando o café da manhã das famílias do bairro mais saboroso e prático.',visao:'Até o final de 2030, ser a padaria regional de referência na Zona Centro-Sul de Manaus.',slogan:'O sabor da Amazônia no seu café',valores:[{palavra:'Frescor',descricao:'Fornadas ao longo do dia.'},{palavra:'Acolhimento',descricao:'Atendimento que conhece o cliente pelo nome.'}]},
+   areas:{areas:[{area:'Panificação',publico:'Famílias do bairro',produtos:'Pães, bolos e tapiocas.'}]},gestores:{gestores:[{cargo:'Proprietário',nome:'(exemplo)'},{cargo:'Gerente de produção',nome:'(exemplo)'},{cargo:'Gerente de vendas',nome:'(exemplo)'}]},
+   swot:{fortes:[{item:'Receitas regionais exclusivas'},{item:'Localização próxima a escolas'}],fracos:[{item:'Sem controle de estoque'},{item:'Pouca presença digital'}]},
+   bsc:{SF:{objetivo:'Aumentar o faturamento com novos canais de venda.',metas:[{meta:'Aumentar o faturamento anual em 25%',indicador:'Faturamento',formula:'(Fat. atual − anterior)/anterior',m1:'8%',m2:'16%',m3:'25%',plano:'Lançar vendas por aplicativo',resp:'Proprietário'}]},C:{objetivo:'Encantar e fidelizar clientes.',metas:[{meta:'Atingir NPS 70',indicador:'NPS',formula:'% promotores − % detratores',m1:'50',m2:'60',m3:'70',plano:'Pesquisa mensal de satisfação',resp:'Gerente de vendas'}]},PI:{objetivo:'Padronizar a produção.',metas:[{meta:'Reduzir perdas de produção em 30%',indicador:'Perdas (kg)',formula:'kg descartados / kg produzidos',m1:'10%',m2:'20%',m3:'30%',plano:'Fichas técnicas e controle de estoque',resp:'Gerente de produção'}]},AC:{objetivo:'Capacitar a equipe.',metas:[]}}};
+  await Store.set('pes',id,pe);await Store.patch('equipes',id,{progresso:peProg(pe)});
+  await Store.set('msgs','m_demo1',{equipeId:id,canal:'prof',de:'Ana Beatriz (exemplo)',papel:'aluno',perfil:'Líder (representante)',texto:'Professor, a organização alvo pode ser uma padaria familiar sem CNPJ?',em:Date.now()-36e5*30,lidaProf:false});
+  await Store.set('msgs','m_demo2',{equipeId:'*',canal:'prof',de:'Professor',papel:'professor',texto:'Bem-vindos ao semestre 2026/2. Criem a equipe neste sistema até o prazo da Fase 1.',em:Date.now()-864e5*25});
+  await Store.set('feedback',id,{proposito:'A missão está boa; deixe mais claro o grande diferencial do empreendimento.'});
+}
+
+/* ===================== Renderização principal ===================== */
+async function render(){paintNav();
+  try{if(S.view==='publico')await renderPublico();
+    else if(S.view==='aluno')await(S.sess?.role==='aluno'?renderAluno():renderAlunoLogin());
+    else if(S.view==='prof')await(S.sess?.role==='prof'?renderProf():renderProfLogin());}
+  catch(e){console.error(e);app.innerHTML=`<div class="wrap"><div class="empty"><b>Não foi possível carregar esta área</b>${esc(e.message||e)}<br><button class="btn" style="margin-top:12px" onclick="render()">Tentar novamente</button></div></div>`}}
+(async()=>{document.documentElement.lang='pt-BR';await Store.init();paintNav();
+  try{await Promise.race([loadCfg(),new Promise((_,no)=>setTimeout(()=>no(Object.assign(new Error('Tempo esgotado ao conectar ao Firestore.'),{code:'timeout'})),15000))])}
+  catch(e){console.error(e);const c=e.code||'';const dica=c.includes('permission')?'As regras do Firestore estão bloqueando o acesso. No console do Firebase, abra Firestore → Regras, cole as regras indicadas e clique em Publicar.':c.includes('not-found')||c.includes('failed-precondition')?'O banco Firestore ainda não foi criado neste projeto. No console, abra Firestore → Criar banco de dados.':c.includes('api-key')||/api.?key/i.test(e.message)?'A chave (apiKey) da configuração não confere. Copie novamente o firebaseConfig do console.':c==='timeout'||c.includes('unavailable')?'Sem resposta do Firebase. Verifique a internet e se o banco foi criado.':'Confira a configuração do Firebase e as regras do Firestore.';
+    app.innerHTML=`<div class="wrap"><div class="card stack" style="max-width:720px;margin:20px auto"><div class="eyebrow">Conexão com o banco de dados</div><h2>Não foi possível acessar o Firebase</h2><p>${esc(dica)}</p><p class="help">Detalhe técnico: ${esc(c)} ${esc(e.message||'')}</p><div><button class="btn" onclick="location.reload()">Tentar novamente</button></div></div></div>`;return}
+  const h=(location.hash||'').slice(1);if(['publico','aluno','prof'].includes(h))S.view=h;else if(S.sess?.role==='aluno')S.view='aluno';else if(S.sess?.role==='prof')S.view='prof';
+  render()})();
+</script>
+
+</body>
+</html>
