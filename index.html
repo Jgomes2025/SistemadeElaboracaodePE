@@ -841,6 +841,10 @@ const Store={mode:'local',fs:null,mem:{},
   async get(col,id){if(this.fs){const d=await this.fs.collection(col).doc(id).get();return d.exists?{id:d.id,...d.data()}:null}const d=this.c(col)[id];return d?{id,...clone(d)}:null},
   async set(col,id,data){const d=this.clean(data);if(this.fs)return this.fs.collection(col).doc(id).set(d);this.c(col)[id]=d;this.persist()},
   async patch(col,id,part){const d=this.clean(part);if(this.fs){const ref=this.fs.collection(col).doc(id);try{await ref.update(d)}catch(e){await ref.set(d,{merge:true})}return}this.c(col)[id]=Object.assign(this.c(col)[id]||{},d);this.persist()},
+  watch(cols,cb){
+    if(this.fs){cols.forEach(col=>{let first=true;this.fs.collection(col).onSnapshot(()=>{if(first){first=false;return}cb(col)},e=>console.warn('sync',col,e))});return}
+    window.addEventListener('storage',e=>{if(e.key===DBKEY){try{this.mem=JSON.parse(e.newValue||'{}')||{}}catch(x){}cb('*')}});
+  },
   async del(col,id){if(this.fs)return this.fs.collection(col).doc(id).delete();delete this.c(col)[id];this.persist()}
 };
 const imgCache={};
@@ -1049,7 +1053,7 @@ function posterHTML(eq,pe){const ano=eq.anoInicio||S.ano,p=pe?.proposito||{},b=p
    <section class="pbox"><h3>3.3 Planejamento de curto prazo (${ano}) <span class="plan">PLAN</span></h3>
      <table class="ptable"><thead><tr><th>Persp.</th><th>Ação</th><th>Quem</th><th>Quando</th><th>Status</th></tr></thead><tbody>${acts.map(r=>`<tr><td><b>${r.x.k}</b></td><td>${esc(r.a.acao)}</td><td>${esc(r.a.quem||'')}</td><td>${esc([r.a.inicio,r.a.termino].filter(Boolean).join(' – '))}</td><td>${esc(r.a.status||'')}</td></tr>`).join('')||'<tr><td colspan="5">—</td></tr>'}</tbody></table></section>
   </div>
-  <div class="pfoot"><span>${esc(eq.edicao||S.cfg?.edicao||'')} · Engenharia de Produção · UFAM</span><span>Sistema de Elaboração de Planejamento Estratégico</span></div></div>`}
+  <div class="pfoot"><span>${esc(edOf(eq))} · Engenharia de Produção · UFAM</span><span>Sistema de Elaboração de Planejamento Estratégico</span></div></div>`}
 function mountPoster(el,eq,pe){el.innerHTML=`<div class="row between" style="margin-bottom:10px"><div class="row"><button class="btn sm ghost" id="pzoom">Ver em tamanho real</button>${inFrame()?'<span class="help">A impressão em A1 fica disponível na versão hospedada do sistema.</span>':'<button class="btn sm gold" id="pprint">Imprimir / salvar PDF (A1)</button>'}</div><span class="help">Folha A1 retrato (594 × 841 mm)</span></div><div class="pwrap"><div class="pscale">${posterHTML(eq,pe)}</div></div>`;
   const w=$('.pwrap',el),sc=$('.pscale',el),po=$('.poster',el);hydrateImgs(el);let real=false;
   const fit=()=>{if(real){sc.style.transform='none';w.style.height='';return}const k=w.clientWidth/po.offsetWidth;sc.style.transform=`scale(${k})`;w.style.height=(po.offsetHeight*k)+'px'};
@@ -1058,7 +1062,10 @@ function mountPoster(el,eq,pe){el.innerHTML=`<div class="row between" style="mar
   const pp=$('#pprint',el);if(pp)pp.onclick=()=>{const pa=$('#printArea');pa.innerHTML=posterHTML(eq,pe);hydrateImgs(pa);document.body.classList.add('printing');setTimeout(()=>{window.print();document.body.classList.remove('printing')},700)}}
 
 /* ===================== Dados auxiliares ===================== */
-async function loadCfg(){S.cfg=await Store.get('config','geral');if(!S.cfg){await seed();S.cfg=await Store.get('config','geral')}S.ano=S.cfg.anoInicio}
+async function loadCfg(){S.cfg=await Store.get('config','geral');if(!S.cfg){await seed();S.cfg=await Store.get('config','geral')}S.ano=S.cfg.anoInicio;await loadOrsCur()}
+async function loadOrsCur(){try{S.orsCur=(await Store.list('orientacoes')).filter(o=>o.semestre===S.cfg.semestre&&o.publicada).sort((a,b)=>(a.criadaEm||0)-(b.criadaEm||0))}catch(e){S.orsCur=[]}}
+function edAtual(){return (S.orsCur&&S.orsCur[0]?.titulo)||S.cfg?.edicao||''}
+function edOf(e){return e&&e.semestre===S.cfg?.semestre?edAtual():(e?.edicao||'')}
 function nf(av,cfg=S.cfg){if(!av)return null;const w=cfg?.pesos||{prof:2,resp:3,alunos:1};const parts=[[av.prof,w.prof],[av.resp,w.resp],[av.alunos,w.alunos]].filter(([v])=>v!==''&&v!=null&&!isNaN(v));if(!parts.length)return null;const sw=parts.reduce((a,[,p])=>a+ +p,0);return parts.reduce((a,[v,p])=>a+v*p,0)/sw}
 function rankEd(eqs){const r=eqs.map(e=>({e,n:nf(e.avaliacao)})).filter(x=>x.n!=null&&x.n>0).sort((a,b)=>b.n-a.n);r.forEach((x,i)=>x.pos=i+1);return r}
 
@@ -1089,7 +1096,7 @@ async function renderPublico(){
     const atual=eqs.filter(e=>e.semestre===S.cfg.semestre&&!e.arquivado);const progM=atual.length?Math.round(atual.reduce((a,e)=>a+(e.progresso||0),0)/atual.length):0;
     const lastEd=[...edK].reverse().find(k=>rankEd(eds[k]).length);const rk=lastEd?rankEd(eds[lastEd]):[];
     const maxE=Math.max(1,...edK.map(k=>eds[k].length)),maxS=Math.max(1,...segK.map(x=>x[1]));
-    const roman=k=>{const m=/^([IVXLC]+)\s/.exec(eds[k][0]?.edicao||'');return m?m[1]:(k===S.cfg.semestre?'Nova':'—')};
+    const roman=k=>{const m=/^([IVXLC]+)\s/.exec(edOf(eds[k][0]));return m?m[1]:(k===S.cfg.semestre?'Nova':'—')};
     const pod=rk.slice(0,3);const podOrd=[pod[1],pod[0],pod[2]].filter(Boolean);
     const sub=e=>orgReal(e)&&e.nome?esc(e.nome):(orgReal(e)?'':'start-up');
     body=`<div class="stack" style="gap:22px">
@@ -1107,13 +1114,13 @@ async function renderPublico(){
      ${edK.length?`<section><div class="sect-h"><div><div class="eyebrow">Linha do tempo</div><h2>Edições da Mostra</h2></div><p>Cada edição com o número de PEs e a equipe campeã.</p></div>
       <div class="tline">${edK.map(k=>{const r=rankEd(eds[k]);const w=r[0];const cur=k===S.cfg.semestre;return `<div class="tcard ${cur?'cur':''}"><div class="tnum">${roman(k)}</div><div class="tsem">${esc(k)}${cur?' · vigente':''}</div><div class="tq"><b class="num">${eds[k].length}</b> PE${eds[k].length>1?'s':''}</div>${w?`<div class="twin">${ic('award')}<span><b>${esc(w.e.organizacao)}</b><small class="num">NF ${n2(w.n)}</small></span></div>`:`<div class="twin muted">${cur?'Em andamento':'Notas não lançadas'}</div>`}</div>`}).join('')}</div></section>`:''}
      <div class="dash2">
-      <div class="card podcard"><div class="row between"><div><div class="eyebrow">Ranking</div><h3>${lastEd?esc(eds[lastEd][0].edicao||lastEd):'Ranking'}</h3></div>${lastEd?`<span class="chip gold">${esc(lastEd)}</span>`:''}</div>
+      <div class="card podcard"><div class="row between"><div><div class="eyebrow">Ranking</div><h3>${lastEd?esc(edOf(eds[lastEd][0])||lastEd):'Ranking'}</h3></div>${lastEd?`<span class="chip gold">${esc(lastEd)}</span>`:''}</div>
        ${rk.length?`<div class="podium">${podOrd.map(x=>`<div class="pcol p${x.pos}"><div class="pmed">${x.pos}º</div><div class="pname">${esc(x.e.organizacao)}</div><div class="psub">${sub(x.e)}</div><div class="pblock"><b class="num">${n2(x.n)}</b></div></div>`).join('')}</div>
        ${rk.length>3?`<div class="prest">${rk.slice(3).map(x=>`<div class="row" style="flex-wrap:nowrap"><span class="medal">${x.pos}º</span><div style="flex:1;min-width:0"><b>${esc(x.e.organizacao)}</b>${orgReal(x.e)&&x.e.nome?` <small>· ${esc(x.e.nome)}</small>`:''}<div class="prog" style="margin-top:4px"><i style="width:${x.n*10}%"></i></div></div><b class="num">${n2(x.n)}</b></div>`).join('')}</div>`:''}
        <p class="help" style="margin-top:10px">Nota final = média ponderada: professores convidados ×${S.cfg.pesos.prof}, professor responsável ×${S.cfg.pesos.resp}, alunos ×${S.cfg.pesos.alunos}.</p>`:'<div class="empty">Nenhuma edição avaliada ainda.</div>'}</div>
       <div class="stack" style="gap:22px">
        <div class="card"><div class="eyebrow">Produção</div><h3>PEs por semestre</h3><div class="vbars">${edK.map(k=>`<div class="vbar"><b>${eds[k].length}</b><i style="height:${eds[k].length/maxE*100}%"></i></div>`).join('')||'<span class="muted">Sem dados</span>'}</div><div class="vlabels">${edK.map(k=>`<span>${esc(k)}</span>`).join('')}</div></div>
-       <div class="card"><div class="eyebrow">Semestre vigente · ${esc(S.cfg.semestre)}</div><h3>${esc(S.cfg.edicao)}</h3><p class="help" style="margin:2px 0 12px">Horizonte do plano: ${S.cfg.anoInicio} a ${S.cfg.anoInicio+2}</p>
+       <div class="card"><div class="eyebrow">Semestre vigente · ${esc(S.cfg.semestre)}</div><h3>${esc(edAtual())}</h3><p class="help" style="margin:2px 0 12px">Horizonte do plano: ${S.cfg.anoInicio} a ${S.cfg.anoInicio+2}</p>
         <div class="g2" style="gap:12px"><div class="kpi flat" data-ic="users"><b>${atual.length}</b><span>Equipes em andamento</span></div><div class="kpi flat gold" data-ic="target"><b>${progM}%</b><span>Progresso médio dos PEs</span></div></div>
         <div class="stack" style="gap:8px;margin-top:14px">${atual.map(e=>`<div><div class="row between"><b>${esc(e.nome)}</b><small>${esc(e.organizacao||'')}</small></div>${progBar(e.progresso||0)}</div>`).join('')||'<span class="muted">Nenhuma equipe cadastrada neste semestre.</span>'}</div></div>
       </div>
@@ -1126,7 +1133,7 @@ async function renderPublico(){
     const pes={};await Promise.all(list.map(async e=>pes[e.id]=await Store.get('pes',e.id)));
     body=`<div class="stack"><div class="sect-h"><div><div class="eyebrow">Acervo público</div><h2>Planejamentos Estratégicos publicados</h2></div><p>PEs elaborados pelos alunos ao longo dos anos e liberados pelo professor para consulta da comunidade acadêmica e das organizações.</p></div>
      <div class="card flat"><div class="fgrid"><label class="fld" style="grid-column:span 2"><span class="lbl">Buscar</span><input id="fq" value="${esc(S.filt.q)}" placeholder="Organização, start-up ou consultor"></label><label class="fld" style="grid-column:span 1"><span class="lbl">Semestre</span><select id="fed"><option value="">Todos</option>${eds.map(x=>`<option ${x===S.filt.ed?'selected':''}>${esc(x)}</option>`).join('')}</select></label><label class="fld" style="grid-column:span 1"><span class="lbl">Segmento</span><select id="fseg"><option value="">Todos</option>${segs.map(x=>`<option ${x===S.filt.seg?'selected':''}>${esc(x)}</option>`).join('')}</select></label></div></div>
-     ${list.length?`<div class="g3">${list.map(e=>{const n=nf(e.avaliacao);const mis=pes[e.id]?.proposito?.missao;return `<article class="card pe-card" data-ver="${e.id}" tabindex="0"><div class="cover cv${segIdx(e.segmento)}"><span class="mono">${esc((e.organizacao||"?").trim().charAt(0).toUpperCase())}</span><span class="chip csem">${esc(e.semestre)}</span>${n>0?`<span class="chip cnf">${ic('star')} ${n2(n)}</span>`:''}${orgReal(e)?'<span class="chip creal">Organização real</span>':''}</div><div class="org">${esc(e.organizacao||'—')}</div><div class="row" style="gap:6px">${e.segmento?`<span class="chip">${esc(e.segmento)}</span>`:''}${e.nome?`<span class="chip wine">${esc(e.nome)}</span>`:''}</div>${mis?`<div class="mis">${esc(mis)}</div>`:''}${e.arquivado?`<div class="row" style="gap:6px">${ARQ_TIPOS.filter(t=>e.arquivos?.[t.k]).map(t=>`<span class="chip purple">${t.k==='poster'?'Pôster':t.k==='completo'?'PE completo':'PE básico'}</span>`).join('')||'<span class="chip">Arquivos em breve</span>'}</div>`:''}<small>${(n=>n?n+(n===1?' consultor':' consultores'):'Consultores não informados')(consultores(e).length)} · ${esc(e.edicao||'')}</small></article>`}).join('')}</div>`:'<div class="empty"><b>Nenhum PE encontrado</b>Ajuste os filtros ou aguarde a publicação pelo professor.</div>'}</div>`;
+     ${list.length?`<div class="g3">${list.map(e=>{const n=nf(e.avaliacao);const mis=pes[e.id]?.proposito?.missao;return `<article class="card pe-card" data-ver="${e.id}" tabindex="0"><div class="cover cv${segIdx(e.segmento)}"><span class="mono">${esc((e.organizacao||"?").trim().charAt(0).toUpperCase())}</span><span class="chip csem">${esc(e.semestre)}</span>${n>0?`<span class="chip cnf">${ic('star')} ${n2(n)}</span>`:''}${orgReal(e)?'<span class="chip creal">Organização real</span>':''}</div><div class="org">${esc(e.organizacao||'—')}</div><div class="row" style="gap:6px">${e.segmento?`<span class="chip">${esc(e.segmento)}</span>`:''}${e.nome?`<span class="chip wine">${esc(e.nome)}</span>`:''}</div>${mis?`<div class="mis">${esc(mis)}</div>`:''}${e.arquivado?`<div class="row" style="gap:6px">${ARQ_TIPOS.filter(t=>e.arquivos?.[t.k]).map(t=>`<span class="chip purple">${t.k==='poster'?'Pôster':t.k==='completo'?'PE completo':'PE básico'}</span>`).join('')||'<span class="chip">Arquivos em breve</span>'}</div>`:''}<small>${(n=>n?n+(n===1?' consultor':' consultores'):'Consultores não informados')(consultores(e).length)} · ${esc(edOf(e))}</small></article>`}).join('')}</div>`:'<div class="empty"><b>Nenhum PE encontrado</b>Ajuste os filtros ou aguarde a publicação pelo professor.</div>'}</div>`;
   }
   app.innerHTML=`<div class="wrap">${tabs}${body}</div>`;
   $$('[data-ps]').forEach(b=>b.onclick=()=>{S.sub=b.dataset.ps;render()});
@@ -1135,7 +1142,7 @@ async function renderPublico(){
 }
 async function verPublico(eqs){const eq=eqs.find(e=>e.id===S.verId&&e.publico);if(!eq){S.sub='acervo';return render()}
   const n=nf(eq.avaliacao);const hist=!!eq.arquivado;const pe=hist?null:(await Store.get('pes',eq.id)||{});S.vtab=S.vtab||'completo';
-  const head=`<div class="card"><div class="row between"><div><div class="eyebrow">${esc(eq.edicao||'')} · ${esc(eq.semestre)}</div><h2>${esc(eq.organizacao)}</h2><p class="muted" style="margin-top:4px">Start-up de consultoria: <b>${esc(eq.nome||'—')}</b>${eq.slogan?` · “${esc(eq.slogan)}”`:''}</p><p style="margin-top:6px">Consultores: ${esc(consultores(eq).join(', ')||'—')}</p></div><div class="stack" style="gap:6px;align-items:flex-end">${n>0?`<span class="chip gold" style="font-size:1rem">Nota final ${n2(n)}</span>`:''}${eq.segmento?`<span class="chip">${esc(eq.segmento)}</span>`:''}</div></div>
+  const head=`<div class="card"><div class="row between"><div><div class="eyebrow">${esc(edOf(eq))} · ${esc(eq.semestre)}</div><h2>${esc(eq.organizacao)}</h2><p class="muted" style="margin-top:4px">Start-up de consultoria: <b>${esc(eq.nome||'—')}</b>${eq.slogan?` · “${esc(eq.slogan)}”`:''}</p><p style="margin-top:6px">Consultores: ${esc(consultores(eq).join(', ')||'—')}</p></div><div class="stack" style="gap:6px;align-items:flex-end">${n>0?`<span class="chip gold" style="font-size:1rem">Nota final ${n2(n)}</span>`:''}${eq.segmento?`<span class="chip">${esc(eq.segmento)}</span>`:''}</div></div>
    ${eq.link?`<p style="margin-top:10px">Outros arquivos: <a href="${esc(eq.link)}" target="_blank" rel="noopener">abrir pasta da equipe</a></p>`:''}
    ${eq.avaliacao?.recomendacoes?`<div class="fbk" style="margin-top:12px"><b>Recomendações dos avaliadores:</b> ${nl(eq.avaliacao.recomendacoes)}</div>`:''}</div>`;
   if(hist){app.innerHTML=`<div class="wrap stack"><div><button class="btn sm ghost" id="back">← Voltar ao acervo</button></div>${head}<div class="card stack"><div><h3>Arquivos do Planejamento Estratégico</h3><p class="help">Planilhas originais entregues pela equipe na Mostra. Abra no Excel para ver o PE completo e o pôster A1 com todos os gráficos e desenhos.</p></div>${downloadsHTML(eq)}</div></div>`;
@@ -1193,7 +1200,7 @@ async function renderAluno(){
   const fzA=(await Store.list('orientacoes')).filter(o=>o.semestre===eq.semestre&&o.publicada).flatMap(o=>o.fases||[]).filter(f=>f.prazo&&f.prazo>=today()).sort((a,b)=>a.prazo.localeCompare(b.prazo));const dA=fzA[0]?Math.ceil((new Date(fzA[0].prazo+'T23:59')-new Date())/864e5):null;
   const nRec=SECOES.filter(s=>S.fb[s.id]).length;const nOk=VIEWABLE.filter(s=>secProg(s,S.pe)>=.99).length;
   app.innerHTML=`<div class="wrap"><section class="hero hero-team">
-    <div class="hero-txt"><div class="eyebrow">Start-up de consultoria · ${esc(eq.edicao||'')} · ${esc(eq.semestre)}</div><h2>${esc(eq.nome)}</h2>${eq.slogan?`<p class="hslogan">“${esc(eq.slogan)}”</p>`:''}
+    <div class="hero-txt"><div class="eyebrow">Start-up de consultoria · ${esc(edOf(eq))} · ${esc(eq.semestre)}</div><h2>${esc(eq.nome)}</h2>${eq.slogan?`<p class="hslogan">“${esc(eq.slogan)}”</p>`:''}
      <div class="hmeta"><span class="chip hchip">${ic('building')} ${esc(eq.organizacao||'Organização alvo a definir')}</span>${avatars(consultores(eq),6)}</div>
      <div class="qa"><span class="who-me">${ic('users')} ${esc(S.sess.nome)} · ${esc(S.sess.papel||'')}</span><button class="btn glass sm" id="sair">Sair</button></div></div>
     <div class="hero-prog"><div id="tbRing">${ring(peProg(S.pe),150,13)}</div><div class="hp-l">PE completo preenchido</div>
@@ -1332,7 +1339,7 @@ async function renderProf(){
   const cur0=eqs.filter(e=>e.semestre===S.cfg.semestre&&!e.arquivado);const pm0=cur0.length?Math.round(cur0.reduce((a,e)=>a+(e.progresso||0),0)/cur0.length):0;
   const fz=orsAll.filter(o=>o.semestre===S.cfg.semestre).flatMap(o=>o.fases||[]).filter(f=>f.prazo&&f.prazo>=today()).sort((a,b)=>a.prazo.localeCompare(b.prazo));const dz=fz[0]?Math.ceil((new Date(fz[0].prazo+'T23:59')-new Date())/864e5):null;
   app.innerHTML=`<div class="wrap"><section class="hero hero-adm">
-    <div class="hero-txt"><div class="eyebrow">Ambiente do professor · central de gestão</div><h2>Semestre ${esc(S.cfg.semestre)}</h2><p>${esc(S.cfg.edicao)} · horizonte do plano ${S.cfg.anoInicio} a ${S.cfg.anoInicio+2}</p>
+    <div class="hero-txt"><div class="eyebrow">Ambiente do professor · central de gestão</div><h2>Semestre ${esc(S.cfg.semestre)}</h2><p>${esc(edAtual())} · horizonte do plano ${S.cfg.anoInicio} a ${S.cfg.anoInicio+2}</p>
      <div class="qa"><button class="btn gold sm" data-qa="orient">${ic('compass')}Orientações</button><button class="btn glass sm" data-qa="msgs">${ic('msg')}Mensagens</button><button class="btn glass sm" data-qa="aval">${ic('award')}Avaliação</button><button class="btn glass sm" id="sair">Sair</button></div></div>
     <div class="hero-kpis">
      <div class="gk"><span class="gki">${ic('users')}</span><b class="num">${cur0.length}</b><span>Equipes no semestre</span></div>
@@ -1370,7 +1377,7 @@ function editOrient(o){const F=[{k:'semestre',l:'Semestre',w:1},{k:'pontos',l:'V
   {k:'criterios',l:'Critérios avaliativos',t:'textarea'},{k:'premio',l:'Premiação',t:'textarea',rows:2},{k:'publicada',l:'Publicar para os alunos',t:'check'}];
   const m=modal(`<div class="row between"><h3>${o.id?'Editar':'Nova'} orientação</h3><button class="btn sm ghost" data-close>Fechar</button></div><div id="of"></div><div class="row between">${o.id?'<button class="btn danger" id="oDel">Excluir</button>':'<span></span>'}<button class="btn" id="oSave">Salvar orientação</button></div>`);
   mountForm($('#of',m),F,o,{imgp:'or'});
-  $('#oSave',m).onclick=async()=>{if(!o.titulo)return toast('Informe o título.');const id=o.id||'or_'+uid();o.criadaEm=o.criadaEm||Date.now();await Store.set('orientacoes',id,o);closeModal();toast('Orientação salva.');render()};
+  $('#oSave',m).onclick=async()=>{if(!o.titulo)return toast('Informe o título.');const id=o.id||'or_'+uid();o.criadaEm=o.criadaEm||Date.now();await Store.set('orientacoes',id,o);if(o.semestre===S.cfg.semestre&&o.publicada&&o.titulo&&o.titulo!==S.cfg.edicao){await Store.patch('config','geral',{edicao:o.titulo});S.cfg.edicao=o.titulo}await loadOrsCur();closeModal();toast('Orientação salva.');render()};
   const d=$('#oDel',m);if(d)d.onclick=async()=>{if(await confirmBox('Excluir esta orientação? Os alunos deixarão de vê-la.','Excluir')){await Store.del('orientacoes',o.id);toast('Orientação excluída.');render()}};
 }
 async function profEquipes(pane,eqs){const sems=[...new Set(eqs.map(e=>e.semestre))].sort().reverse();S.fsem=S.fsem||S.cfg.semestre;
@@ -1479,7 +1486,7 @@ async function profMsgs(pane,cur,msgs){
   await draw(true);stopPoll();S.poll=setInterval(()=>{if(S.view==='prof'&&S.ptabProf==='msgs'&&!$('#ov'))draw(false);else if(S.view!=='prof'||S.ptabProf!=='msgs')stopPoll()},10000);
 }
 async function profConfig(pane){const c=clone(S.cfg);
-  const F=[{k:'semestre',l:'Semestre vigente',w:1,ph:'2026/2'},{k:'edicao',l:'Nome da edição da Mostra',w:2},{k:'anoInicio',l:'1º ano do plano (horizonte de 3 anos)',t:'number',w:1},{k:'tamEquipe',l:'Membros por equipe',t:'number',w:1},{k:'pontos',l:'Valor do exercício (pontos)',t:'number',w:1},{k:'pesos.prof',l:'Peso prof. convidados',t:'number',w:1},{k:'pesos.resp',l:'Peso prof. responsável',t:'number',w:1},{k:'pesos.alunos',l:'Peso alunos',t:'number',w:1}];
+  const F=[{k:'semestre',l:'Semestre vigente',w:1,ph:'2026/2'},{k:'edicao',l:'Nome da edição da Mostra',w:2,help:'É o mesmo título da orientação publicada do semestre; alterar aqui atualiza os dois.'},{k:'anoInicio',l:'1º ano do plano (horizonte de 3 anos)',t:'number',w:1},{k:'tamEquipe',l:'Membros por equipe',t:'number',w:1},{k:'pontos',l:'Valor do exercício (pontos)',t:'number',w:1},{k:'pesos.prof',l:'Peso prof. convidados',t:'number',w:1},{k:'pesos.resp',l:'Peso prof. responsável',t:'number',w:1},{k:'pesos.alunos',l:'Peso alunos',t:'number',w:1}];
   pane.innerHTML=`<div class="g2" style="align-items:start"><div class="stack"><div class="card stack"><h3>Semestre e Mostra</h3><p class="help">Ao mudar o semestre, as equipes anteriores ficam preservadas e continuam acessíveis em “Equipes e PEs” e “Avaliação”. Os alunos passam a ver apenas as orientações e equipes do novo semestre.</p><div id="cf"></div><button class="btn" id="cfSave">Salvar configurações</button></div>
    <div class="card stack"><h3>Senha do professor</h3><form class="stack" id="pwP"><label class="fld"><span class="lbl">Nova senha</span><input type="password" id="pq1" minlength="6" required autocomplete="new-password"></label><label class="fld"><span class="lbl">Confirmar</span><input type="password" id="pq2" minlength="6" required autocomplete="new-password"></label><button class="btn gold" type="submit">Trocar senha</button></form></div></div>
    <div class="stack"><div class="card stack"><h3>Banco de dados</h3><p>Situação: ${Store.mode==='firebase'?'<span class="chip ok">Firebase conectado</span> Os dados ficam no Firestore e são compartilhados entre todos os usuários.':'<span class="chip gold">Modo local</span> Os dados ficam apenas neste navegador. Para uso real com os alunos, conecte o Firebase.'}</p>
@@ -1498,7 +1505,7 @@ service cloud.firestore {
 }</div><p class="help" style="margin-top:6px">As senhas são guardadas apenas como código criptográfico (hash). Para um controle mais rígido, o próximo passo é ativar o Firebase Authentication.</p></details></div>
    <div class="card stack"><h3>Cópia de segurança</h3><p class="help">Exporte todos os dados em JSON (para guardar ou migrar do modo local para o Firebase) e importe quando precisar.</p><div class="row"><button class="btn ghost" id="bkE">Exportar dados</button><button class="btn ghost" id="bkO">Exportar só as orientações</button><button class="btn ghost" id="bkI">Importar dados</button></div><textarea id="bkT" rows="6" placeholder="O JSON exportado aparece aqui. Para importar, cole o JSON e clique em Importar dados." aria-label="JSON de backup"></textarea><div class="row"><button class="btn sm ghost" id="bkC">Copiar JSON</button></div></div></div></div>`;
   mountForm($('#cf'),F,c,{imgp:'cfg'});
-  $('#cfSave').onclick=async()=>{['anoInicio','tamEquipe','pontos'].forEach(k=>c[k]=Number(c[k]));Object.keys(c.pesos).forEach(k=>c.pesos[k]=Number(c.pesos[k]));await Store.set('config','geral',c);S.cfg=c;S.ano=c.anoInicio;toast('Configurações salvas.');render()};
+  $('#cfSave').onclick=async()=>{['anoInicio','tamEquipe','pontos'].forEach(k=>c[k]=Number(c[k]));Object.keys(c.pesos).forEach(k=>c.pesos[k]=Number(c.pesos[k]));await Store.set('config','geral',c);S.cfg=c;S.ano=c.anoInicio;await loadOrsCur();if(S.orsCur[0]&&c.edicao&&S.orsCur[0].titulo!==c.edicao){await Store.patch('orientacoes',S.orsCur[0].id,{titulo:c.edicao});await loadOrsCur()}toast('Configurações salvas.');render()};
   $('#pwP').onsubmit=async e=>{e.preventDefault();if($('#pq1').value!==$('#pq2').value)return toast('As senhas não conferem.');await Store.patch('config','geral',{profHash:await sha($('#pq1').value),demoProf:false});S.cfg.profHash=await sha($('#pq1').value);S.cfg.demoProf=false;toast('Senha do professor alterada.');e.target.reset()};
   const COLS=['config','orientacoes','equipes','pes','feedback','msgs','imgs'];
   $('#bkE').onclick=async()=>{const o={};for(const col of COLS){o[col]={};(await Store.list(col)).forEach(d=>{const{id,...r}=d;o[col][id]=r})}$('#bkT').value=JSON.stringify(o);toast('Dados exportados. Copie o JSON e guarde em um arquivo .json.')};
@@ -1608,11 +1615,20 @@ async function render(){paintNav();
     else if(S.view==='aluno')await(S.sess?.role==='aluno'?renderAluno():renderAlunoLogin());
     else if(S.view==='prof')await(S.sess?.role==='prof'?renderProf():renderProfLogin());}
   catch(e){console.error(e);app.innerHTML=`<div class="wrap"><div class="empty"><b>Não foi possível carregar esta área</b>${esc(e.message||e)}<br><button class="btn" style="margin-top:12px" onclick="render()">Tentar novamente</button></div></div>`}}
+let syncT=null;
+function busy(){const a=document.activeElement;return !!($('#ov')||Object.keys(S.dirty).length||(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)&&app.contains(a)))}
+async function onSync(col){clearTimeout(syncT);syncT=setTimeout(async()=>{
+  try{if(col==='config'||col==='orientacoes'||col==='*'){const c=await Store.get('config','geral');if(c){S.cfg=c;S.ano=S.view==='aluno'&&S.eq?(S.eq.anoInicio||c.anoInicio):c.anoInicio}await loadOrsCur()}}catch(e){}
+  paintNav();if(busy())return syncT=setTimeout(()=>onSync(col),3000);
+  const live=S.view==='publico'&&S.sub!=='ver'||S.view==='prof'&&(S.ptabProf==='painel'||S.ptabProf==='equipes'||S.ptabProf==='acervo')||S.view==='aluno'&&(S.atab==='inicio'||S.atab==='orient');
+  if(live){const y=window.scrollY;await render();window.scrollTo(0,y)}
+},1200)}
 new MutationObserver(()=>decorate(app)).observe(app,{childList:true,subtree:true});
 (async()=>{document.documentElement.lang='pt-BR';await Store.init();paintNav();
   try{await Promise.race([loadCfg(),new Promise((_,no)=>setTimeout(()=>no(Object.assign(new Error('Tempo esgotado ao conectar ao Firestore.'),{code:'timeout'})),15000))])}
   catch(e){console.error(e);const c=e.code||'';const dica=inFrame()?'Você está vendo o sistema dentro de uma pré-visualização (por exemplo, no painel do Claude), que bloqueia a conexão com o Firebase. Abra o endereço do sistema no GitHub ou o arquivo index.html direto no navegador.':c.includes('permission')?'As regras do Firestore estão bloqueando o acesso. No console do Firebase, abra Firestore → Regras, cole as regras indicadas e clique em Publicar.':c.includes('not-found')||c.includes('failed-precondition')?'O banco Firestore ainda não foi criado neste projeto. No console, abra Firestore → Criar banco de dados.':c.includes('api-key')||/api.?key/i.test(e.message)?'A chave (apiKey) da configuração não confere. Copie novamente o firebaseConfig do console.':c==='timeout'||c.includes('unavailable')?'Sem resposta do Firebase. Verifique a internet e se o banco foi criado.':'Confira a configuração do Firebase e as regras do Firestore.';
     app.innerHTML=`<div class="wrap"><div class="card stack" style="max-width:720px;margin:20px auto"><div class="eyebrow">Conexão com o banco de dados</div><h2>Não foi possível acessar o Firebase</h2><p>${esc(dica)}</p><p class="help">Detalhe técnico: ${esc(c)} ${esc(e.message||'')}</p><div><button class="btn" onclick="location.reload()">Tentar novamente</button></div></div></div>`;return}
+  Store.watch(['config','orientacoes','equipes','feedback'],onSync);
   const h=(location.hash||'').slice(1);if(['publico','aluno','prof'].includes(h))S.view=h;else if(S.sess?.role==='aluno')S.view='aluno';else if(S.sess?.role==='prof')S.view='prof';
   render()})();
 </script>
