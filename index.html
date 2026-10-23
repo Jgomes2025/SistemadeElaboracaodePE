@@ -711,6 +711,49 @@ input:focus,select:focus,textarea:focus{background:var(--surface);border-color:v
 .envs{display:flex;gap:6px;justify-content:center}
 .nav-r{display:flex;gap:10px;align-items:center;justify-content:flex-end;min-width:0}
 @media (max-width:900px){.nav-in{display:flex;flex-wrap:wrap;justify-content:center;gap:6px}.nav-l{display:none}.envs{overflow-x:auto;max-width:100%;scrollbar-width:none}.envs::-webkit-scrollbar{display:none}.nav-r{width:100%;justify-content:center}.who{font-size:.8rem}}
+/* Participação */
+.palert{display:flex;gap:14px;align-items:flex-start;padding:16px 18px;border-radius:16px;background:var(--surface);border:1px solid var(--line)}
+.palert>svg{width:26px;height:26px;flex:none;margin-top:2px;color:var(--muted)}
+.palert b{display:block;font-size:1.05rem}.palert small{color:var(--muted)}
+.palert.ok{background:color-mix(in srgb,var(--ok) 10%,var(--surface));border-color:color-mix(in srgb,var(--ok) 35%,transparent)}.palert.ok>svg{color:var(--ok)}
+.palert.warn{background:color-mix(in srgb,var(--warn) 10%,var(--surface));border-color:color-mix(in srgb,var(--warn) 40%,transparent)}.palert.warn>svg{color:var(--warn)}
+.palert.bad{background:color-mix(in srgb,var(--bad) 9%,var(--surface));border-color:color-mix(in srgb,var(--bad) 40%,transparent)}.palert.bad>svg{color:var(--bad)}
+.pstack{display:flex;height:16px;border-radius:99px;overflow:hidden;background:color-mix(in srgb,var(--navy) 8%,transparent);margin-top:12px;min-width:120px}
+.pstack i{display:block;height:100%}
+.plegend{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:12px;font-size:.92rem}
+.plegend span{display:inline-flex;align-items:center;gap:7px}.plegend i{width:12px;height:12px;border-radius:4px;display:inline-block}
+.pcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.pcard{position:relative;display:flex;flex-direction:column;gap:10px;padding:16px;border-radius:16px;background:var(--surface);border:1px solid var(--line);box-shadow:0 10px 24px -18px rgba(18,38,77,.5);overflow:hidden}
+.pcard::before{content:"";position:absolute;inset:0 0 auto;height:4px;background:var(--line)}
+.pcard.ok::before{background:linear-gradient(90deg,#3FA36B,#2E7D4F)}.pcard.warn::before{background:linear-gradient(90deg,#E5A24A,#B26A00)}.pcard.bad::before{background:linear-gradient(90deg,#E05A50,#B3261E)}
+.pcard .pn{display:block;overflow-wrap:anywhere}.pcard small{color:var(--muted);text-align:left}
+.pshare{font-size:1.6rem;font-weight:800;color:var(--navy)}
+.pcard .chip{align-self:flex-start}
+.pstats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:10px 0;border-top:1px dashed var(--line);border-bottom:1px dashed var(--line)}
+.pstats div{display:flex;flex-direction:column;align-items:center}.pstats b{font-size:1.15rem;color:var(--ink)}.pstats span{font-size:.72rem;color:var(--muted)}
+.pult{display:flex;gap:6px;align-items:center}.pult svg{width:14px;height:14px}
+.lv{display:inline-block;width:22px;height:22px;border-radius:6px;background:color-mix(in srgb,var(--navy) 7%,transparent);vertical-align:middle}
+.lv.l1{background:#E9D9EE}.lv.l2{background:#C59BD4}.lv.l3{background:#8B4FA8}.lv.l4{background:#4A1D6B}
+.lv.rsp{box-shadow:0 0 0 2px var(--surface),0 0 0 4px #C9A24A}
+.lvl-leg{display:flex;align-items:center;gap:5px;font-size:.8rem;color:var(--muted);flex-wrap:wrap}.lvl-leg .lv{width:14px;height:14px;border-radius:4px}
+.pmx td.c,.pmx th.c{text-align:center;width:52px}
+.pmx select{padding:5px 8px;font-size:.88rem;min-width:130px}
+:root[data-theme="dark"] .lv.l1{background:#3A2A48}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .lv.l1{background:#3A2A48}}
+.pcard .pn,.pcard small,.pcard b{text-align:left;hyphens:manual}
+/* IPI e similaridade */
+.ipib{display:flex;flex-direction:column;align-items:center;justify-content:center;width:62px;height:62px;border-radius:16px;flex:none;color:#fff;background:linear-gradient(135deg,#3FA36B,#2E7D4F);box-shadow:0 8px 18px -10px rgba(0,0,0,.5)}
+.ipib b{font-size:1.45rem;font-weight:800;line-height:1}.ipib span{font-size:.62rem;letter-spacing:.16em;opacity:.9}
+.ipib.gold{background:linear-gradient(135deg,#E8C77A,#B88A2C);color:#2A1A05}.ipib.warn{background:linear-gradient(135deg,#E5A24A,#B26A00)}.ipib.bad{background:linear-gradient(135deg,#E05A50,#B3261E)}
+.ipi-parts{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.8rem;color:var(--muted)}.ipi-parts b{color:var(--ink)}
+.jb i.ok{background:linear-gradient(90deg,#3FA36B,#2E7D4F)}.jb i.gold{background:linear-gradient(90deg,#E8C77A,#C9A24A)}.jb i.warn{background:linear-gradient(90deg,#E5A24A,#B26A00)}.jb i.bad{background:linear-gradient(90deg,#E05A50,#B3261E)}
+.simbox{display:flex;flex-direction:column;gap:12px}
+.simhead{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.simg{display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--navy)}.simg span{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.simg.bad{color:var(--bad)}.simg.warn{color:var(--warn)}.simg.ok{color:var(--ok)}
+.simlist{display:flex;flex-direction:column;gap:8px}
+.simrow{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(80px,1fr) 52px;gap:12px;align-items:center}
+.simrow .sn{min-width:0;overflow-wrap:anywhere;text-align:left}.simrow b{text-align:right}
 
 @page{size:A1 portrait;margin:0}
 @media print{
@@ -841,6 +884,11 @@ const Store={mode:'local',fs:null,mem:{},
   async get(col,id){if(this.fs){const d=await this.fs.collection(col).doc(id).get();return d.exists?{id:d.id,...d.data()}:null}const d=this.c(col)[id];return d?{id,...clone(d)}:null},
   async set(col,id,data){const d=this.clean(data);if(this.fs)return this.fs.collection(col).doc(id).set(d);this.c(col)[id]=d;this.persist()},
   async patch(col,id,part){const d=this.clean(part);if(this.fs){const ref=this.fs.collection(col).doc(id);try{await ref.update(d)}catch(e){await ref.set(d,{merge:true})}return}this.c(col)[id]=Object.assign(this.c(col)[id]||{},d);this.persist()},
+  async bump(col,id,inc={},set={}){
+    if(this.fs){const FV=firebase.firestore.FieldValue;const u={};Object.entries(inc).forEach(([k,v])=>u[k]=FV.increment(v));Object.assign(u,set);const ref=this.fs.collection(col).doc(id);
+      try{await ref.update(u)}catch(e){await ref.set({},{merge:true});await ref.update(u)}return}
+    const d=this.c(col)[id]||(this.c(col)[id]={});const put=(p,f)=>{const ks=p.split('.');let a=d;for(let i=0;i<ks.length-1;i++)a=a[ks[i]]=a[ks[i]]||{};const l=ks[ks.length-1];a[l]=f(a[l])};
+    Object.entries(inc).forEach(([k,v])=>put(k,o=>(o||0)+v));Object.entries(set).forEach(([k,v])=>put(k,()=>v));this.persist()},
   watch(cols,cb){
     if(this.fs){cols.forEach(col=>{let first=true;this.fs.collection(col).onSnapshot(()=>{if(first){first=false;return}cb(col)},e=>console.warn('sync',col,e))});return}
     window.addEventListener('storage',e=>{if(e.key===DBKEY){try{this.mem=JSON.parse(e.newValue||'{}')||{}}catch(x){}cb('*')}});
@@ -1161,9 +1209,9 @@ async function renderAlunoLogin(){
    <div class="g2" style="align-items:start">
     <form class="card stack" id="fLogin"><h3>Entrar na equipe</h3>
      ${eqs.length?`<label class="fld"><span class="lbl">Equipe</span><select id="lgEq" required><option value="">Selecione a sua start-up…</option>${eqs.map(e=>`<option value="${e.id}">${esc(e.nome)} — ${esc(e.organizacao||'')}</option>`).join('')}</select></label>
-     <label class="fld"><span class="lbl">Seu nome</span><input id="lgNome" required placeholder="Como você aparece nas mensagens"></label>
-     <label class="fld"><span class="lbl">Perfil</span><select id="lgPapel"><option>Membro da equipe</option><option>Líder (representante)</option><option>Gestor da organização</option></select></label>
+     <label class="fld"><span class="lbl">Quem é você?</span><select id="lgMem" required disabled><option value="">Escolha primeiro a equipe…</option></select><span class="help">Seu nome não aparece? Peça ao líder para incluí-lo em “Equipe”.</span></label>
      <label class="fld"><span class="lbl">Senha da equipe</span><input type="password" id="lgSenha" required autocomplete="current-password"></label>
+     <label class="fld"><span class="lbl">Seu PIN pessoal <small id="pinHint"></small></span><input type="password" id="lgPin" inputmode="numeric" pattern="[0-9]{4,6}" minlength="4" maxlength="6" required autocomplete="off" placeholder="4 a 6 dígitos"><span class="help">O PIN identifica você no registro de participação. Não compartilhe com a equipe.</span></label>
      ${Store.mode==='local'&&eqs.some(e=>e.demo)?'<p class="help"><span class="ex">Exemplo</span> Equipe de demonstração: “Rumo Consultoria”, senha <b>demo123</b>.</p>':''}
      <button class="btn" type="submit">Entrar</button>`:'<div class="empty"><b>Nenhuma equipe criada neste semestre</b>Seja o representante e crie a primeira.</div>'}
     </form>
@@ -1178,25 +1226,37 @@ async function renderAlunoLogin(){
       <label class="fld"><span class="lbl">Demais membros (um por linha: nome; e-mail)</span><textarea id="nvMembros" rows="4" placeholder="Ana Souza; ana@ufam.edu.br"></textarea><span class="help">A equipe tem ${S.cfg.tamEquipe||5} membros, incluindo o líder.</span></label>
       <label class="fld" style="grid-column:span 2"><span class="lbl">Senha da equipe</span><input type="password" id="nvS1" required minlength="6" autocomplete="new-password"></label>
       <label class="fld" style="grid-column:span 2"><span class="lbl">Confirmar senha</span><input type="password" id="nvS2" required minlength="6" autocomplete="new-password"></label>
+      <label class="fld" style="grid-column:span 4"><span class="lbl">Seu PIN pessoal (4 a 6 dígitos)</span><input type="password" id="nvPin" inputmode="numeric" pattern="[0-9]{4,6}" minlength="4" maxlength="6" required autocomplete="off"><span class="help">Cada membro cria o próprio PIN no primeiro acesso. Ele identifica quem edita cada seção.</span></label>
      </div><button class="btn gold" type="submit">Criar equipe e entrar</button></form>
    </div></div></div>`;
-  const fl=$('#fLogin');fl.onsubmit=async e=>{e.preventDefault();const id=$('#lgEq').value,eq=eqs.find(x=>x.id===id);if(!eq)return toast('Selecione a equipe.');
-    if(await sha($('#lgSenha').value)!==eq.senhaHash)return toast('Senha incorreta. Confira com o líder da equipe.');
-    setSess({role:'aluno',eqId:id,nome:$('#lgNome').value.trim(),papel:$('#lgPapel').value});S.atab='inicio';render()};
+  const fl=$('#fLogin');
+  const lgEq=$('#lgEq');if(lgEq){const fill=()=>{const eq=eqs.find(x=>x.id===lgEq.value);const sel=$('#lgMem');if(!eq){sel.innerHTML='<option value="">Escolha primeiro a equipe…</option>';sel.disabled=true;return}
+      sel.disabled=false;sel.innerHTML='<option value="">Selecione seu nome…</option>'+roster(eq).map(r=>`<option value="${r.k}">${esc(r.nome)} · ${esc(r.papel.replace(' (representante)',''))}</option>`).join('');pinH()};
+    const pinH=()=>{const eq=eqs.find(x=>x.id===lgEq.value),k=$('#lgMem').value;$('#pinHint').textContent=eq&&k?(eq.pins?.[k]?'':'· primeiro acesso: crie agora o seu PIN'):''};
+    lgEq.onchange=fill;$('#lgMem').onchange=pinH}
+  fl.onsubmit=async e=>{e.preventDefault();const id=$('#lgEq').value,eq=eqs.find(x=>x.id===id);if(!eq)return toast('Selecione a equipe.');
+    const r=roster(eq).find(x=>x.k===$('#lgMem').value);if(!r)return toast('Selecione o seu nome na lista da equipe.');
+    if(await sha($('#lgSenha').value)!==eq.senhaHash)return toast('Senha da equipe incorreta. Confira com o líder.');
+    const pin=$('#lgPin').value.trim();if(!/^\d{4,6}$/.test(pin))return toast('O PIN deve ter de 4 a 6 dígitos.');const ph=await sha('pin:'+id+':'+r.k+':'+pin);
+    const fresh=await Store.get('equipes',id);const pins={...(fresh?.pins||{})};
+    if(pins[r.k]&&pins[r.k]!==ph)return toast('PIN incorreto. Se esqueceu, peça ao líder ou ao professor para redefinir.');
+    if(!pins[r.k]){pins[r.k]=ph;await Store.patch('equipes',id,{pins});toast('PIN pessoal criado. Use-o nos próximos acessos.')}
+    setSess({role:'aluno',eqId:id,nome:r.nome,papel:r.papel,mk:r.k});logPart(id,{[`m.${r.k}.acessos`]:1},{[`m.${r.k}.nome`]:r.nome,[`m.${r.k}.papel`]:r.papel,[`m.${r.k}.ultAcesso`]:Date.now()});S.atab='inicio';render()};
   $('#fNova').onsubmit=async e=>{e.preventDefault();const nome=$('#nvNome').value.trim();if($('#nvS1').value!==$('#nvS2').value)return toast('As senhas não conferem.');
     if(eqs.some(x=>x.nome.toLowerCase()===nome.toLowerCase()))return toast('Já existe uma equipe com este nome neste semestre.');
     const membros=$('#nvMembros').value.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{const[n,m]=l.split(/[;,]/);return{nome:(n||'').trim(),email:(m||'').trim()}});
-    const id='eq_'+uid();const org=$('#nvOrg').value.trim();
-    await Store.set('equipes',id,{semestre:S.cfg.semestre,edicao:S.cfg.edicao,anoInicio:S.cfg.anoInicio,nome,slogan:$('#nvSlogan').value.trim(),organizacao:org,segmento:$('#nvSeg').value,lider:$('#nvLider').value.trim(),liderEmail:$('#nvEmail').value.trim(),membros,gestor:{},senhaHash:await sha($('#nvS1').value),criadaEm:Date.now(),atualizadoEm:Date.now(),progresso:0,publico:false,arquivado:false});
+    const id='eq_'+uid();const org=$('#nvOrg').value.trim();const lk=mkey($('#nvLider').value.trim());if(!/^\d{4,6}$/.test($('#nvPin').value))return toast('O PIN deve ter de 4 a 6 dígitos.');
+    await Store.set('equipes',id,{semestre:S.cfg.semestre,edicao:S.cfg.edicao,anoInicio:S.cfg.anoInicio,nome,slogan:$('#nvSlogan').value.trim(),organizacao:org,segmento:$('#nvSeg').value,lider:$('#nvLider').value.trim(),liderEmail:$('#nvEmail').value.trim(),membros,gestor:{},pins:{[lk]:await sha('pin:'+id+':'+lk+':'+$('#nvPin').value)},senhaHash:await sha($('#nvS1').value),criadaEm:Date.now(),atualizadoEm:Date.now(),progresso:0,publico:false,arquivado:false});
     await Store.set('pes',id,{capa:{organizacao:org,cidade:'Manaus',codigo:'PE 01',revisao:1}});
-    setSess({role:'aluno',eqId:id,nome:$('#nvLider').value.trim(),papel:'Líder (representante)'});S.atab='inicio';toast('Equipe criada. Repasse a senha aos membros e ao gestor.');render()};
+    setSess({role:'aluno',eqId:id,nome:$('#nvLider').value.trim(),papel:'Líder (representante)',mk:lk});S.atab='inicio';toast('Equipe criada. Repasse a senha aos membros e ao gestor.');render()};
 }
 async function renderAluno(){
   const eq=await Store.get('equipes',S.sess.eqId);if(!eq){setSess(null);return render()}
-  S.eq=eq;S.ano=eq.anoInicio||S.cfg.anoInicio;S.pe=await Store.get('pes',eq.id)||{};S.fb=await Store.get('feedback',eq.id)||{};
+  if(!S.sess.mk){setSess(null);toast('Agora cada membro entra com o próprio nome e PIN. Entre novamente.');return render()}
+  S.eq=eq;S.ano=eq.anoInicio||S.cfg.anoInicio;S.pe=await Store.get('pes',eq.id)||{};S.fb=await Store.get('feedback',eq.id)||{};snapAll();
   const msgs=(await Store.list('msgs')).filter(m=>m.canal==='prof'&&(m.equipeId===eq.id||m.equipeId==='*')&&m.papel==='professor');
   const seen=ls('sispe_seen_'+eq.id)||0;const unread=msgs.filter(m=>m.em>seen).length;
-  const T=[['inicio','Início'],['orient','Orientações'],['completo','PE Completo · Modelo 2'],['basico','PE Básico A1 · Modelo 1'],['msgs','Mensagens'],['equipe','Equipe']];
+  const T=[['inicio','Início'],['orient','Orientações'],['completo','PE Completo · Modelo 2'],['basico','PE Básico A1 · Modelo 1'],['part','Participação'],['msgs','Mensagens'],['equipe','Equipe']];
   const fzA=(await Store.list('orientacoes')).filter(o=>o.semestre===eq.semestre&&o.publicada).flatMap(o=>o.fases||[]).filter(f=>f.prazo&&f.prazo>=today()).sort((a,b)=>a.prazo.localeCompare(b.prazo));const dA=fzA[0]?Math.ceil((new Date(fzA[0].prazo+'T23:59')-new Date())/864e5):null;
   const nRec=SECOES.filter(s=>S.fb[s.id]).length;const nOk=VIEWABLE.filter(s=>secProg(s,S.pe)>=.99).length;
   app.innerHTML=`<div class="wrap"><section class="hero hero-team">
@@ -1216,6 +1276,8 @@ async function renderAluno(){
   if(S.atab==='basico')return alunoBasico(pane,eq);
   if(S.atab==='msgs')return alunoMsgs(pane,eq);
   if(S.atab==='equipe')return alunoEquipe(pane,eq);
+  if(S.atab==='part'){const d=await Store.get('feedback',partId(eq.id));pane.innerHTML=partView(eq,d,{assign:/Líder/.test(S.sess.papel||''),pe:S.pe})+`<div class="card" style="margin-top:20px"><div class="row between"><div><div class="eyebrow">Originalidade</div><h3>Similaridade do nosso PE com outros PEs</h3></div><button class="btn sm" id="simMe">${ic('chart')}Verificar agora</button></div><div id="simMeOut" style="margin-top:12px"><p class="help">Compare o PE da equipe com os PEs do acervo e das outras equipes antes de entregar. O professor também acompanha este indicador.</p></div></div>`;bindPart(pane,eq);
+    $('#simMe').onclick=async ev=>{ev.target.disabled=true;$('#simMeOut').innerHTML='<div class="empty"><b>Calculando…</b></div>';await flushSave();try{const base=await simBase();$('#simMeOut').innerHTML=simHTML(simOf(base,eq.id),{aluno:true})}catch(e){$('#simMeOut').innerHTML='<div class="empty"><b>Não foi possível calcular</b></div>'}ev.target.disabled=false};return}
 }
 async function alunoInicio(pane,eq){
   const pend=VIEWABLE.filter(s=>secProg(s,S.pe)<1).slice(0,6);const fbs=SECOES.filter(s=>S.fb[s.id]);
@@ -1244,7 +1306,7 @@ function alunoCompleto(pane){
   $$('[data-sec]',pane).forEach(b=>b.onclick=()=>openSec(b.dataset.sec));$('#secSel').onchange=e=>openSec(e.target.value);
   drawSec();
 }
-async function openSec(id){await flushSave();const fresh=await Store.get('pes',S.eq.id);if(fresh)S.pe=fresh;S.sec=id;$$('.secnav [data-sec]').forEach(b=>b.classList.toggle('on',b.dataset.sec===id));const sel=$('#secSel');if(sel)sel.value=id;drawSec();{const h=$('.tabs');if(h)window.scrollTo({top:Math.min(window.scrollY,h.getBoundingClientRect().top+window.scrollY-80),behavior:'smooth'})}}
+async function openSec(id){await flushSave();const fresh=await Store.get('pes',S.eq.id);if(fresh){S.pe=fresh;snapAll()}S.sec=id;$$('.secnav [data-sec]').forEach(b=>b.classList.toggle('on',b.dataset.sec===id));const sel=$('#secSel');if(sel)sel.value=id;drawSec();{const h=$('.tabs');if(h)window.scrollTo({top:Math.min(window.scrollY,h.getBoundingClientRect().top+window.scrollY-80),behavior:'smooth'})}}
 function refreshDots(){const nav=$('.secnav');if(nav){nav.innerHTML=secNavHTML();$$('[data-sec]',nav).forEach(b=>b.onclick=()=>openSec(b.dataset.sec))}}
 function drawSec(){
   const sec=SECOES.find(s=>s.id===S.sec)||SECOES[0];const sp=$('#secpane');const i=SECOES.indexOf(sec);const upd=S.pe['upd_'+sec.id];
@@ -1275,7 +1337,9 @@ async function flushSave(){clearTimeout(S.saveT);const ks=Object.keys(S.dirty);i
   ks.forEach(k=>{part[k]=S.pe[k];part['upd_'+k]={por:S.sess?.nome||'—',em:now};S.pe['upd_'+k]=part['upd_'+k]});
   try{await Store.patch('pes',S.eq.id,part);const prog=peProg(S.pe);const up={atualizadoEm:now,progresso:prog};if(ks.includes('capa')&&S.pe.capa?.organizacao)up.organizacao=S.pe.capa.organizacao;await Store.patch('equipes',S.eq.id,up);
     const st=$('#savest');if(st){st.textContent='Salvo às '+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});st.className='savest'}refreshDots();
-    const tb=$('#tbRing');if(tb)tb.innerHTML=ring(prog,150,13);}
+    const tb=$('#tbRing');if(tb)tb.innerHTML=ring(prog,150,13);
+    if(S.sess?.mk){const mk=S.sess.mk,inc={},set={};let ct=0;ks.forEach(k=>{const L=secLen(k);const d=Math.max(0,L-(S.snap?.[k]??L));if(S.snap)S.snap[k]=L;ct+=d;inc[`m.${mk}.s.${k}.n`]=1;inc[`m.${mk}.s.${k}.c`]=d;set[`m.${mk}.s.${k}.ult`]=now});
+      inc[`m.${mk}.n`]=ks.length;inc[`m.${mk}.c`]=ct;set[`m.${mk}.ult`]=now;set[`m.${mk}.d.${today().replace(/-/g,'')}`]=true;set[`m.${mk}.nome`]=S.sess.nome;set[`m.${mk}.papel`]=S.sess.papel||'';logPart(S.eq.id,inc,set)}}
   catch(e){console.error(e);ks.forEach(k=>S.dirty[k]=true);toast('Falha ao salvar. Verifique a conexão; tentaremos de novo.');S.saveT=setTimeout(flushSave,5000)}}
 window.addEventListener('beforeunload',()=>{flushSave()});
 function alunoBasico(pane,eq){
@@ -1310,8 +1374,11 @@ function alunoEquipe(pane,eq){const lider=/Líder/.test(S.sess.papel||'');
   pane.innerHTML=`<div class="g2" style="align-items:start"><div class="card stack"><h3>Dados da equipe</h3><div id="eqf"></div><button class="btn" id="eqSave">Salvar dados da equipe</button></div>
    <div class="stack"><div class="card stack"><h3>Senha de acesso</h3><p>Todos os membros e o gestor da organização entram com a mesma senha. ${lider?'Como líder, você pode trocá-la e repassar a nova senha.':'Apenas o líder pode trocar a senha.'}</p>
    ${lider?`<form class="stack" id="pwF"><label class="fld"><span class="lbl">Nova senha</span><input type="password" id="pw1" minlength="6" required autocomplete="new-password"></label><label class="fld"><span class="lbl">Confirmar</span><input type="password" id="pw2" minlength="6" required autocomplete="new-password"></label><button class="btn gold" type="submit">Trocar senha</button></form>`:''}</div>
-   <div class="card stack"><h3>Mensagem pronta para os membros</h3><p class="help">Copie e envie pelo grupo da equipe (sem a senha; informe-a pessoalmente).</p><div class="code" id="convite" style="white-space:pre-wrap">Olá! Nossa start-up “${esc(eq.nome)}” já está cadastrada no Sistema de Elaboração de Planejamento Estratégico (Engenharia de Produção – UFAM).\nAcesse “Ambiente dos alunos”, escolha a equipe “${esc(eq.nome)}”, informe seu nome e a senha da equipe.</div><button class="btn sm ghost" id="cpy">Copiar mensagem</button></div></div></div>`;
+   <div class="card stack"><h3>PINs pessoais</h3><p class="help">Cada membro entra com o próprio nome e PIN, para que a participação de cada um seja registrada.${lider?' Como líder, você pode redefinir o PIN de quem esqueceu.':''}</p>
+    ${roster(eq).map(r=>`<div class="row between" style="flex-wrap:nowrap"><span>${esc(r.nome)} <small>· ${esc(r.papel)}</small></span>${eq.pins?.[r.k]?`<span class="row" style="gap:6px;flex-wrap:nowrap"><span class="chip ok">PIN criado</span>${lider&&r.k!==S.sess.mk?`<button class="btn sm ghost" data-rpin="${r.k}">Redefinir</button>`:''}</span>`:'<span class="chip">Aguardando 1º acesso</span>'}</div>`).join('')}</div>
+   <div class="card stack"><h3>Mensagem pronta para os membros</h3><p class="help">Copie e envie pelo grupo da equipe (sem a senha; informe-a pessoalmente).</p><div class="code" id="convite" style="white-space:pre-wrap">Olá! Nossa start-up “${esc(eq.nome)}” já está cadastrada no Sistema de Elaboração de Planejamento Estratégico (Engenharia de Produção – UFAM).\nAcesse “Ambiente dos alunos”, escolha a equipe “${esc(eq.nome)}”, selecione o seu nome, informe a senha da equipe e crie o seu PIN pessoal no primeiro acesso.</div><button class="btn sm ghost" id="cpy">Copiar mensagem</button></div></div></div>`;
   mountForm($('#eqf'),F,obj,{imgp:'eq'});
+  $$('[data-rpin]',pane).forEach(b=>b.onclick=async()=>{if(!await confirmBox('Redefinir o PIN deste membro? Ele criará um novo PIN no próximo acesso.','Redefinir'))return;const f=await Store.get('equipes',eq.id);const p={...(f?.pins||{})};delete p[b.dataset.rpin];await Store.patch('equipes',eq.id,{pins:p});toast('PIN redefinido.');render()});
   $('#eqSave').onclick=async()=>{await Store.patch('equipes',eq.id,obj);toast('Dados da equipe salvos.');render()};
   $('#cpy').onclick=()=>{const t=$('#convite').textContent;navigator.clipboard?.writeText(t).then(()=>toast('Mensagem copiada.'),()=>{getSelection().selectAllChildren($('#convite'));toast('Selecione e copie o texto.')})};
   const pf=$('#pwF');if(pf)pf.onsubmit=async e=>{e.preventDefault();if($('#pw1').value!==$('#pw2').value)return toast('As senhas não conferem.');await Store.patch('equipes',eq.id,{senhaHash:await sha($('#pw1').value)});toast('Senha alterada. Informe a nova senha à equipe.');pf.reset()};
@@ -1330,11 +1397,11 @@ async function renderProfLogin(){const first=!S.cfg.profHash;
     else if(h!==S.cfg.profHash)return toast('Senha incorreta.');
     setSess({role:'prof',nome:'Prof. Jonas Gomes da Silva'});render()};
 }
-const PIC={painel:'grid',orient:'compass',equipes:'users',aval:'award',acervo:'archive',msgs:'msg',config:'sliders'};
-const AIC={inicio:'home',orient:'compass',completo:'file',basico:'layout',msgs:'msg',equipe:'users'};
+const PIC={ppart:'chart',simil:'layout',painel:'grid',orient:'compass',equipes:'users',aval:'award',acervo:'archive',msgs:'msg',config:'sliders'};
+const AIC={part:'chart',inicio:'home',orient:'compass',completo:'file',basico:'layout',msgs:'msg',equipe:'users'};
 async function renderProf(){
   const eqs=await Store.list('equipes');const msgs=await Store.list('msgs');const orsAll=await Store.list('orientacoes');const unread=msgs.filter(m=>m.papel==='aluno'&&m.canal==='prof'&&!m.lidaProf).length;
-  const T=[['painel','Painel'],['orient','Orientações'],['equipes','Equipes e PEs'],['aval','Avaliação da Mostra'],['acervo','Acervo histórico'],['msgs','Mensagens'],['config','Semestre e configurações']];
+  const T=[['painel','Painel'],['orient','Orientações'],['equipes','Equipes e PEs'],['ppart','Participação individual'],['simil','Similaridade dos PEs'],['aval','Avaliação da Mostra'],['acervo','Acervo histórico'],['msgs','Mensagens'],['config','Semestre e configurações']];
   if(S.ptabProf==='revisar')return profRevisar(eqs);
   const cur0=eqs.filter(e=>e.semestre===S.cfg.semestre&&!e.arquivado);const pm0=cur0.length?Math.round(cur0.reduce((a,e)=>a+(e.progresso||0),0)/cur0.length):0;
   const fz=orsAll.filter(o=>o.semestre===S.cfg.semestre).flatMap(o=>o.fases||[]).filter(f=>f.prazo&&f.prazo>=today()).sort((a,b)=>a.prazo.localeCompare(b.prazo));const dz=fz[0]?Math.ceil((new Date(fz[0].prazo+'T23:59')-new Date())/864e5):null;
@@ -1350,14 +1417,33 @@ async function renderProf(){
    <div class="admin"><nav class="side" aria-label="Gestão"><div class="sh">Gestão da disciplina</div>${T.map(([k,l])=>`<button data-pt="${k}" class="${S.ptabProf===k?'on':''}">${ic(PIC[k])}<span>${l}</span>${k==='msgs'&&unread?`<span class="badge">${unread}</span>`:''}</button>`).join('')}</nav><div id="pane" style="min-width:0"></div></div></div>`;
   $('#sair').onclick=()=>{setSess(null);render()};$$('[data-pt]').forEach(b=>b.onclick=()=>{stopPoll();S.ptabProf=b.dataset.pt;render()});$$('[data-qa]').forEach(b=>b.onclick=()=>{stopPoll();S.ptabProf=b.dataset.qa;render()});
   const pane=$('#pane'),cur=eqs.filter(e=>e.semestre===S.cfg.semestre&&!e.arquivado);
-  ({painel:()=>profPainel(pane,cur,msgs),orient:()=>profOrient(pane),equipes:()=>profEquipes(pane,eqs),aval:()=>profAval(pane,eqs),acervo:()=>profAcervo(pane,eqs),msgs:()=>profMsgs(pane,cur,msgs),config:()=>profConfig(pane)})[S.ptabProf]();
+  ({ppart:()=>profPart(pane,cur),simil:()=>profSim(pane,cur),painel:()=>profPainel(pane,cur,msgs),orient:()=>profOrient(pane),equipes:()=>profEquipes(pane,eqs),aval:()=>profAval(pane,eqs),acervo:()=>profAcervo(pane,eqs),msgs:()=>profMsgs(pane,cur,msgs),config:()=>profConfig(pane)})[S.ptabProf]();
 }
-async function profPainel(pane,cur,msgs){
+async function profPart(pane,cur){const docs={};(await Store.list('feedback')).filter(d=>d.id.startsWith('part_')).forEach(d=>docs[d.id.slice(5)]=d);
+  const rows=[];cur.forEach(e=>{const P=partRows(e,docs[e.id]);P.alunos.forEach(x=>rows.push({e,x,P}))});S.ppf=S.ppf||'todos';
+  const f=rows.filter(r=>S.ppf==='todos'||(S.ppf==='baixa'&&r.x.ipi<40)||(S.ppf==='alta'&&r.x.ipi>=70)).sort((a,b)=>a.x.ipi-b.x.ipi);
+  const media=rows.length?Math.round(rows.reduce((a,r)=>a+r.x.ipi,0)/rows.length):0;const nb=rows.filter(r=>r.x.ipi<40).length;
+  pane.innerHTML=`<div class="stack" style="gap:18px"><div class="g3"><div class="kpi" data-ic="users"><b>${rows.length}</b><span>Alunos nas equipes do semestre</span></div><div class="kpi gold" data-ic="target"><b>${media}</b><span>IPI médio da turma</span></div><div class="kpi purple" data-ic="clock"><b>${nb}</b><span>Alunos com IPI baixo (&lt; 40)</span></div></div>
+   <div class="card"><div class="row between"><div><div class="eyebrow">Índice de Participação Individual</div><h3>Participação por membro</h3></div><div class="ptabs">${[['todos','Todos'],['baixa','IPI baixo'],['alta','IPI alto']].map(([k,l])=>`<button data-ppf="${k}" class="${S.ppf===k?'on':''}">${l}</button>`).join('')}</div></div>
+   <p class="help" style="margin:6px 0 12px">IPI = 50% contribuição em relação à cota justa da equipe + 25% regularidade (dias com edição; meta 6) + 25% cobertura das seções. Ordenado do menor para o maior IPI.</p>
+   ${f.length?`<div class="tbl-wrap"><table><thead><tr><th>Membro</th><th>Equipe</th><th style="min-width:170px">IPI</th><th class="r">Contribuição</th><th class="r">Edições</th><th class="r">Dias ativos</th><th class="r">Seções</th><th>Última atividade</th></tr></thead><tbody>${f.map(({e,x})=>{const c=ipiCls(x.ipi,x.n);return `<tr><td><b>${esc(x.nome)}</b><br><small>${esc(x.papel.replace(' (representante)',''))}</small></td><td>${esc(e.nome)}<br><small>${esc(e.organizacao||'')}</small></td><td><div class="row" style="flex-wrap:nowrap;gap:8px"><span class="jb" style="flex:1"><i class="${c}" style="width:${x.ipi}%"></i></span><b class="num">${x.ipi}</b></div><span class="chip ${c==='gold'?'gold':c}">${x.ipiCl}</span></td><td class="r num">${Math.round(x.share*100)}%</td><td class="r num">${x.n}</td><td class="r num">${x.dias}</td><td class="r num">${x.secs.length}</td><td class="num">${x.ult?fmtDT(x.ult):'—'}</td></tr>`}).join('')}</tbody></table></div>`:'<div class="empty"><b>Nenhum aluno nesta seleção</b>Os índices aparecem à medida que os membros editam o PE.</div>'}</div></div>`;
+  $$('[data-ppf]',pane).forEach(b=>b.onclick=()=>{S.ppf=b.dataset.ppf;profPart(pane,cur)});
+}
+async function profSim(pane,cur){
+  pane.innerHTML=`<div class="stack" style="gap:18px"><div class="card"><div class="row between"><div><div class="eyebrow">Originalidade</div><h3>Similaridade dos PEs com outras equipes</h3></div><button class="btn" id="simGo">${ic('chart')}Calcular agora</button></div>
+   <p class="help" style="margin-top:6px">Compara o texto de cada PE do semestre com todos os outros PEs do sistema: equipes do mesmo semestre e acervo histórico (inclusive o texto extraído das planilhas importadas). O cálculo é feito no seu navegador e pode levar alguns segundos.</p></div><div id="simOut"></div></div>`;
+  $('#simGo').onclick=async ev=>{ev.target.disabled=true;$('#simOut').innerHTML='<div class="empty"><b>Calculando…</b>Lendo e comparando os PEs.</div>';
+    try{const base=await simBase();const res=cur.map(e=>({e,r:simOf(base,e.id)}));S.simCache={base,t:Date.now()};
+      $('#simOut').innerHTML=res.length?`<div class="card"><p class="help">${base.docs.length} documentos comparados · ${base.docs.filter(d=>d.pe.corpus).length} com texto extraído das planilhas originais.</p><div class="tbl-wrap" style="margin-top:10px"><table><thead><tr><th>Equipe</th><th style="min-width:180px">Maior similaridade</th><th>Mais parecida com</th><th>Seções críticas</th><th></th></tr></thead><tbody>${res.sort((a,b)=>(b.r?.max||0)-(a.r?.max||0)).map(({e,r})=>{const v=r?.max||0;const [c,l]=simLvl(v);return `<tr><td><b>${esc(e.nome)}</b><br><small>${esc(e.organizacao||'')}</small></td><td>${r&&!r.pouco?`<div class="row" style="flex-wrap:nowrap;gap:8px"><span class="jb" style="flex:1"><i class="${c}" style="width:${Math.min(100,v*100)}%"></i></span><b class="num">${pctS(v)}</b></div><span class="chip ${c}">${l}</span>`:'<small>Conteúdo insuficiente</small>'}</td><td>${r?.top[0]?simLabel(r.top[0].eq):'—'}</td><td class="num">${r?r.secs.filter(x=>x.score>=.35).length:0}</td><td><button class="btn sm ghost" data-simd="${e.id}">Detalhar</button></td></tr>`}).join('')}</tbody></table></div></div>`:'<div class="empty"><b>Nenhuma equipe no semestre</b></div>';
+      $$('[data-simd]',pane).forEach(b=>b.onclick=()=>{const e=cur.find(x=>x.id===b.dataset.simd);const m=modal(`<div class="row between"><h3>Similaridade · ${esc(e.nome)}</h3><button class="btn sm ghost" data-close>Fechar</button></div>${simHTML(simOf(base,e.id))}`)})}
+    catch(err){console.error(err);$('#simOut').innerHTML='<div class="empty"><b>Não foi possível calcular</b>'+esc(err.message||err)+'</div>'}ev.target.disabled=false};
+}
+async function profPainel(pane,cur,msgs){const partDocs={};(await Store.list('feedback')).filter(d=>d.id.startsWith('part_')).forEach(d=>partDocs[d.id.slice(5)]=d);
   const ors=(await Store.list('orientacoes')).filter(o=>o.semestre===S.cfg.semestre);const fases=ors.flatMap(o=>o.fases||[]).filter(f=>f.prazo).sort((a,b)=>a.prazo.localeCompare(b.prazo));
   const rec=msgs.filter(m=>m.papel==='aluno'&&m.canal==='prof').sort((a,b)=>b.em-a.em).slice(0,5);const nomeEq=id=>cur.find(e=>e.id===id)?.nome||'Equipe';const t=today();
   pane.innerHTML=`<div class="dash2">
    <div class="card"><div class="row between"><div><div class="eyebrow">Acompanhamento</div><h3>Equipes do semestre</h3></div><button class="btn sm ghost" id="toEq">${ic('users')}Gerenciar</button></div>
-    ${cur.length?`<div class="tgrid">${[...cur].sort((a,b)=>(b.progresso||0)-(a.progresso||0)).map(e=>`<div class="tteam"><div class="tr1">${ring(e.progresso||0,74,8,false)}<div style="min-width:0"><b class="tn">${esc(e.nome)}</b><div class="to">${esc(e.organizacao||'Organização a definir')}</div>${avatars(consultores(e),5)}</div></div><div class="tr2"><small>${ic('clock')} ${fmtDT(e.atualizadoEm)}</small><button class="btn sm" data-rev="${e.id}">Revisar PE</button></div></div>`).join('')}</div>`:'<div class="empty" style="margin-top:14px"><b>Nenhuma equipe ainda</b>As equipes aparecem aqui assim que o representante as cria no ambiente dos alunos.</div>'}</div>
+    ${cur.length?`<div class="tgrid">${[...cur].sort((a,b)=>(b.progresso||0)-(a.progresso||0)).map(e=>`<div class="tteam"><div class="tr1">${ring(e.progresso||0,74,8,false)}<div style="min-width:0"><b class="tn">${esc(e.nome)}</b><div class="to">${esc(e.organizacao||'Organização a definir')}</div>${avatars(consultores(e),5)}</div></div>${(P=>`<div>${partStack(P)}<div class="row between" style="margin-top:6px"><small>Participação</small>${partBadge(P)}</div></div>`)(partRows(e,partDocs[e.id]))}<div class="tr2"><small>${ic('clock')} ${fmtDT(e.atualizadoEm)}</small><button class="btn sm" data-rev="${e.id}">Revisar PE</button></div></div>`).join('')}</div>`:'<div class="empty" style="margin-top:14px"><b>Nenhuma equipe ainda</b>As equipes aparecem aqui assim que o representante as cria no ambiente dos alunos.</div>'}</div>
    <div class="stack" style="gap:22px">
     <div class="card"><div class="eyebrow">Cronograma</div><h3>Fases e prazos</h3>${fases.length?`<div class="mini-tl">${fases.map(f=>`<div class="mt ${f.prazo<t?'done':''}"><span class="mtd"><b>${fmtD(f.prazo).slice(0,5)}</b><small>${fmtD(f.prazo).slice(6)}</small></span><span class="mtn">${esc(f.nome)}</span>${f.prazo<t?'<span class="chip ok">Concluída</span>':''}</div>`).join('')}</div>`:'<p class="muted" style="margin-top:8px">Nenhuma fase publicada para este semestre.</p>'}</div>
     <div class="card"><div class="row between"><div><div class="eyebrow">Caixa de entrada</div><h3>Mensagens recentes</h3></div><button class="btn sm ghost" id="toMs">${ic('msg')}Abrir</button></div>${rec.length?`<div class="mlist">${rec.map(m=>`<div class="mi ${m.lidaProf?'':'new'}"><span class="av av1">${esc(ini(m.de))}</span><div style="min-width:0"><b>${esc(nomeEq(m.equipeId))}</b> <small>· ${esc(m.de)} · ${fmtDT(m.em)}</small><div class="mtx">${esc(m.texto)}</div></div></div>`).join('')}</div>`:'<p class="muted" style="margin-top:8px">Nenhuma mensagem das equipes.</p>'}</div>
@@ -1380,25 +1466,28 @@ function editOrient(o){const F=[{k:'semestre',l:'Semestre',w:1},{k:'pontos',l:'V
   $('#oSave',m).onclick=async()=>{if(!o.titulo)return toast('Informe o título.');const id=o.id||'or_'+uid();o.criadaEm=o.criadaEm||Date.now();await Store.set('orientacoes',id,o);if(o.semestre===S.cfg.semestre&&o.publicada&&o.titulo&&o.titulo!==S.cfg.edicao){await Store.patch('config','geral',{edicao:o.titulo});S.cfg.edicao=o.titulo}await loadOrsCur();closeModal();toast('Orientação salva.');render()};
   const d=$('#oDel',m);if(d)d.onclick=async()=>{if(await confirmBox('Excluir esta orientação? Os alunos deixarão de vê-la.','Excluir')){await Store.del('orientacoes',o.id);toast('Orientação excluída.');render()}};
 }
-async function profEquipes(pane,eqs){const sems=[...new Set(eqs.map(e=>e.semestre))].sort().reverse();S.fsem=S.fsem||S.cfg.semestre;
+async function profEquipes(pane,eqs){const partDocs={};(await Store.list('feedback')).filter(d=>d.id.startsWith('part_')).forEach(d=>partDocs[d.id.slice(5)]=d);const sems=[...new Set(eqs.map(e=>e.semestre))].sort().reverse();S.fsem=S.fsem||S.cfg.semestre;
   const list=eqs.filter(e=>e.semestre===S.fsem).sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR'));
   pane.innerHTML=`<div class="row between" style="margin-bottom:14px"><label class="fld" style="max-width:220px"><span class="lbl">Semestre</span><select id="fsem">${sems.map(s=>`<option ${s===S.fsem?'selected':''}>${esc(s)}</option>`).join('')}</select></label><p class="help" style="max-width:60ch">Revise o conteúdo dos PEs, deixe recomendações por seção, publique no acervo público, redefina a senha de uma equipe ou exclua cadastros indevidos.</p></div>
-   ${list.length?`<div class="tbl-wrap"><table><thead><tr><th>Start-up</th><th>Organização / segmento</th><th>Consultores</th><th style="min-width:150px">Progresso</th><th>Acervo público</th><th>Ações</th></tr></thead><tbody>${list.map(e=>`<tr><td><b>${esc(e.nome||'—')}</b><br><small>${esc(e.slogan||'')}</small></td><td>${esc(e.organizacao||'—')}<br><small>${esc(e.segmento||'')}</small></td><td><small>${esc(consultores(e).join(', '))}</small>${e.gestor?.nome?`<br><small>Gestor: ${esc(e.gestor.nome)}</small>`:''}</td><td>${e.arquivado?'<span class="chip purple">Acervo</span>':progBar(e.progresso||0)}</td><td><label class="chk"><input type="checkbox" data-pub="${e.id}" ${e.publico?'checked':''}> ${e.publico?'Publicado':'Oculto'}</label></td><td><div class="row" style="flex-wrap:nowrap"><button class="btn sm" data-rev="${e.id}">Revisar</button><button class="btn sm ghost" data-pw="${e.id}">Senha</button><button class="btn sm danger" data-rm="${e.id}">Excluir</button></div></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty"><b>Nenhuma equipe neste semestre</b></div>'}`;
+   ${list.length?`<div class="tbl-wrap"><table><thead><tr><th>Start-up</th><th>Organização / segmento</th><th>Consultores</th><th style="min-width:150px">Progresso</th><th style="min-width:170px">Participação</th><th>Acervo público</th><th>Ações</th></tr></thead><tbody>${list.map(e=>`<tr><td><b>${esc(e.nome||'—')}</b><br><small>${esc(e.slogan||'')}</small></td><td>${esc(e.organizacao||'—')}<br><small>${esc(e.segmento||'')}</small></td><td>${avatars(consultores(e),6)}${e.gestor?.nome?`<small style="display:block;margin-top:4px">Gestor: ${esc(e.gestor.nome)}</small>`:''}</td><td>${e.arquivado?'<span class="chip purple">Acervo</span>':progBar(e.progresso||0)}</td><td>${e.arquivado?'—':(P=>`${partStack(P)}<div style="margin-top:6px">${partBadge(P)}</div>`)(partRows(e,partDocs[e.id]))}</td><td><label class="chk"><input type="checkbox" data-pub="${e.id}" ${e.publico?'checked':''}> ${e.publico?'Publicado':'Oculto'}</label></td><td><div class="row" style="flex-wrap:nowrap"><button class="btn sm" data-rev="${e.id}">Revisar</button><button class="btn sm ghost" data-pw="${e.id}">Senha</button><button class="btn sm danger" data-rm="${e.id}">Excluir</button></div></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty"><b>Nenhuma equipe neste semestre</b></div>'}`;
   $('#fsem').onchange=e=>{S.fsem=e.target.value;render()};
   $$('[data-rev]',pane).forEach(b=>b.onclick=()=>{const e=list.find(x=>x.id===b.dataset.rev);if(e?.arquivado)return editAcervo(e);S.revId=b.dataset.rev;S.ptabProf='revisar';S.rtab='completo';render()});
   $$('[data-pub]',pane).forEach(c=>c.onchange=async()=>{await Store.patch('equipes',c.dataset.pub,{publico:c.checked});toast(c.checked?'PE publicado no acervo público.':'PE retirado do acervo público.');render()});
-  $$('[data-pw]',pane).forEach(b=>b.onclick=()=>{const m=modal(`<h3>Redefinir senha da equipe</h3><p>Use quando o líder esquecer a senha. Informe a nova senha à equipe.</p><label class="fld"><span class="lbl">Nova senha</span><input type="password" id="npw" minlength="6" autocomplete="new-password"></label><div class="row" style="justify-content:flex-end"><button class="btn ghost" data-close>Cancelar</button><button class="btn" id="npwOk">Redefinir</button></div>`,'sm');
+  $$('[data-pw]',pane).forEach(b=>b.onclick=()=>{const m=modal(`<h3>Redefinir senha da equipe</h3><p>Use quando o líder esquecer a senha. Informe a nova senha à equipe.</p><label class="fld"><span class="lbl">Nova senha</span><input type="password" id="npw" minlength="6" autocomplete="new-password"></label><div class="row" style="justify-content:flex-end"><button class="btn ghost" data-close>Cancelar</button><button class="btn" id="npwOk">Redefinir</button></div><hr style="border:0;border-top:1px solid var(--line);width:100%"><p class="help">PINs pessoais: redefina quando um membro esquecer o próprio PIN.</p><div class="row"><button class="btn sm ghost" id="npin">Redefinir todos os PINs</button></div>`,'sm');
+    $('#npin',m).onclick=async()=>{await Store.patch('equipes',b.dataset.pw,{pins:{}});closeModal();toast('PINs redefinidos. Cada membro criará um novo no próximo acesso.')};
     $('#npwOk',m).onclick=async()=>{const v=$('#npw',m).value;if(v.length<6)return toast('Use pelo menos 6 caracteres.');await Store.patch('equipes',b.dataset.pw,{senhaHash:await sha(v)});closeModal();toast('Senha redefinida.')}});
-  $$('[data-rm]',pane).forEach(b=>b.onclick=async()=>{const e=list.find(x=>x.id===b.dataset.rm);if(await confirmBox(`Excluir a equipe <b>${esc(e.nome||e.organizacao)}</b> e todo o seu PE? Esta ação não pode ser desfeita.`,'Excluir equipe')){await Promise.all([Store.del('equipes',e.id),Store.del('pes',e.id),Store.del('feedback',e.id)]);toast('Equipe excluída.');render()}});
+  $$('[data-rm]',pane).forEach(b=>b.onclick=async()=>{const e=list.find(x=>x.id===b.dataset.rm);if(await confirmBox(`Excluir a equipe <b>${esc(e.nome||e.organizacao)}</b> e todo o seu PE? Esta ação não pode ser desfeita.`,'Excluir equipe')){await Promise.all([Store.del('equipes',e.id),Store.del('pes',e.id),Store.del('feedback',e.id),Store.del('feedback',partId(e.id))]);toast('Equipe excluída.');render()}});
 }
 async function profRevisar(eqs){const eq=eqs.find(e=>e.id===S.revId);if(!eq){S.ptabProf='equipes';return render()}
   const pe=await Store.get('pes',eq.id)||{};const fb=await Store.get('feedback',eq.id)||{};S.rtab=S.rtab||'completo';
   app.innerHTML=`<div class="wrap stack"><div><button class="btn sm ghost" id="back">← Voltar</button></div>
    <div class="card"><div class="row between"><div><div class="eyebrow">Revisão do PE · ${esc(eq.semestre)}</div><h2>${esc(eq.nome||'—')} · ${esc(eq.organizacao||'organização não definida')}</h2><p class="muted" style="margin-top:4px">Consultores: ${esc(consultores(eq).join(', '))}${eq.gestor?.nome?` · Gestor: ${esc(eq.gestor.nome)}`:''}</p></div><div style="min-width:220px">${progBar(peProg(pe))}<small>Última edição: ${fmtDT(eq.atualizadoEm)}</small></div></div></div>
-   <div class="tabs"><button data-rt="completo" class="${S.rtab==='completo'?'on':''}">PE Completo + recomendações</button><button data-rt="basico" class="${S.rtab==='basico'?'on':''}">PE Básico A1</button></div>
+   <div class="tabs"><button data-rt="completo" class="${S.rtab==='completo'?'on':''}">PE Completo + recomendações</button><button data-rt="basico" class="${S.rtab==='basico'?'on':''}">PE Básico A1</button><button data-rt="part" class="${S.rtab==='part'?'on':''}">${ic('chart')}Participação</button><button data-rt="sim" class="${S.rtab==='sim'?'on':''}">${ic('layout')}Similaridade</button></div>
    <div id="rbody" class="stack"></div></div>`;
   $('#back').onclick=()=>{S.ptabProf='equipes';render()};$$('[data-rt]').forEach(b=>b.onclick=()=>{S.rtab=b.dataset.rt;render()});
   const rb=$('#rbody');
+  if(S.rtab==='sim'){rb.innerHTML='<div class="empty"><b>Calculando similaridade…</b></div>';const base=await simBase();rb.innerHTML=`<div class="card">${simHTML(simOf(base,eq.id))}</div>`;return}
+  if(S.rtab==='part'){rb.innerHTML=partView(eq,await Store.get('feedback',partId(eq.id)),{prof:true,pe});return}
   if(S.rtab==='basico'){rb.innerHTML=`<div class="card"><label class="fld"><span class="lbl">Recomendação para o PE básico</span><textarea data-fb="basico" rows="2">${esc(fb.basico||'')}</textarea></label></div><div class="card" id="pbx"></div>`;mountPoster($('#pbx'),eq,pe)}
   else{rb.innerHTML=`<div class="fbk">As recomendações são salvas automaticamente ao sair de cada campo e aparecem para a equipe na seção correspondente.</div>`+peView(eq,pe,{feedback:true,fb,prog:true});hydrateImgs(rb)}
   rb.addEventListener('change',async e=>{const k=e.target.dataset.fb;if(!k)return;await Store.patch('feedback',eq.id,{[k]:e.target.value.trim()});toast('Recomendação salva.')});
@@ -1539,6 +1628,7 @@ async function importarPacote(file,eqs){let pkg;
   let ok=0;
   for(const r of pkg.registros){const E=r.equipe||{};try{
     let cur=eqs.find(e=>e.id===r.id)||eqs.find(e=>e.arquivado&&e.semestre===E.semestre&&normOrg(e.organizacao)===normOrg(E.organizacao));
+    if(pkg.somenteAtualizar&&!cur){log(`${E.organizacao||r.id}: não está no acervo; ignorado (importe antes o pacote da Mostra).`);step();continue}
     const id=cur?.id||r.id||'arq_'+uid();log(`${E.organizacao||id}: ${cur?'atualizando registro existente':'criando novo registro'}…`);
     const arqs=clone(cur?.arquivos||{});
     for(const [k,a] of Object.entries(r.arquivos||{})){const fid=`${id}__file_${k}__${uid()}`;await putImg(fid,a.data);delete imgCache[fid];if(arqs[k])await delImg(arqs[k].id);arqs[k]={id:fid,nome:a.nome,tam:a.tam,tipo:a.tipo||'',em:Date.now()};log(`   ${a.nome} enviado (${fmtTam(a.tam)}).`);step()}
@@ -1553,6 +1643,91 @@ async function importarPacote(file,eqs){let pkg;
   for(const o of (pkg.orientacoes||[])){try{const ex=await Store.get('orientacoes',o.id);if(ex){log(`Orientações ${o.semestre}: já existiam e foram mantidas.`);continue}const {id,...d}=o;await Store.set('orientacoes',id,d);log(`Orientações ${o.semestre} cadastradas e publicadas.`,'ok')}catch(e){log(`Falha nas orientações ${o.semestre}: ${e.message||e}`,'er')}}
   log(`${ok} de ${pkg.registros.length} PE(s) importados.`,ok===pkg.registros.length?'ok':'er');fim()}
 function bindDownloads(root,eq){$$('[data-dl]',root).forEach(b=>b.onclick=()=>baixarArquivo(eq.arquivos[b.dataset.dl],b))}
+/* ===================== Participação dos membros ===================== */
+const mkey=n=>'m_'+String(n||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'').slice(0,40);
+function roster(eq){const r=[];if(eq.lider)r.push({nome:eq.lider,papel:'Líder (representante)'});(eq.membros||[]).forEach(m=>m?.nome&&r.push({nome:m.nome,papel:'Membro da equipe'}));if(eq.gestor?.nome)r.push({nome:eq.gestor.nome,papel:'Gestor da organização',gestor:true});
+  const seen=new Set();return r.map(x=>({...x,k:mkey(x.nome)})).filter(x=>x.k!=='m_'&&!seen.has(x.k)&&seen.add(x.k))}
+const PART_SECS=()=>[...VIEWABLE.map(s=>({id:s.id,n:s.n})),{id:'basico',n:'PE básico (pôster A1)'}];
+const partId=id=>'part_'+id;
+const secLen=k=>JSON.stringify(S.pe?.[k]??'').length;
+function snapAll(){S.snap={};PART_SECS().forEach(s=>S.snap[s.id]=secLen(s.id))}
+async function logPart(eqId,inc,set){try{await Store.bump('feedback',partId(eqId),inc,set)}catch(e){console.warn('participação',e)}}
+function partRows(eq,doc){const m=doc?.m||{};const r=roster(eq);
+  Object.entries(m).forEach(([k,v])=>{if(!r.some(x=>x.k===k))r.push({nome:v.nome||k,papel:v.papel||'Membro da equipe',k,extra:true,gestor:/Gestor/.test(v.papel||'')})});
+  const rows=r.map(x=>{const d=m[x.k]||{};const s=d.s||{};const secs=Object.keys(s).filter(id=>(s[id].n||0)>0);
+    return {...x,n:d.n||0,c:d.c||0,acessos:d.acessos||0,ult:d.ult||0,s,secs,dias:Object.keys(d.d||{}).length}});
+  const alunos=rows.filter(x=>!x.gestor);const tot=alunos.reduce((a,x)=>a+x.c+x.n*40,0);
+  alunos.forEach(x=>x.share=tot?(x.c+x.n*40)/tot:0);rows.filter(x=>x.gestor).forEach(x=>x.share=null);
+  const fair=alunos.length?1/alunos.length:1;
+  const nSec=PART_SECS().length,resp=eq.respSec||{};
+  alunos.forEach(x=>{const E=Math.min(1,x.share/fair),Rg=Math.min(1,x.dias/6);const rs=Object.entries(resp).filter(([,k])=>k===x.k).map(([id])=>id);
+    const C=rs.length?rs.filter(id=>(x.s[id]?.n||0)>0).length/rs.length:Math.min(1,x.secs.length/Math.max(1,Math.ceil(nSec/alunos.length)));
+    x.ipiE=E;x.ipiR=Rg;x.ipiC=C;x.ipi=x.n?Math.round(100*(.5*E+.25*Rg+.25*C)):0;x.ipiCl=x.n===0?'Sem contribuição':x.ipi>=70?'Alta':x.ipi>=40?'Média':'Baixa'});
+  alunos.forEach(x=>x.st=x.n===0?'bad':x.ipi<40?'warn':'ok');rows.filter(x=>x.gestor).forEach(x=>x.st=x.n?'ok':'');
+  const top=[...alunos].sort((a,b)=>b.share-a.share)[0];const sem=alunos.filter(x=>x.n===0);
+  let alerta=null,nivel='ok';
+  if(!tot){alerta='Ainda não há edições registradas para esta equipe.';nivel=''}
+  else if(alunos.length>=3&&top.share>=.6){alerta=`${top.nome} concentra ${Math.round(top.share*100)}% das contribuições.`;nivel='bad'}
+  else if(sem.length){alerta=`${sem.length} ${sem.length>1?'membros ainda não contribuíram':'membro ainda não contribuiu'}: ${sem.map(x=>x.nome).join(', ')}.`;nivel='warn'}
+  else alerta='Participação distribuída entre os membros.';
+  return {rows,alunos,tot,alerta,nivel}}
+function ipiCls(v,n){return n===0?'bad':v>=70?'ok':v>=40?'gold':'warn'}
+function ipiBadge(x){const c=ipiCls(x.ipi,x.n);return `<div class="ipib ${c}" title="Índice de Participação Individual"><b class="num">${x.ipi}</b><span>IPI</span></div>`}
+const ST={ok:['ok','Participação adequada'],warn:['warn','Baixa participação'],bad:['bad','Sem contribuição']};
+const PCOL=['#8E1F44','#1F4C9A','#6B3FA0','#C9A24A','#2E7D4F','#B8325E','#3B5BA5','#8A5A12'];
+function partStack(P){return `<div class="pstack">${P.alunos.filter(x=>x.share>0).map((x,i)=>`<i style="width:${(x.share*100).toFixed(1)}%;background:${PCOL[P.alunos.indexOf(x)%PCOL.length]}" title="${esc(x.nome)}: ${Math.round(x.share*100)}%"></i>`).join('')}</div>`}
+function partBadge(P){return P.nivel==='bad'?`<span class="chip bad">${ic('target')} Concentração</span>`:P.nivel==='warn'?`<span class="chip warn">Membro sem contribuição</span>`:P.nivel==='ok'?'<span class="chip ok">Equilibrada</span>':'<span class="chip">Sem registros</span>'}
+function partView(eq,doc,opt={}){const P=partRows(eq,doc);const secs=PART_SECS();const resp=eq.respSec||{};const maxC=Math.max(1,...P.rows.flatMap(x=>Object.values(x.s).map(v=>(v.c||0)+(v.n||0)*40)));
+  const lvl=v=>{if(!v||!v.n)return 0;const z=((v.c||0)+(v.n||0)*40)/maxC;return z>.5?4:z>.2?3:z>.06?2:1};
+  const pe=opt.pe||{};
+  return `<div class="stack" style="gap:20px">
+   <div class="palert ${P.nivel}">${ic(P.nivel==='ok'?'award':P.nivel?'target':'clock')}<div><b>${esc(P.alerta)}</b><small>IPI (0–100) = 50% contribuição em relação à cota justa da equipe + 25% regularidade (dias distintos com edição; meta: 6) + 25% cobertura (seções sob sua responsabilidade que você editou, ou parcela das seções do PE). Faixas: Alta ≥ 70 · Média 40–69 · Baixa &lt; 40. ${opt.prof?'':'Todos os membros veem este painel.'}</small></div></div>
+   ${P.tot?`<div class="card"><div class="row between"><div><div class="eyebrow">Divisão do trabalho</div><h3>Contribuição de cada membro</h3></div><span class="help">Gestor da organização não entra no cálculo</span></div>${partStack(P)}<div class="plegend">${P.alunos.map((x,i)=>`<span><i style="background:${PCOL[i%PCOL.length]}"></i>${esc(x.nome)} · <b class="num">${Math.round(x.share*100)}%</b></span>`).join('')}</div></div>`:''}
+   <div class="pcards">${P.rows.map((x,i)=>{const rs=Object.entries(resp).filter(([,k])=>k===x.k).map(([id])=>id);const feitas=rs.filter(id=>(x.s[id]?.n||0)>0).length;
+     return `<div class="pcard ${x.st}"><div class="row" style="flex-wrap:nowrap;gap:12px"><span class="av av${i%4}" style="width:44px;height:44px;font-size:.9rem;margin:0">${esc(ini(x.nome))}</span><div style="min-width:0;flex:1"><b class="pn">${esc(x.nome)}</b><small>${esc(x.papel)}${x.extra?' · fora da lista da equipe':''}</small></div>${x.share!=null?ipiBadge(x):''}</div>
+      ${x.st?`<span class="chip ${ST[x.st]?.[0]||'ok'}">${x.gestor?(x.n?'Acompanhando':''):ST[x.st][1]}</span>`:'<span class="chip">Gestor · sem edições</span>'}
+      ${x.share!=null?`<div class="ipi-parts"><span>Contribuição <b class="num">${Math.round(x.share*100)}%</b></span><span>Regularidade <b class="num">${x.dias} ${x.dias===1?'dia':'dias'}</b></span><span>Cobertura <b class="num">${Math.round(x.ipiC*100)}%</b></span></div>`:''}
+      <div class="pstats"><div><b class="num">${x.n}</b><span>edições</span></div><div><b class="num">${x.secs.length}</b><span>seções</span></div><div><b class="num">${x.c>999?n2(x.c/1000).replace(',00','')+' mil':x.c}</b><span>caracteres</span></div><div><b class="num">${x.acessos}</b><span>acessos</span></div></div>
+      <small class="pult">${ic('clock')} ${x.ult?'Última atividade: '+fmtDT(x.ult):'Nenhuma atividade registrada'}</small>
+      ${rs.length?`<small class="pult">${ic('target')} Responsável por ${rs.length} ${rs.length>1?'seções':'seção'} · contribuiu em ${feitas}</small>`:''}</div>`}).join('')}</div>
+   <div class="card"><div class="row between"><div><div class="eyebrow">Checklist do PE</div><h3>Quem trabalhou em cada seção</h3></div><div class="lvl-leg"><span>menos</span>${[1,2,3,4].map(l=>`<i class="lv l${l}"></i>`).join('')}<span>mais</span><span style="margin-left:10px"><i class="lv l0 rsp"></i> responsável</span></div></div>
+    <div class="tbl-wrap" style="margin-top:12px"><table class="pmx"><thead><tr><th>Seção</th><th>Preench.</th>${P.rows.map((x,i)=>`<th class="c" title="${esc(x.nome)}"><span class="av av${i%4}" style="margin:0 auto;width:30px;height:30px">${esc(ini(x.nome))}</span></th>`).join('')}<th>Responsável</th></tr></thead><tbody>
+    ${secs.map(sc=>{const sp=sc.id==='basico'?(filled(pe.basico)?1:0):secProg(SECOES.find(s=>s.id===sc.id),pe);return `<tr><td>${esc(sc.n)}</td><td class="num">${opt.pe?`<span class="chip ${sp>=.99?'ok':sp>0?'gold':''}">${Math.round(sp*100)}%</span>`:'—'}</td>${P.rows.map(x=>{const v=x.s[sc.id];const L=lvl(v);const r=resp[sc.id]===x.k;return `<td class="c"><i class="lv l${L} ${r?'rsp':''}" title="${esc(x.nome)}: ${v?.n||0} edições, ${v?.c||0} caracteres${v?.ult?' · '+fmtDT(v.ult):''}${r?' · responsável':''}"></i></td>`}).join('')}
+      <td>${opt.assign?`<select data-resp="${sc.id}" aria-label="Responsável por ${esc(sc.n)}"><option value="">—</option>${P.rows.filter(x=>!x.gestor).map(x=>`<option value="${x.k}" ${resp[sc.id]===x.k?'selected':''}>${esc(x.nome)}</option>`).join('')}</select>`:esc(P.rows.find(x=>x.k===resp[sc.id])?.nome||'—')}</td></tr>`}).join('')}
+    </tbody></table></div>${opt.assign?'<p class="help" style="margin-top:8px">Como líder, defina o responsável de cada seção. O painel compara a divisão planejada com quem de fato editou.</p>':''}</div>
+  </div>`}
+function bindPart(root,eq){$$('[data-resp]',root).forEach(sel=>sel.onchange=async()=>{const r={...(eq.respSec||{})};if(sel.value)r[sel.dataset.resp]=sel.value;else delete r[sel.dataset.resp];eq.respSec=r;await Store.patch('equipes',eq.id,{respSec:r});toast('Responsável atualizado.')})}
+
+/* ===================== Similaridade entre PEs ===================== */
+const STOPW=new Set('a o e de da do das dos em no na nos nas um uma uns umas para por com sem que se ao aos as os ou mais menos como sua seu suas seus ser ter sobre entre pela pelo pelas pelos este esta estes estas isso esse essa esses essas nosso nossa nossos nossas the and of to sao foi sera seja ate muito muitas muitos tambem cada todo toda todos todas'.split(' '));
+function normW(t){return String(t||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').split(' ').filter(w=>w.length>2&&!STOPW.has(w)&&!/^\d+$/.test(w))}
+function h32(s){let h=0x811c9dc5;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+function shSet(t,k=4){const w=normW(t),s=new Set();for(let i=0;i+k<=w.length;i++)s.add(h32(w.slice(i,i+k).join(' ')));return s}
+function flatT(v,out=[]){if(v==null)return out;if(typeof v==='string'){if(!(/__/.test(v)&&!/\s/.test(v)))out.push(v)}else if(typeof v==='number'){}else if(Array.isArray(v))v.forEach(x=>flatT(x,out));else if(typeof v==='object')Object.entries(v).forEach(([k,x])=>{if(!/^(upd_|original|logo|organograma|foto|imagem|plusImg|atrImg)/.test(k))flatT(x,out)});return out}
+function peTxt(pe){const o=[];Object.entries(pe||{}).forEach(([k,v])=>{if(/^upd_/.test(k)||k==='original')return;if(k==='corpus')o.push(v?.texto||'');else o.push(flatT(v).join('\n'))});return o.join('\n')}
+const SIM_SECS=()=>[...VIEWABLE.map(s=>({id:s.id,n:s.n})),{id:'basico',n:'PE básico (pôster A1)'}];
+async function simBase(){const [eqs,pes]=await Promise.all([Store.list('equipes'),Store.list('pes')]);const E={};eqs.forEach(e=>E[e.id]=e);
+  const docs=pes.filter(p=>E[p.id]).map(p=>({id:p.id,eq:E[p.id],pe:p,sh:shSet(peTxt(p))})).filter(d=>d.sh.size>=15);
+  const df=new Map();docs.forEach(d=>d.sh.forEach(h=>df.set(h,(df.get(h)||0)+1)));const lim=Math.max(3,Math.ceil(docs.length*.2));
+  const common=new Set([...df].filter(([,n])=>n>=lim).map(([h])=>h));return {docs,common,E}}
+function simOf(base,id){const me=base.docs.find(d=>d.id===id);if(!me)return null;const A=new Set([...me.sh].filter(h=>!base.common.has(h)));if(A.size<10)return {max:0,top:[],secs:[],n:A.size,pouco:true};
+  const sem=me.eq.semestre;const others=base.docs.filter(d=>d.id!==id);
+  const top=others.map(d=>{let k=0;A.forEach(h=>{if(d.sh.has(h))k++});return {eq:d.eq,score:k/A.size,mesmo:d.eq.semestre===sem}}).filter(x=>x.score>0).sort((a,b)=>b.score-a.score);
+  const secs=SIM_SECS().map(sc=>{const T=new Set([...shSet(flatT(me.pe[sc.id]).join('\n'))].filter(h=>!base.common.has(h)));if(T.size<12)return null;let best=null;
+    others.forEach(d=>{let k=0;T.forEach(h=>{if(d.sh.has(h))k++});const sc2=k/T.size;if(!best||sc2>best.score)best={score:sc2,eq:d.eq}});return best&&best.score>0?{n:sc.n,...best}:null}).filter(Boolean).sort((a,b)=>b.score-a.score);
+  return {max:top[0]?.score||0,top:top.slice(0,5),secs,n:A.size}}
+const simLvl=v=>v>=.35?['bad','Alta']:v>=.15?['warn','Moderada']:['ok','Baixa'];
+const pctS=v=>Math.round(v*100)+'%';
+function simLabel(e){return `${esc(orgReal(e)?e.organizacao:(e.organizacao||e.nome))}${orgReal(e)&&e.nome?` <small>· ${esc(e.nome)}</small>`:''} <small>(${esc(e.semestre)}${orgReal(e)?'':', fictício'})</small>`}
+function simHTML(r,opt={}){if(!r)return '<div class="empty"><b>Sem conteúdo para comparar</b>Preencha o PE completo para calcular a similaridade.</div>';
+  if(r.pouco)return '<div class="empty"><b>Conteúdo ainda insuficiente</b>Quando o PE tiver mais texto próprio, o indicador será calculado.</div>';
+  const [c,l]=simLvl(r.max);
+  return `<div class="simbox"><div class="simhead"><div class="simg ${c}">${ring(Math.round(r.max*100),118,11,false)}<span>maior similaridade</span></div>
+    <div class="stack" style="gap:8px;min-width:0;flex:1"><div><span class="chip ${c}">Similaridade ${l}</span></div><p>${r.top[0]?`O trecho mais parecido é com o PE de ${simLabel(r.top[0].eq)}: <b>${pctS(r.max)}</b> das sequências de 4 palavras ${opt.aluno?'do seu PE':'deste PE'} aparecem também naquele documento.`:'Nenhuma coincidência relevante com outros PEs.'}</p>
+    <p class="help">Comparação por sequências de 4 palavras significativas, desconsiderando o texto padrão do modelo (frases presentes em muitos PEs). Faixas: Baixa &lt; 15% · Moderada 15–34% · Alta ≥ 35%. Semelhança não é prova de cópia: confira os trechos indicados.</p></div></div>
+   ${r.top.length?`<h4 style="margin-top:6px">PEs mais parecidos</h4><div class="simlist">${r.top.map(t=>{const [cc]=simLvl(t.score);return `<div class="simrow"><span class="sn">${simLabel(t.eq)}${t.mesmo?' <span class="chip blue">mesmo semestre</span>':''}</span><span class="jb"><i class="${cc}" style="width:${Math.min(100,t.score*100)}%"></i></span><b class="num">${pctS(t.score)}</b></div>`}).join('')}</div>`:''}
+   ${r.secs.length?`<h4 style="margin-top:6px">Seções com maior coincidência</h4><div class="tbl-wrap"><table><thead><tr><th>Seção</th><th>Mais parecida com</th><th class="r">Coincidência</th></tr></thead><tbody>${r.secs.slice(0,8).map(x=>`<tr><td>${esc(x.n)}</td><td>${simLabel(x.eq)}</td><td class="r"><span class="chip ${simLvl(x.score)[0]}">${pctS(x.score)}</span></td></tr>`).join('')}</tbody></table></div>`:''}</div>`}
+
 /* ===================== Dados iniciais ===================== */
 async function seed(){const local=Store.mode==='local';
   await Store.set('config','geral',{semestre:'2026/2',edicao:'Mostra de Planejamento Estratégico 2026/2',anoInicio:2028,tamEquipe:5,pontos:5,pesos:{prof:2,resp:3,alunos:1},...(local?{profHash:await sha('ufam2026'),demoProf:true}:{})});
