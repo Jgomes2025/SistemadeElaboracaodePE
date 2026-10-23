@@ -180,6 +180,10 @@ td.r,th.r{text-align:right}
 /* Acervo */
 .pe-card{display:flex;flex-direction:column;gap:10px;cursor:pointer;transition:transform .15s,border-color .15s;text-align:left}
 .pe-card:hover{transform:translateY(-2px);border-color:var(--gold2)}
+.pe-card{overflow:hidden;overflow-wrap:anywhere}
+.pe-card .row{min-width:0;max-width:100%}
+.pe-card .chip{white-space:normal;max-width:100%;line-height:1.3;padding:3px 10px;text-align:left;overflow-wrap:anywhere}
+.pe-card .chip.wine{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .pe-card .org{font-size:1.25rem;font-weight:700;color:var(--wine);text-align:left}
 .pe-card .mis{font-size:.95rem;color:var(--muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .medal{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:800;background:var(--surface2);color:var(--muted);flex:none}
@@ -319,6 +323,19 @@ td.r,th.r{text-align:right}
 .poster .pfoot{display:flex;justify-content:space-between;font-size:12pt;color:#6F5A66;border-top:0.6mm solid #E2D3DB;padding-top:4mm}
 .ex{background:var(--gold-soft);color:var(--gold);border-radius:6px;padding:1px 8px;font-size:.8rem;font-weight:700}
 
+.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.gal figure,.orig-poster{margin:0;display:flex;flex-direction:column;gap:6px;min-width:0}
+.gal img{width:100%;height:170px;object-fit:contain;background:var(--surface2);border:1px solid var(--line);border-radius:8px;cursor:zoom-in}
+.orig-poster img{width:100%;max-width:760px;height:auto;align-self:center;border:1px solid var(--line);border-radius:8px;cursor:zoom-in;background:#fff}
+.gal figcaption,.orig-poster figcaption{font-size:.82rem;color:var(--muted);text-align:center}
+.zoomwrap{overflow:auto;max-height:78vh;border-radius:8px;background:var(--surface2)}
+.zoomwrap img{display:block;max-width:none;margin:0 auto}
+.zoomwrap.fit img{max-width:100%;max-height:76vh;width:auto;height:auto}
+.implog{font-size:.88rem;color:var(--muted);display:flex;flex-direction:column;gap:3px;max-height:180px;overflow:auto}
+.implog .ok{color:var(--ok)}.implog .er{color:var(--bad)}
+.dl-list{display:flex;flex-direction:column;gap:10px}
+.dl-item{display:flex;align-items:center;gap:14px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.dl-ic{width:48px;height:48px;border-radius:9px;display:grid;place-items:center;font-weight:800;font-size:.8rem;letter-spacing:.04em;background:var(--wine-soft);color:var(--wine);flex:none}
 .empty{padding:34px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:var(--r)}
 .empty b{display:block;color:var(--ink);font-size:1.1rem;margin-bottom:4px}
 .login{max-width:980px;margin:0 auto}
@@ -416,7 +433,7 @@ function closeModal(){$('#ov')?.remove()}
 function confirmBox(msg,ok='Confirmar'){return new Promise(res=>{const m=modal(`<h3>Confirmação</h3><p>${msg}</p><div class="row" style="justify-content:flex-end"><button class="btn ghost" data-close>Cancelar</button><button class="btn" id="cfOk">${esc(ok)}</button></div>`,'sm');m.querySelector('#cfOk').onclick=()=>{closeModal();res(true)};m.parentElement.addEventListener('click',e=>{if(e.target.closest('[data-close]')||e.target===m.parentElement)res(false)})})}
 function loadScript(src){return new Promise((ok,no)=>{const s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=no;document.head.appendChild(s)})}
 function inFrame(){try{return window.self!==window.top}catch(e){return true}}
-async function compressImage(file,max=1200){const url=await new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(r.result);r.onerror=no;r.readAsDataURL(file)});const img=await new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=url});const k=Math.min(1,max/Math.max(img.width,img.height));const c=document.createElement('canvas');c.width=Math.round(img.width*k);c.height=Math.round(img.height*k);const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(img,0,0,c.width,c.height);let q=.82,d=c.toDataURL('image/jpeg',q);while(d.length>700000&&q>.4){q-=.12;d=c.toDataURL('image/jpeg',q)}return d}
+async function compressImage(file,max=1200,target=700000){const url=await new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(r.result);r.onerror=no;r.readAsDataURL(file)});const img=await new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=url});const k=Math.min(1,max/Math.max(img.width,img.height));const c=document.createElement('canvas');c.width=Math.round(img.width*k);c.height=Math.round(img.height*k);const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(img,0,0,c.width,c.height);let q=.82,d=c.toDataURL('image/jpeg',q);while(d.length>target&&q>.4){q-=.1;d=c.toDataURL('image/jpeg',q)}return d}
 
 /* ===================== Banco de dados (Firebase ou local) ===================== */
 const DBKEY='sispe_ufam_db_v1';
@@ -441,7 +458,7 @@ const Store={mode:'local',fs:null,mem:{},
   async del(col,id){if(this.fs)return this.fs.collection(col).doc(id).delete();delete this.c(col)[id];this.persist()}
 };
 const imgCache={};
-async function getImg(id){if(!id)return null;if(imgCache[id])return imgCache[id];const d=await Store.get('imgs',id);return imgCache[id]=d?.data||null}
+async function getImg(id){if(!id)return null;if(imgCache[id])return imgCache[id];const d=await Store.get('imgs',id);if(d?.parts){let x='';for(let i=0;i<d.parts;i++)x+=(await Store.get('imgs',id+'_p'+i))?.data||'';return imgCache[id]=x||null}return imgCache[id]=d?.data||null}
 function hydrateImgs(root){$$('img[data-img]',root).forEach(async im=>{const d=await getImg(im.dataset.img);if(d)im.src=d;else im.replaceWith(Object.assign(document.createElement('span'),{className:'muted',textContent:'Imagem indisponível'}))})}
 
 /* ===================== Estrutura do PE (Modelo 2 e Modelo 1) ===================== */
@@ -561,11 +578,11 @@ function mountForm(el,fields,obj,ctx,onChange){
   el.onclick=e=>{const a=e.target.closest('[data-add],[data-del],[data-clr]');if(!a)return;
     if(a.dataset.add){const p=a.dataset.add;const arr=getPath(obj,p)||[];arr.push({});setPath(obj,p,arr)}
     else if(a.dataset.del){const ps=a.dataset.del.split('.'),i=+ps.pop(),arr=getPath(obj,ps.join('.'));arr.splice(i,1)}
-    else{const p=a.dataset.clr,old=getPath(obj,p);if(old)Store.del('imgs',old).catch(()=>{});setPath(obj,p,'')}
+    else{const p=a.dataset.clr,old=getPath(obj,p);if(old)delImg(old);setPath(obj,p,'')}
     draw();onChange&&onChange()};
   el.onchange=async e=>{const t=e.target;if(!t.dataset.file||!t.files[0])return;toast('Otimizando e enviando imagem…');
     try{const data=await compressImage(t.files[0]);const p=t.dataset.file,old=getPath(obj,p);const id=(ctx.imgp||'img')+'__'+p.replace(/\W/g,'_')+'__'+uid();
-      await Store.set('imgs',id,{data,em:Date.now()});imgCache[id]=data;if(old)Store.del('imgs',old).catch(()=>{});setPath(obj,p,id);draw();onChange&&onChange();toast('Imagem salva.')}
+      await putImg(id,data);if(old)delImg(old);setPath(obj,p,id);draw();onChange&&onChange();toast('Imagem salva.')}
     catch(err){console.error(err);toast('Não foi possível ler esta imagem. Tente um arquivo JPG ou PNG.')}};
   return {draw};
 }
@@ -706,7 +723,7 @@ async function renderPublico(){
     const pes={};await Promise.all(list.map(async e=>pes[e.id]=await Store.get('pes',e.id)));
     body=`<div class="stack"><div class="sect-h"><div><div class="eyebrow">Acervo público</div><h2>Planejamentos Estratégicos publicados</h2></div><p>PEs elaborados pelos alunos ao longo dos anos e liberados pelo professor para consulta da comunidade acadêmica e das organizações.</p></div>
      <div class="card flat"><div class="fgrid"><label class="fld" style="grid-column:span 2"><span class="lbl">Buscar</span><input id="fq" value="${esc(S.filt.q)}" placeholder="Organização, start-up ou consultor"></label><label class="fld" style="grid-column:span 1"><span class="lbl">Semestre</span><select id="fed"><option value="">Todos</option>${eds.map(x=>`<option ${x===S.filt.ed?'selected':''}>${esc(x)}</option>`).join('')}</select></label><label class="fld" style="grid-column:span 1"><span class="lbl">Segmento</span><select id="fseg"><option value="">Todos</option>${segs.map(x=>`<option ${x===S.filt.seg?'selected':''}>${esc(x)}</option>`).join('')}</select></label></div></div>
-     ${list.length?`<div class="g3">${list.map(e=>{const n=nf(e.avaliacao);const mis=pes[e.id]?.proposito?.missao;return `<article class="card pe-card" data-ver="${e.id}" tabindex="0"><div class="row between"><span class="chip purple">${esc(e.semestre)}</span>${n>0?`<span class="chip gold">Nota ${n2(n)}</span>`:''}</div><div class="org">${esc(e.organizacao||'—')}</div><div class="row" style="gap:6px">${e.segmento?`<span class="chip">${esc(e.segmento)}</span>`:''}${e.nome?`<span class="chip wine">${esc(e.nome)}</span>`:''}</div>${mis?`<div class="mis">${esc(mis)}</div>`:'<div class="mis">Missão não registrada no acervo.</div>'}<small>${consultores(e).length} consultor(es) · ${esc(e.edicao||'')}</small></article>`}).join('')}</div>`:'<div class="empty"><b>Nenhum PE encontrado</b>Ajuste os filtros ou aguarde a publicação pelo professor.</div>'}</div>`;
+     ${list.length?`<div class="g3">${list.map(e=>{const n=nf(e.avaliacao);const mis=pes[e.id]?.proposito?.missao;return `<article class="card pe-card" data-ver="${e.id}" tabindex="0"><div class="row between"><span class="chip purple">${esc(e.semestre)}</span>${n>0?`<span class="chip gold">Nota ${n2(n)}</span>`:''}</div><div class="org">${esc(e.organizacao||'—')}</div><div class="row" style="gap:6px">${e.segmento?`<span class="chip">${esc(e.segmento)}</span>`:''}${e.nome?`<span class="chip wine">${esc(e.nome)}</span>`:''}</div>${mis?`<div class="mis">${esc(mis)}</div>`:''}${e.arquivado?`<div class="row" style="gap:6px">${ARQ_TIPOS.filter(t=>e.arquivos?.[t.k]).map(t=>`<span class="chip purple">${t.k==='poster'?'Pôster':t.k==='completo'?'PE completo':'PE básico'}</span>`).join('')||'<span class="chip">Arquivos em breve</span>'}</div>`:''}<small>${(n=>n?n+(n===1?' consultor':' consultores'):'Consultores não informados')(consultores(e).length)} · ${esc(e.edicao||'')}</small></article>`}).join('')}</div>`:'<div class="empty"><b>Nenhum PE encontrado</b>Ajuste os filtros ou aguarde a publicação pelo professor.</div>'}</div>`;
   }
   app.innerHTML=`<div class="wrap">${tabs}${body}</div>`;
   $$('[data-ps]').forEach(b=>b.onclick=()=>{S.sub=b.dataset.ps;render()});
@@ -714,11 +731,13 @@ async function renderPublico(){
   const fq=$('#fq');if(fq){let t;fq.oninput=()=>{clearTimeout(t);t=setTimeout(()=>{S.filt.q=fq.value;render().then(()=>{const x=$('#fq');x.focus();x.setSelectionRange(x.value.length,x.value.length)})},350)};$('#fed').onchange=e=>{S.filt.ed=e.target.value;render()};$('#fseg').onchange=e=>{S.filt.seg=e.target.value;render()}}
 }
 async function verPublico(eqs){const eq=eqs.find(e=>e.id===S.verId&&e.publico);if(!eq){S.sub='acervo';return render()}
-  const pe=await Store.get('pes',eq.id)||{};const n=nf(eq.avaliacao);S.vtab=S.vtab||'completo';
-  app.innerHTML=`<div class="wrap stack"><div><button class="btn sm ghost" id="back">← Voltar ao acervo</button></div>
-   <div class="card"><div class="row between"><div><div class="eyebrow">${esc(eq.edicao||'')} · ${esc(eq.semestre)}</div><h2>${esc(eq.organizacao)}</h2><p class="muted" style="margin-top:4px">Start-up de consultoria: <b>${esc(eq.nome||'—')}</b>${eq.slogan?` · “${esc(eq.slogan)}”`:''}</p><p style="margin-top:6px">Consultores: ${esc(consultores(eq).join(', ')||'—')}</p></div><div class="stack" style="gap:6px;align-items:flex-end">${n>0?`<span class="chip gold" style="font-size:1rem">Nota final ${n2(n)}</span>`:''}${eq.segmento?`<span class="chip">${esc(eq.segmento)}</span>`:''}</div></div>
-   ${eq.link?`<p style="margin-top:10px">Arquivos originais: <a href="${esc(eq.link)}" target="_blank" rel="noopener">abrir planilhas e relatório</a></p>`:''}
-   ${eq.avaliacao?.recomendacoes?`<div class="fbk" style="margin-top:12px"><b>Recomendações dos avaliadores:</b> ${nl(eq.avaliacao.recomendacoes)}</div>`:''}</div>
+  const n=nf(eq.avaliacao);const hist=!!eq.arquivado;const pe=hist?null:(await Store.get('pes',eq.id)||{});S.vtab=S.vtab||'completo';
+  const head=`<div class="card"><div class="row between"><div><div class="eyebrow">${esc(eq.edicao||'')} · ${esc(eq.semestre)}</div><h2>${esc(eq.organizacao)}</h2><p class="muted" style="margin-top:4px">Start-up de consultoria: <b>${esc(eq.nome||'—')}</b>${eq.slogan?` · “${esc(eq.slogan)}”`:''}</p><p style="margin-top:6px">Consultores: ${esc(consultores(eq).join(', ')||'—')}</p></div><div class="stack" style="gap:6px;align-items:flex-end">${n>0?`<span class="chip gold" style="font-size:1rem">Nota final ${n2(n)}</span>`:''}${eq.segmento?`<span class="chip">${esc(eq.segmento)}</span>`:''}</div></div>
+   ${eq.link?`<p style="margin-top:10px">Outros arquivos: <a href="${esc(eq.link)}" target="_blank" rel="noopener">abrir pasta da equipe</a></p>`:''}
+   ${eq.avaliacao?.recomendacoes?`<div class="fbk" style="margin-top:12px"><b>Recomendações dos avaliadores:</b> ${nl(eq.avaliacao.recomendacoes)}</div>`:''}</div>`;
+  if(hist){app.innerHTML=`<div class="wrap stack"><div><button class="btn sm ghost" id="back">← Voltar ao acervo</button></div>${head}<div class="card stack"><div><h3>Arquivos do Planejamento Estratégico</h3><p class="help">Planilhas originais entregues pela equipe na Mostra. Abra no Excel para ver o PE completo e o pôster A1 com todos os gráficos e desenhos.</p></div>${downloadsHTML(eq)}</div></div>`;
+    $('#back').onclick=()=>{S.sub='acervo';render()};bindDownloads(app,eq);return}
+  app.innerHTML=`<div class="wrap stack"><div><button class="btn sm ghost" id="back">← Voltar ao acervo</button></div>${head}
    <div class="tabs"><button data-vt="completo" class="${S.vtab==='completo'?'on':''}">PE Completo</button><button data-vt="basico" class="${S.vtab==='basico'?'on':''}">PE Básico (A1)</button></div><div id="vbody" class="stack"></div></div>`;
   $('#back').onclick=()=>{S.sub='acervo';render()};$$('[data-vt]').forEach(b=>b.onclick=()=>{S.vtab=b.dataset.vt;render()});
   const vb=$('#vbody');if(S.vtab==='basico')mountPoster(vb,eq,pe);else{vb.innerHTML=peView(eq,pe,{});hydrateImgs(vb)}}
@@ -930,7 +949,7 @@ async function profEquipes(pane,eqs){const sems=[...new Set(eqs.map(e=>e.semestr
   pane.innerHTML=`<div class="row between" style="margin-bottom:14px"><label class="fld" style="max-width:220px"><span class="lbl">Semestre</span><select id="fsem">${sems.map(s=>`<option ${s===S.fsem?'selected':''}>${esc(s)}</option>`).join('')}</select></label><p class="help" style="max-width:60ch">Revise o conteúdo dos PEs, deixe recomendações por seção, publique no acervo público, redefina a senha de uma equipe ou exclua cadastros indevidos.</p></div>
    ${list.length?`<div class="tbl-wrap"><table><thead><tr><th>Start-up</th><th>Organização / segmento</th><th>Consultores</th><th style="min-width:150px">Progresso</th><th>Acervo público</th><th>Ações</th></tr></thead><tbody>${list.map(e=>`<tr><td><b>${esc(e.nome||'—')}</b><br><small>${esc(e.slogan||'')}</small></td><td>${esc(e.organizacao||'—')}<br><small>${esc(e.segmento||'')}</small></td><td><small>${esc(consultores(e).join(', '))}</small>${e.gestor?.nome?`<br><small>Gestor: ${esc(e.gestor.nome)}</small>`:''}</td><td>${e.arquivado?'<span class="chip purple">Acervo</span>':progBar(e.progresso||0)}</td><td><label class="chk"><input type="checkbox" data-pub="${e.id}" ${e.publico?'checked':''}> ${e.publico?'Publicado':'Oculto'}</label></td><td><div class="row" style="flex-wrap:nowrap"><button class="btn sm" data-rev="${e.id}">Revisar</button><button class="btn sm ghost" data-pw="${e.id}">Senha</button><button class="btn sm danger" data-rm="${e.id}">Excluir</button></div></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty"><b>Nenhuma equipe neste semestre</b></div>'}`;
   $('#fsem').onchange=e=>{S.fsem=e.target.value;render()};
-  $$('[data-rev]',pane).forEach(b=>b.onclick=()=>{S.revId=b.dataset.rev;S.ptabProf='revisar';S.rtab='completo';render()});
+  $$('[data-rev]',pane).forEach(b=>b.onclick=()=>{const e=list.find(x=>x.id===b.dataset.rev);if(e?.arquivado)return editAcervo(e);S.revId=b.dataset.rev;S.ptabProf='revisar';S.rtab='completo';render()});
   $$('[data-pub]',pane).forEach(c=>c.onchange=async()=>{await Store.patch('equipes',c.dataset.pub,{publico:c.checked});toast(c.checked?'PE publicado no acervo público.':'PE retirado do acervo público.');render()});
   $$('[data-pw]',pane).forEach(b=>b.onclick=()=>{const m=modal(`<h3>Redefinir senha da equipe</h3><p>Use quando o líder esquecer a senha. Informe a nova senha à equipe.</p><label class="fld"><span class="lbl">Nova senha</span><input type="password" id="npw" minlength="6" autocomplete="new-password"></label><div class="row" style="justify-content:flex-end"><button class="btn ghost" data-close>Cancelar</button><button class="btn" id="npwOk">Redefinir</button></div>`,'sm');
     $('#npwOk',m).onclick=async()=>{const v=$('#npw',m).value;if(v.length<6)return toast('Use pelo menos 6 caracteres.');await Store.patch('equipes',b.dataset.pw,{senhaHash:await sha(v)});closeModal();toast('Senha redefinida.')}});
@@ -961,23 +980,35 @@ async function profAval(pane,eqs){const sems=[...new Set(eqs.map(e=>e.semestre))
   $('#avSave').onclick=async()=>{await Promise.all(rows.map(r=>Store.patch('equipes',r.e.id,{avaliacao:{...r.a,nf:nf(r.a)}})));toast('Avaliações salvas.');render()};
 }
 async function profAcervo(pane,eqs){const arq=eqs.filter(e=>e.arquivado).sort((a,b)=>(b.semestre||'').localeCompare(a.semestre||''));
-  pane.innerHTML=`<div class="row between" style="margin-bottom:14px"><p class="muted" style="max-width:70ch">Cadastre os Planejamentos Estratégicos de anos anteriores, elaborados antes deste sistema. Informe os dados principais e o link para os arquivos originais (Drive, OneDrive etc.). As equipes do semestre vigente também podem ser publicadas em “Equipes e PEs”.</p><button class="btn" id="novoA">+ Cadastrar PE anterior</button></div>
-   <div class="tbl-wrap"><table><thead><tr><th>Semestre</th><th>Organização</th><th>Start-up</th><th>Segmento</th><th>NF</th><th>Público</th><th></th></tr></thead><tbody>${arq.map(e=>`<tr><td>${esc(e.semestre)}</td><td><b>${esc(e.organizacao)}</b></td><td>${esc(e.nome||'—')}</td><td>${esc(e.segmento||'')}</td><td class="num">${n2(nf(e.avaliacao))}</td><td>${e.publico?'<span class="chip ok">Sim</span>':'<span class="chip">Não</span>'}</td><td><div class="row" style="flex-wrap:nowrap"><button class="btn sm ghost" data-ea="${e.id}">Editar</button><button class="btn sm" data-rev="${e.id}">Conteúdo</button></div></td></tr>`).join('')||'<tr><td colspan="7" class="muted">Nenhum PE anterior cadastrado.</td></tr>'}</tbody></table></div>`;
+  pane.innerHTML=`<div class="row between" style="margin-bottom:14px"><p class="muted" style="max-width:70ch">Cadastre os Planejamentos Estratégicos de anos anteriores e anexe as planilhas originais do PE completo e do PE básico. No ambiente público, os visitantes baixam esses arquivos para abrir no Excel. As equipes do semestre vigente também podem ser publicadas em “Equipes e PEs”.</p><div class="row"><label class="btn gold" for="pkgIn">Importar pacote do acervo (.json)</label><input type="file" id="pkgIn" accept=".json,application/json" hidden><button class="btn" id="novoA">+ Cadastrar PE anterior</button></div></div>
+   <div class="tbl-wrap"><table><thead><tr><th>Semestre</th><th>Organização</th><th>Start-up</th><th>Segmento</th><th>NF</th><th>Arquivos</th><th>Público</th><th></th></tr></thead><tbody>${arq.map(e=>`<tr><td>${esc(e.semestre)}</td><td><b>${esc(e.organizacao)}</b></td><td>${esc(e.nome||'—')}</td><td>${esc(e.segmento||'')}</td><td class="num">${n2(nf(e.avaliacao))}</td><td>${ARQ_TIPOS.filter(t=>e.arquivos?.[t.k]).length?`<span class="chip ok">${ARQ_TIPOS.filter(t=>e.arquivos?.[t.k]).length} anexado(s)</span>`:'<span class="chip warn">Pendente</span>'}</td><td>${e.publico?'<span class="chip ok">Sim</span>':'<span class="chip">Não</span>'}</td><td><div class="row" style="flex-wrap:nowrap"><button class="btn sm ghost" data-ea="${e.id}">Editar</button></div></td></tr>`).join('')||'<tr><td colspan="8" class="muted">Nenhum PE anterior cadastrado.</td></tr>'}</tbody></table></div>`;
+  $('#pkgIn').onchange=e=>{const f=e.target.files[0];e.target.value='';if(f)importarPacote(f,eqs)};
   $('#novoA').onclick=()=>editAcervo(null);$$('[data-ea]',pane).forEach(b=>b.onclick=()=>editAcervo(arq.find(e=>e.id===b.dataset.ea)));
   $$('[data-rev]',pane).forEach(b=>b.onclick=()=>{S.revId=b.dataset.rev;S.ptabProf='revisar';S.rtab='completo';render()});
 }
-async function editAcervo(eq){const pe=eq?await Store.get('pes',eq.id)||{}:{};
+async function editAcervo(eq){const pe=eq?await Store.get('pes',eq.id)||{}:{};const id=eq?.id||'arq_'+uid();const arqs=clone(eq?.arquivos||{});const novos={},remover=new Set();
   const o={semestre:eq?.semestre||'',edicao:eq?.edicao||'',anoInicio:eq?.anoInicio||'',organizacao:eq?.organizacao||'',segmento:eq?.segmento||'',nome:eq?.nome||'',slogan:eq?.slogan||'',consult:[eq?.lider,...(eq?.membros||[]).map(m=>m.nome)].filter(Boolean).join('\n'),missao:pe.proposito?.missao||'',visao:pe.proposito?.visao||'',link:eq?.link||'',prof:eq?.avaliacao?.prof??'',resp:eq?.avaliacao?.resp??'',alunos:eq?.avaliacao?.alunos??'',recomendacoes:eq?.avaliacao?.recomendacoes||'',publico:eq?eq.publico:true};
   const F=[{k:'semestre',l:'Semestre',w:1,ph:'2023/2'},{k:'edicao',l:'Edição da Mostra',w:2,ph:'VII Mostra de PE'},{k:'anoInicio',l:'1º ano do plano',t:'number',w:1,ph:'2025'},{k:'organizacao',l:'Organização alvo',w:2},{k:'segmento',l:'Segmento',t:'select',opts:SEGMENTOS,w:2},{k:'nome',l:'Start-up de consultoria',w:2},{k:'slogan',l:'Slogan',w:2},
-   {k:'consult',l:'Consultores (um por linha)',t:'textarea',w:4,rows:3},{k:'missao',l:'Missão',t:'textarea',w:2},{k:'visao',l:'Visão',t:'textarea',w:2},{k:'link',l:'Link para os arquivos originais',t:'url',ph:'https://…'},
+   {k:'consult',l:'Consultores (um por linha)',t:'textarea',w:4,rows:3},{k:'missao',l:'Missão (aparece no cartão do acervo)',t:'textarea',w:2},{k:'visao',l:'Visão',t:'textarea',w:2},{k:'link',l:'Link para outros arquivos (opcional)',t:'url',ph:'https://… (Drive, OneDrive)'},
    {k:'prof',l:'Média prof. convidados',t:'number',w:1},{k:'resp',l:'Nota prof. responsável',t:'number',w:1},{k:'alunos',l:'Média alunos',t:'number',w:2},{k:'recomendacoes',l:'Recomendações dos avaliadores',t:'textarea'},{k:'publico',l:'Exibir no acervo público',t:'check'}];
-  const m=modal(`<div class="row between"><h3>${eq?'Editar':'Cadastrar'} PE de edição anterior</h3><button class="btn sm ghost" data-close>Fechar</button></div><div id="af"></div><div class="row between">${eq?'<button class="btn danger" id="aDel">Excluir</button>':'<span></span>'}<button class="btn" id="aSave">Salvar no acervo</button></div>`);
-  mountForm($('#af',m),F,o,{imgp:'ac'});
-  $('#aSave',m).onclick=async()=>{if(!o.semestre||!o.organizacao)return toast('Informe semestre e organização.');const cs=o.consult.split('\n').map(s=>s.trim()).filter(Boolean);const id=eq?.id||'arq_'+uid();
-    const num=v=>v===''||v==null?'':Number(v);
-    await Store.set('equipes',id,{...(eq||{}),semestre:o.semestre,edicao:o.edicao,anoInicio:Number(o.anoInicio)||null,organizacao:o.organizacao,segmento:o.segmento,nome:o.nome,slogan:o.slogan,lider:cs[0]||'',membros:cs.slice(1).map(n=>({nome:n})),link:o.link,publico:!!o.publico,arquivado:true,criadaEm:eq?.criadaEm||Date.now(),atualizadoEm:Date.now(),avaliacao:{prof:num(o.prof),resp:num(o.resp),alunos:num(o.alunos),recomendacoes:o.recomendacoes}});
-    await Store.patch('pes',id,{proposito:{...(pe.proposito||{}),missao:o.missao,visao:o.visao},capa:{...(pe.capa||{}),organizacao:o.organizacao}});closeModal();toast('PE salvo no acervo.');render()};
-  const d=$('#aDel',m);if(d)d.onclick=async()=>{if(await confirmBox('Excluir este PE do acervo?','Excluir')){await Promise.all([Store.del('equipes',eq.id),Store.del('pes',eq.id)]);toast('Excluído.');render()}};
+  const m=modal(`<div class="row between"><h3>${eq?'Editar':'Cadastrar'} PE de edição anterior</h3><button class="btn sm ghost" data-close>Fechar</button></div>
+   <div class="card flat stack" style="background:var(--surface2)"><div><h4>Arquivos para download</h4><p class="help">Anexe as planilhas originais. Os visitantes do acervo baixam e abrem no Excel, com todos os gráficos e desenhos preservados. Limite de 20 MB por arquivo.</p></div><div class="stack" id="arqBox"></div></div>
+   <div id="af"></div><div class="implog" id="upLog" aria-live="polite"></div><div class="row between">${eq?'<button class="btn danger" id="aDel">Excluir</button>':'<span></span>'}<button class="btn" id="aSave">Salvar no acervo</button></div>`);
+  const drawArq=()=>{$('#arqBox',m).innerHTML=ARQ_TIPOS.map(t=>{const cur=novos[t.k]?{nome:novos[t.k].name,tam:novos[t.k].size,novo:true}:(!remover.has(t.k)&&arqs[t.k]);
+    return `<div class="dl-item"><span class="dl-ic">${t.k==='poster'?'PDF':'XLSX'}</span><div style="min-width:0;flex:1"><b>${esc(t.l)}</b><br><small>${cur?`${esc(cur.nome)} · ${fmtTam(cur.tam||0)}${cur.novo?' · será enviado ao salvar':''}`:'Nenhum arquivo anexado'}</small></div><div class="row" style="flex-wrap:nowrap"><label class="btn sm ghost" for="up_${t.k}">${cur?'Trocar':'Anexar'}</label><input type="file" id="up_${t.k}" data-up="${t.k}" accept="${t.acc}" hidden>${cur?`<button type="button" class="btn sm danger" data-rmf="${t.k}">Remover</button>`:''}</div></div>`}).join('');
+    $$('[data-up]',m).forEach(inp=>inp.onchange=()=>{const f=inp.files[0];if(!f)return;if(f.size>20*1048576)return toast('O arquivo passa de 20 MB. Reduza as imagens da planilha ou use o link para outros arquivos.');novos[inp.dataset.up]=f;remover.delete(inp.dataset.up);drawArq()});
+    $$('[data-rmf]',m).forEach(b=>b.onclick=()=>{const k=b.dataset.rmf;if(novos[k])delete novos[k];else remover.add(k);drawArq()})};
+  drawArq();mountForm($('#af',m),F,o,{imgp:'ac'});
+  const log=(t,c='')=>{const l=$('#upLog',m);const d=document.createElement('div');d.className=c;d.textContent=t;l.appendChild(d)};
+  $('#aSave',m).onclick=async ev=>{if(!o.semestre||!o.organizacao)return toast('Informe semestre e organização.');const cs=o.consult.split('\n').map(s=>s.trim()).filter(Boolean);
+    const num=v=>v===''||v==null?'':Number(v);ev.target.disabled=true;$('#upLog',m).innerHTML='';
+    try{for(const k of remover){if(arqs[k]){await delImg(arqs[k].id);delete arqs[k]}}
+      for(const [k,f] of Object.entries(novos)){log(`Enviando ${f.name}…`);const data=await readDataURL(f);const fid=`${id}__file_${k}__${uid()}`;const line=$('#upLog',m).lastChild;
+        await putImg(fid,data,p=>{line.textContent=`Enviando ${f.name}… ${Math.round(p*100)}%`});delete imgCache[fid];if(arqs[k])await delImg(arqs[k].id);arqs[k]={id:fid,nome:f.name,tam:f.size,tipo:f.type||'',em:Date.now()};line.textContent=`${f.name} enviado.`;line.className='ok'}
+      await Store.set('equipes',id,{...(eq||{}),semestre:o.semestre,edicao:o.edicao,anoInicio:Number(o.anoInicio)||null,organizacao:o.organizacao,segmento:o.segmento,nome:o.nome,slogan:o.slogan,lider:cs[0]||'',membros:cs.slice(1).map(n=>({nome:n})),link:o.link,publico:!!o.publico,arquivado:true,arquivos:arqs,criadaEm:eq?.criadaEm||Date.now(),atualizadoEm:Date.now(),avaliacao:{prof:num(o.prof),resp:num(o.resp),alunos:num(o.alunos),recomendacoes:o.recomendacoes}});
+      await Store.patch('pes',id,{proposito:{...(pe.proposito||{}),missao:o.missao,visao:o.visao},capa:{...(pe.capa||{}),organizacao:o.organizacao}});closeModal();toast('PE salvo no acervo.');render()}
+    catch(e){console.error(e);log('Falha ao salvar: '+(e.message||e)+(Store.mode==='local'?' No modo local, o navegador guarda no máximo cerca de 5 MB; use a versão com Firebase.':''),'er');ev.target.disabled=false}};
+  const d=$('#aDel',m);if(d)d.onclick=async()=>{if(await confirmBox('Excluir este PE do acervo, incluindo os arquivos anexados?','Excluir')){for(const a of Object.values(arqs))await delImg(a.id);const o2=pe.original;if(o2){if(o2.poster)await delImg(o2.poster);for(const x of o2.imagens||[])await delImg(x.id)}await Promise.all([Store.del('equipes',eq.id),Store.del('pes',eq.id)]);toast('Excluído.');render()}};
 }
 async function profMsgs(pane,cur,msgs){
   cur=[...cur].sort((a,b)=>(a.nome||'').localeCompare(b.nome||'','pt-BR'));
@@ -1048,6 +1079,41 @@ service cloud.firestore {
     for(const col of COLS)for(const[id,d] of Object.entries(o[col]||{}))await Store.set(col,id,d);await loadCfg();toast('Dados importados.');render()};
 }
 
+/* ===================== Arquivos do acervo histórico (download) ===================== */
+const ARQ_TIPOS=[{k:'completo',l:'PE completo (Modelo 2)',acc:'.xlsx,.xlsm,.xls',ic:'Excel'},{k:'basico',l:'PE básico (Modelo 1)',acc:'.xlsx,.xlsm,.xls',ic:'Excel'},{k:'poster',l:'Pôster A1 (PDF ou imagem), opcional',acc:'.pdf,image/*',ic:'PDF'}];
+const fmtTam=b=>b>1048576?n2(b/1048576)+' MB':Math.max(1,Math.round(b/1024))+' KB';
+async function putImg(id,data,prog){const CH=850000;if(data.length<=CH)await Store.set('imgs',id,{data,em:Date.now()});else{const n=Math.ceil(data.length/CH);for(let i=0;i<n;i++){await Store.set('imgs',id+'_p'+i,{data:data.slice(i*CH,(i+1)*CH)});prog&&prog((i+1)/n)}await Store.set('imgs',id,{parts:n,em:Date.now()})}imgCache[id]=data}
+async function delImg(id){if(!id)return;try{const d=await Store.get('imgs',id);if(d?.parts)for(let i=0;i<d.parts;i++)await Store.del('imgs',id+'_p'+i);await Store.del('imgs',id)}catch(e){}delete imgCache[id]}
+function readDataURL(f){return new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(r.result);r.onerror=no;r.readAsDataURL(f)})}
+async function baixarArquivo(a,btn){if(inFrame())return toast('O download funciona na versão hospedada do sistema (GitHub).');const t=btn?.textContent;try{if(btn){btn.disabled=true;btn.textContent='Preparando download…'}const d=await getImg(a.id);if(!d)throw new Error('arquivo não encontrado');
+  const blob=await (await fetch(d)).blob();const url=URL.createObjectURL(blob);const l=document.createElement('a');l.href=url;l.download=a.nome||'arquivo';document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);delete imgCache[a.id]}
+  catch(e){console.error(e);toast(inFrame()?'O download funciona na versão hospedada do sistema.':'Não foi possível baixar o arquivo: '+(e.message||e))}finally{if(btn){btn.disabled=false;btn.textContent=t}}}
+function downloadsHTML(eq){const a=eq.arquivos||{};const lst=ARQ_TIPOS.filter(t=>a[t.k]);
+  return lst.length?`<div class="dl-list">${lst.map(t=>`<div class="dl-item"><span class="dl-ic">${t.ic==='Excel'&&!/\.pdf$/i.test(a[t.k].nome)?'XLSX':/\.pdf$/i.test(a[t.k].nome)?'PDF':'IMG'}</span><div style="min-width:0;flex:1"><b>${esc(t.l.replace(', opcional',''))}</b><br><small>${esc(a[t.k].nome)} · ${fmtTam(a[t.k].tam||0)}</small></div><button class="btn sm" data-dl="${t.k}">Baixar</button></div>`).join('')}</div>`:'<div class="empty"><b>Arquivos ainda não disponíveis</b>O professor ainda não anexou as planilhas deste PE.</div>'}
+const normOrg=s=>String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
+async function importarPacote(file,eqs){let pkg;
+  const m=modal(`<div class="row between"><h3>Importar pacote do acervo</h3></div><p class="help">Arquivo: ${esc(file.name)} · ${fmtTam(file.size)}. Não feche esta janela durante o envio.</p><div class="prog"><i id="pkP" style="width:0%"></i></div><div class="implog" id="pkLog" style="max-height:300px"></div><div class="row" style="justify-content:flex-end"><button class="btn" id="pkOk" disabled>Concluir</button></div>`,'sm');
+  m.parentElement.onclick=null;const log=(t,c='')=>{const d=document.createElement('div');d.className=c;d.textContent=t;$('#pkLog',m).appendChild(d);$('#pkLog',m).scrollTop=1e9};
+  const fim=()=>{$('#pkOk',m).disabled=false;$('#pkOk',m).onclick=()=>{closeModal();render()}};
+  try{pkg=JSON.parse(await file.text())}catch(e){log('O arquivo não é um pacote JSON válido.','er');return fim()}
+  if(pkg?.formato!=='sispe-acervo-v1'||!Array.isArray(pkg.registros)){log('Este arquivo não é um pacote do acervo gerado para este sistema.','er');return fim()}
+  const total=pkg.registros.reduce((a,r)=>a+1+Object.keys(r.arquivos||{}).length,0);let feito=0;const step=()=>{feito++;$('#pkP',m).style.width=Math.round(feito/total*100)+'%'};
+  let ok=0;
+  for(const r of pkg.registros){const E=r.equipe||{};try{
+    let cur=eqs.find(e=>e.id===r.id)||eqs.find(e=>e.arquivado&&e.semestre===E.semestre&&normOrg(e.organizacao)===normOrg(E.organizacao));
+    const id=cur?.id||r.id||'arq_'+uid();log(`${E.organizacao||id}: ${cur?'atualizando registro existente':'criando novo registro'}…`);
+    const arqs=clone(cur?.arquivos||{});
+    for(const [k,a] of Object.entries(r.arquivos||{})){const fid=`${id}__file_${k}__${uid()}`;await putImg(fid,a.data);delete imgCache[fid];if(arqs[k])await delImg(arqs[k].id);arqs[k]={id:fid,nome:a.nome,tam:a.tam,tipo:a.tipo||'',em:Date.now()};log(`   ${a.nome} enviado (${fmtTam(a.tam)}).`);step()}
+    const keep=v=>v!==''&&v!=null&&!(Array.isArray(v)&&!v.length);const merged={...(cur||{}),arquivado:true,arquivos:arqs,atualizadoEm:Date.now()};delete merged.id;
+    Object.entries(E).forEach(([k,v])=>{if(k==='avaliacao')return;if(keep(v)&&!(cur&&keep(cur[k])&&r.preservar?.includes(k)))merged[k]=v});
+    if(E.avaliacao){merged.avaliacao={...(cur?.avaliacao||{})};Object.entries(E.avaliacao).forEach(([k,v])=>{if(keep(v)&&!keep(merged.avaliacao[k]))merged.avaliacao[k]=v})}
+    if(merged.publico==null)merged.publico=true;if(!merged.criadaEm)merged.criadaEm=Date.now();
+    await Store.set('equipes',id,merged);
+    if(r.pe){const pe=await Store.get('pes',id)||{};const part={};Object.entries(r.pe).forEach(([sec,obj])=>{part[sec]={...(pe[sec]||{})};Object.entries(obj).forEach(([k,v])=>{if(keep(v))part[sec][k]=v})});await Store.patch('pes',id,part)}
+    step();ok++;log(`   Concluído.`,'ok')}
+   catch(e){console.error(e);log(`   Falha em ${E.organizacao||r.id}: ${e.message||e}`,'er')}}
+  log(`${ok} de ${pkg.registros.length} PE(s) importados.`,ok===pkg.registros.length?'ok':'er');fim()}
+function bindDownloads(root,eq){$$('[data-dl]',root).forEach(b=>b.onclick=()=>baixarArquivo(eq.arquivos[b.dataset.dl],b))}
 /* ===================== Dados iniciais ===================== */
 async function seed(){const local=Store.mode==='local';
   await Store.set('config','geral',{semestre:'2026/2',edicao:'Mostra de Planejamento Estratégico 2026/2',anoInicio:2028,tamEquipe:5,pontos:5,pesos:{prof:2,resp:3,alunos:1},...(local?{profHash:await sha('ufam2026'),demoProf:true}:{})});
@@ -1112,7 +1178,7 @@ async function render(){paintNav();
   catch(e){console.error(e);app.innerHTML=`<div class="wrap"><div class="empty"><b>Não foi possível carregar esta área</b>${esc(e.message||e)}<br><button class="btn" style="margin-top:12px" onclick="render()">Tentar novamente</button></div></div>`}}
 (async()=>{document.documentElement.lang='pt-BR';await Store.init();paintNav();
   try{await Promise.race([loadCfg(),new Promise((_,no)=>setTimeout(()=>no(Object.assign(new Error('Tempo esgotado ao conectar ao Firestore.'),{code:'timeout'})),15000))])}
-  catch(e){console.error(e);const c=e.code||'';const dica=c.includes('permission')?'As regras do Firestore estão bloqueando o acesso. No console do Firebase, abra Firestore → Regras, cole as regras indicadas e clique em Publicar.':c.includes('not-found')||c.includes('failed-precondition')?'O banco Firestore ainda não foi criado neste projeto. No console, abra Firestore → Criar banco de dados.':c.includes('api-key')||/api.?key/i.test(e.message)?'A chave (apiKey) da configuração não confere. Copie novamente o firebaseConfig do console.':c==='timeout'||c.includes('unavailable')?'Sem resposta do Firebase. Verifique a internet e se o banco foi criado.':'Confira a configuração do Firebase e as regras do Firestore.';
+  catch(e){console.error(e);const c=e.code||'';const dica=inFrame()?'Você está vendo o sistema dentro de uma pré-visualização (por exemplo, no painel do Claude), que bloqueia a conexão com o Firebase. Abra o endereço do sistema no GitHub ou o arquivo index.html direto no navegador.':c.includes('permission')?'As regras do Firestore estão bloqueando o acesso. No console do Firebase, abra Firestore → Regras, cole as regras indicadas e clique em Publicar.':c.includes('not-found')||c.includes('failed-precondition')?'O banco Firestore ainda não foi criado neste projeto. No console, abra Firestore → Criar banco de dados.':c.includes('api-key')||/api.?key/i.test(e.message)?'A chave (apiKey) da configuração não confere. Copie novamente o firebaseConfig do console.':c==='timeout'||c.includes('unavailable')?'Sem resposta do Firebase. Verifique a internet e se o banco foi criado.':'Confira a configuração do Firebase e as regras do Firestore.';
     app.innerHTML=`<div class="wrap"><div class="card stack" style="max-width:720px;margin:20px auto"><div class="eyebrow">Conexão com o banco de dados</div><h2>Não foi possível acessar o Firebase</h2><p>${esc(dica)}</p><p class="help">Detalhe técnico: ${esc(c)} ${esc(e.message||'')}</p><div><button class="btn" onclick="location.reload()">Tentar novamente</button></div></div></div>`;return}
   const h=(location.hash||'').slice(1);if(['publico','aluno','prof'].includes(h))S.view=h;else if(S.sess?.role==='aluno')S.view='aluno';else if(S.sess?.role==='prof')S.view='prof';
   render()})();
