@@ -754,6 +754,19 @@ input:focus,select:focus,textarea:focus{background:var(--surface);border-color:v
 .simlist{display:flex;flex-direction:column;gap:8px}
 .simrow{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(80px,1fr) 52px;gap:12px;align-items:center}
 .simrow .sn{min-width:0;overflow-wrap:anywhere;text-align:left}.simrow b{text-align:right}
+/* PE Básico: template e versões */
+.bsteps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.bstep{display:flex;gap:12px;align-items:flex-start;padding:16px;border-radius:16px;border:1px solid var(--line);background:linear-gradient(180deg,var(--surface),color-mix(in srgb,var(--surface2) 55%,var(--surface)))}
+.bstep>div{min-width:0;flex:1;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.bstep .fld{width:100%}
+.bn{flex:none;width:36px;height:36px;border-radius:12px;display:grid;place-items:center;font-weight:800;color:#fff;background:linear-gradient(135deg,#8E1F44,#4A1D6B)}
+.upbox{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.dl-ic.pdf{background:linear-gradient(135deg,#B8325E,#6E1230)}
+details.card>summary{cursor:pointer;list-style:none;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+details.card>summary::before{content:"▸";color:var(--gold);font-weight:800;transition:transform .15s}
+details.card[open]>summary::before{transform:rotate(90deg)}
+@media (max-width:900px){.bsteps{grid-template-columns:minmax(0,1fr)}}
+.nav-r .who{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}.nav-r .who::before{display:inline-block;margin-right:6px;vertical-align:middle}
 
 @page{size:A1 portrait;margin:0}
 @media print{
@@ -791,7 +804,7 @@ input:focus,select:focus,textarea:focus{background:var(--surface);border-color:v
   </div>
 </nav>
 <main id="app"><div class="wrap"><div class="empty"><b>Carregando o sistema…</b>Conectando ao banco de dados.</div></div></main>
-<div class="foot">Curso de Engenharia de Produção · Faculdade de Tecnologia · Universidade Federal do Amazonas · Manaus/AM</div>
+<div class="foot">Curso de Engenharia de Produção · Faculdade de Tecnologia · Universidade Federal do Amazonas · Manaus/AM<br><small style="opacity:.7">Atualização do sistema: 29/10/2026 · PE Básico com template e versões</small></div>
 <div id="printArea"></div>
 
 <script>
@@ -1342,14 +1355,44 @@ async function flushSave(){clearTimeout(S.saveT);const ks=Object.keys(S.dirty);i
       inc[`m.${mk}.n`]=ks.length;inc[`m.${mk}.c`]=ct;set[`m.${mk}.ult`]=now;set[`m.${mk}.d.${today().replace(/-/g,'')}`]=true;set[`m.${mk}.nome`]=S.sess.nome;set[`m.${mk}.papel`]=S.sess.papel||'';logPart(S.eq.id,inc,set)}}
   catch(e){console.error(e);ks.forEach(k=>S.dirty[k]=true);toast('Falha ao salvar. Verifique a conexão; tentaremos de novo.');S.saveT=setTimeout(flushSave,5000)}}
 window.addEventListener('beforeunload',()=>{flushSave()});
+const TPL_PADRAO={nome:'PEBASICO.xlsx',url:'PEBASICO.xlsx'};
+async function baixarTemplate(btn){const t=S.cfg?.tplBasico;if(t?.id)return baixarArquivo(t,btn);if(inFrame())return toast('O download funciona na versão hospedada do sistema (GitHub).');const a=document.createElement('a');a.href=TPL_PADRAO.url;a.download=TPL_PADRAO.nome;document.body.appendChild(a);a.click();a.remove()}
+const extIc=n=>/\.pdf$/i.test(n)?'PDF':/\.xls/i.test(n)?'XLSX':'ARQ';
+function versoesHTML(lst,opt={}){const L=[...(lst||[])].sort((a,b)=>b.em-a.em);if(!L.length)return `<div class="empty"><b>Nenhuma versão enviada ainda</b>${opt.prof?'A equipe ainda não enviou o arquivo do PE básico.':'Preencha o template e envie aqui o Excel e o PDF quando estiverem prontos.'}</div>`;
+  const vmax=Math.max(...L.map(x=>x.v||0));
+  return `<div class="dl-list">${L.map(a=>`<div class="dl-item"><span class="dl-ic ${extIc(a.nome)==='PDF'?'pdf':''}">${extIc(a.nome)}</span><div style="min-width:0;flex:1"><b>V${a.v} · ${esc(a.nome)}</b> ${a.v===vmax?'<span class="chip ok">Mais recente</span>':''}<br><small>${fmtTam(a.tam||0)} · enviado por ${esc(a.por||'—')} em ${fmtDT(a.em)}${a.obs?' · '+esc(a.obs):''}</small></div><div class="row" style="flex-wrap:nowrap;gap:6px"><button class="btn sm" data-bdl="${a.id}">Baixar</button>${opt.del&&opt.del(a)?`<button class="btn sm danger" data-bdel="${a.id}">Excluir</button>`:''}</div></div>`).join('')}</div>`}
+function bindVersoes(root,lst,onDel){$$('[data-bdl]',root).forEach(b=>b.onclick=()=>baixarArquivo((lst||[]).find(x=>x.id===b.dataset.bdl),b));$$('[data-bdel]',root).forEach(b=>b.onclick=()=>onDel&&onDel(b.dataset.bdel))}
 function alunoBasico(pane,eq){
-  const b=S.pe.basico||(S.pe.basico={});
-  pane.innerHTML=`<div class="stack"><div class="card stack"><div class="row between"><div><div class="eyebrow">Modelo 1 · síntese do PE completo</div><h2>PE Básico para a Mostra (folha A1)</h2></div><span class="savest" id="savest"></span></div>
-   <p>Missão, visão, valores, áreas, equipe gestora, mapa estratégico, Matriz X e planejamento de curto prazo vêm automaticamente do PE completo. Aqui você preenche apenas o que é exclusivo do pôster: a atratividade do empreendimento e o espaço “Plus” da equipe.</p>
-   ${S.fb.basico?`<div class="fbk"><b>Recomendação do professor:</b> ${nl(S.fb.basico)}</div>`:''}<div id="bform"></div></div>
-   <div class="card"><div class="row between" style="margin-bottom:10px"><h3>Pré-visualização do pôster</h3><button class="btn sm ghost" id="refP">Atualizar pré-visualização</button></div><div id="pbox"></div></div></div>`;
+  const b=S.pe.basico||(S.pe.basico={});const lider=/Líder/.test(S.sess.papel||'');const tpl=S.cfg?.tplBasico;
+  const lst=()=>S.pe.basicoArq||[];const prox=()=>Math.max(0,...lst().map(x=>x.v||0))+1;
+  pane.innerHTML=`<div class="stack">
+   <div class="card stack"><div class="row between"><div><div class="eyebrow">Modelo 1 · arquivo oficial do pôster A1</div><h2>Template e versões do PE Básico</h2></div><span class="chip purple">${lst().length} arquivo(s) enviado(s)</span></div>
+    ${S.fb.basico?`<div class="fbk"><b>Recomendação do professor:</b> ${nl(S.fb.basico)}</div>`:''}
+    <div class="bsteps">
+     <div class="bstep"><span class="bn">1</span><div><b>Baixe o template</b><p class="help">${esc(tpl?.nome||TPL_PADRAO.nome)} · aba <b>PEBasicoVazio</b> para preencher e aba <b>PEBasicoExemplo</b> como referência.</p><button class="btn gold sm" id="tplDl">${ic('file')}Baixar template em Excel</button></div></div>
+     <div class="bstep"><span class="bn">2</span><div><b>Preencha no Excel</b><p class="help">Use o conteúdo do PE completo (Modelo 2). Ao terminar, salve também uma versão em PDF no tamanho A1.</p></div></div>
+     <div class="bstep"><span class="bn">3</span><div><b>Envie a versão</b><p class="help">Envie o Excel e o PDF juntos. Cada envio vira uma nova versão (V1, V2, V3…), sem apagar as anteriores.</p>
+      <div class="upbox"><label class="btn sm" for="bUp">${ic('archive')}Selecionar Excel e/ou PDF</label><input type="file" id="bUp" accept=".xlsx,.xlsm,.xls,.pdf" multiple hidden><span id="bSel" class="help">Nenhum arquivo selecionado.</span></div>
+      <label class="fld" style="margin-top:8px"><span class="lbl">Observação da versão (opcional)</span><input id="bObs" placeholder="Ex.: ajustes após recomendações da Mostra"></label>
+      <div class="row" style="margin-top:8px"><button class="btn" id="bSend" disabled>Enviar como V${prox()}</button><span id="bProg" class="help"></span></div></div></div>
+    </div></div>
+   <div class="card stack"><div><div class="eyebrow">Histórico</div><h3>Versões enviadas</h3></div><div id="bVers"></div></div>
+   <details class="card"><summary><b>Rascunho no sistema (opcional)</b> <small class="muted">· atratividade, “Plus” da equipe e pré-visualização automática do pôster</small></summary>
+    <div class="stack" style="margin-top:14px"><div class="row between"><p class="muted" style="max-width:70ch">Missão, visão, valores, áreas, equipe gestora, mapa estratégico, Matriz X e planejamento de curto prazo vêm automaticamente do PE completo. Aqui você preenche o que é exclusivo do pôster.</p><span class="savest" id="savest"></span></div><div id="bform"></div>
+    <div class="row between" style="margin-top:6px"><h3>Pré-visualização do pôster</h3><button class="btn sm ghost" id="refP">Atualizar pré-visualização</button></div><div id="pbox"></div></div></details></div>`;
+  $('#tplDl').onclick=e=>baixarTemplate(e.currentTarget);
+  const drawV=()=>{$('#bVers').innerHTML=versoesHTML(lst(),{del:a=>lider||a.mk===S.sess.mk});bindVersoes($('#bVers'),lst(),async id=>{if(!await confirmBox('Excluir este arquivo do histórico de versões?','Excluir'))return;const f=await Store.get('pes',eq.id);const L=(f?.basicoArq||[]).filter(x=>x.id!==id);await delImg(id);await Store.patch('pes',eq.id,{basicoArq:L});S.pe.basicoArq=L;drawV();toast('Arquivo excluído.')})};drawV();
+  let files=[];$('#bUp').onchange=e=>{files=[...e.target.files].filter(f=>{if(f.size>20*1048576){toast(`${f.name} passa de 20 MB.`);return false}return /\.(xlsx|xlsm|xls|pdf)$/i.test(f.name)});
+    $('#bSel').textContent=files.length?files.map(f=>`${f.name} (${fmtTam(f.size)})`).join(' · '):'Nenhum arquivo selecionado.';$('#bSend').disabled=!files.length};
+  $('#bSend').onclick=async ev=>{if(!files.length)return;ev.target.disabled=true;const v=prox(),now=Date.now(),obs=$('#bObs').value.trim(),novos=[];
+    try{for(const [i,f] of files.entries()){$('#bProg').textContent=`Enviando ${f.name}…`;const id=`${eq.id}__basico_v${v}_${i}__${uid()}`;await putImg(id,await readDataURL(f),p=>$('#bProg').textContent=`Enviando ${f.name}… ${Math.round(p*100)}%`);delete imgCache[id];
+        novos.push({id,v,nome:f.name,tam:f.size,tipo:f.type||'',em:now,por:S.sess.nome,mk:S.sess.mk,obs})}
+      const fr=await Store.get('pes',eq.id);const L=[...(fr?.basicoArq||[]),...novos];await Store.patch('pes',eq.id,{basicoArq:L});S.pe.basicoArq=L;await Store.patch('equipes',eq.id,{atualizadoEm:now});
+      if(S.sess.mk){const mk=S.sess.mk;logPart(eq.id,{[`m.${mk}.s.basico.n`]:1,[`m.${mk}.s.basico.c`]:800,[`m.${mk}.n`]:1,[`m.${mk}.c`]:800},{[`m.${mk}.s.basico.ult`]:now,[`m.${mk}.ult`]:now,[`m.${mk}.d.${today().replace(/-/g,'')}`]:true,[`m.${mk}.nome`]:S.sess.nome,[`m.${mk}.papel`]:S.sess.papel||''})}
+      toast(`Versão V${v} enviada.`);render()}
+    catch(e){console.error(e);$('#bProg').textContent='Falha no envio: '+(e.message||e);ev.target.disabled=false}};
   mountForm($('#bform'),BASICO.f,b,{imgp:eq.id+'_basico'},()=>queueSave('basico'));
-  const draw=()=>mountPoster($('#pbox'),eq,S.pe);draw();$('#refP').onclick=async()=>{await flushSave();draw()};
+  const draw=()=>mountPoster($('#pbox'),eq,S.pe);$('details.card',pane).addEventListener('toggle',e=>{if(e.target.open)draw()},{once:true});$('#refP').onclick=async()=>{await flushSave();draw()};
 }
 async function alunoMsgs(pane,eq){
   const draw=async(scroll)=>{const all=(await Store.list('msgs')).sort((a,b)=>a.em-b.em);
@@ -1488,7 +1531,7 @@ async function profRevisar(eqs){const eq=eqs.find(e=>e.id===S.revId);if(!eq){S.p
   const rb=$('#rbody');
   if(S.rtab==='sim'){rb.innerHTML='<div class="empty"><b>Calculando similaridade…</b></div>';const base=await simBase();rb.innerHTML=`<div class="card">${simHTML(simOf(base,eq.id))}</div>`;return}
   if(S.rtab==='part'){rb.innerHTML=partView(eq,await Store.get('feedback',partId(eq.id)),{prof:true,pe});return}
-  if(S.rtab==='basico'){rb.innerHTML=`<div class="card"><label class="fld"><span class="lbl">Recomendação para o PE básico</span><textarea data-fb="basico" rows="2">${esc(fb.basico||'')}</textarea></label></div><div class="card" id="pbx"></div>`;mountPoster($('#pbx'),eq,pe)}
+  if(S.rtab==='basico'){rb.innerHTML=`<div class="card stack"><div><div class="eyebrow">Arquivos enviados pela equipe</div><h3>Versões do PE básico (Excel e PDF)</h3></div><div id="pvers">${versoesHTML(pe.basicoArq,{prof:true})}</div></div><div class="card"><label class="fld"><span class="lbl">Recomendação para o PE básico</span><textarea data-fb="basico" rows="2">${esc(fb.basico||'')}</textarea></label></div><details class="card"><summary><b>Pré-visualização automática do pôster</b> <small class="muted">· gerada a partir do PE completo</small></summary><div id="pbx" style="margin-top:12px"></div></details>`;bindVersoes($('#pvers'),pe.basicoArq);$('details.card',rb).addEventListener('toggle',e=>{if(e.target.open)mountPoster($('#pbx'),eq,pe)},{once:true})}
   else{rb.innerHTML=`<div class="fbk">As recomendações são salvas automaticamente ao sair de cada campo e aparecem para a equipe na seção correspondente.</div>`+peView(eq,pe,{feedback:true,fb,prog:true});hydrateImgs(rb)}
   rb.addEventListener('change',async e=>{const k=e.target.dataset.fb;if(!k)return;await Store.patch('feedback',eq.id,{[k]:e.target.value.trim()});toast('Recomendação salva.')});
 }
@@ -1592,8 +1635,14 @@ service cloud.firestore {
     }
   }
 }</div><p class="help" style="margin-top:6px">As senhas são guardadas apenas como código criptográfico (hash). Para um controle mais rígido, o próximo passo é ativar o Firebase Authentication.</p></details></div>
+   <div class="card stack"><h3>Template do PE Básico (Modelo 1)</h3><p class="help">Arquivo que as equipes baixam na aba “PE Básico”. Atual: <b>${esc(S.cfg.tplBasico?.nome||'PEBASICO.xlsx (arquivo publicado junto ao sistema no GitHub)')}</b>${S.cfg.tplBasico?' · enviado em '+fmtDT(S.cfg.tplBasico.em):''}.</p>
+    <div class="row"><label class="btn sm gold" for="tplUp">Enviar novo template</label><input type="file" id="tplUp" accept=".xlsx,.xlsm,.xls" hidden><button class="btn sm ghost" id="tplDl2">Baixar o atual</button>${S.cfg.tplBasico?'<button class="btn sm danger" id="tplRst">Voltar ao padrão</button>':''}</div><span id="tplMsg" class="help"></span></div>
    <div class="card stack"><h3>Cópia de segurança</h3><p class="help">Exporte todos os dados em JSON (para guardar ou migrar do modo local para o Firebase) e importe quando precisar.</p><div class="row"><button class="btn ghost" id="bkE">Exportar dados</button><button class="btn ghost" id="bkO">Exportar só as orientações</button><button class="btn ghost" id="bkI">Importar dados</button></div><textarea id="bkT" rows="6" placeholder="O JSON exportado aparece aqui. Para importar, cole o JSON e clique em Importar dados." aria-label="JSON de backup"></textarea><div class="row"><button class="btn sm ghost" id="bkC">Copiar JSON</button></div></div></div></div>`;
   mountForm($('#cf'),F,c,{imgp:'cfg'});
+  $('#tplDl2').onclick=e=>baixarTemplate(e.currentTarget);
+  $('#tplUp').onchange=async e=>{const f=e.target.files[0];if(!f)return;if(f.size>20*1048576)return toast('O arquivo passa de 20 MB.');$('#tplMsg').textContent='Enviando…';const id='tpl_basico__'+uid();
+    await putImg(id,await readDataURL(f),p=>$('#tplMsg').textContent=`Enviando… ${Math.round(p*100)}%`);delete imgCache[id];const old=S.cfg.tplBasico;const t={id,nome:f.name,tam:f.size,em:Date.now()};await Store.patch('config','geral',{tplBasico:t});S.cfg.tplBasico=t;if(old?.id)delImg(old.id);toast('Template atualizado para as equipes.');render()};
+  const tr=$('#tplRst');if(tr)tr.onclick=async()=>{const old=S.cfg.tplBasico;await Store.patch('config','geral',{tplBasico:null});S.cfg.tplBasico=null;if(old?.id)delImg(old.id);toast('Template padrão restaurado.');render()};
   $('#cfSave').onclick=async()=>{['anoInicio','tamEquipe','pontos'].forEach(k=>c[k]=Number(c[k]));Object.keys(c.pesos).forEach(k=>c.pesos[k]=Number(c.pesos[k]));await Store.set('config','geral',c);S.cfg=c;S.ano=c.anoInicio;await loadOrsCur();if(S.orsCur[0]&&c.edicao&&S.orsCur[0].titulo!==c.edicao){await Store.patch('orientacoes',S.orsCur[0].id,{titulo:c.edicao});await loadOrsCur()}toast('Configurações salvas.');render()};
   $('#pwP').onsubmit=async e=>{e.preventDefault();if($('#pq1').value!==$('#pq2').value)return toast('As senhas não conferem.');await Store.patch('config','geral',{profHash:await sha($('#pq1').value),demoProf:false});S.cfg.profHash=await sha($('#pq1').value);S.cfg.demoProf=false;toast('Senha do professor alterada.');e.target.reset()};
   const COLS=['config','orientacoes','equipes','pes','feedback','msgs','imgs'];
@@ -1692,7 +1741,7 @@ function partView(eq,doc,opt={}){const P=partRows(eq,doc);const secs=PART_SECS()
       ${rs.length?`<small class="pult">${ic('target')} Responsável por ${rs.length} ${rs.length>1?'seções':'seção'} · contribuiu em ${feitas}</small>`:''}</div>`}).join('')}</div>
    <div class="card"><div class="row between"><div><div class="eyebrow">Checklist do PE</div><h3>Quem trabalhou em cada seção</h3></div><div class="lvl-leg"><span>menos</span>${[1,2,3,4].map(l=>`<i class="lv l${l}"></i>`).join('')}<span>mais</span><span style="margin-left:10px"><i class="lv l0 rsp"></i> responsável</span></div></div>
     <div class="tbl-wrap" style="margin-top:12px"><table class="pmx"><thead><tr><th>Seção</th><th>Preench.</th>${P.rows.map((x,i)=>`<th class="c" title="${esc(x.nome)}"><span class="av av${i%4}" style="margin:0 auto;width:30px;height:30px">${esc(ini(x.nome))}</span></th>`).join('')}<th>Responsável</th></tr></thead><tbody>
-    ${secs.map(sc=>{const sp=sc.id==='basico'?(filled(pe.basico)?1:0):secProg(SECOES.find(s=>s.id===sc.id),pe);return `<tr><td>${esc(sc.n)}</td><td class="num">${opt.pe?`<span class="chip ${sp>=.99?'ok':sp>0?'gold':''}">${Math.round(sp*100)}%</span>`:'—'}</td>${P.rows.map(x=>{const v=x.s[sc.id];const L=lvl(v);const r=resp[sc.id]===x.k;return `<td class="c"><i class="lv l${L} ${r?'rsp':''}" title="${esc(x.nome)}: ${v?.n||0} edições, ${v?.c||0} caracteres${v?.ult?' · '+fmtDT(v.ult):''}${r?' · responsável':''}"></i></td>`}).join('')}
+    ${secs.map(sc=>{const sp=sc.id==='basico'?((pe.basicoArq||[]).length?1:filled(pe.basico)?.5:0):secProg(SECOES.find(s=>s.id===sc.id),pe);return `<tr><td>${esc(sc.n)}</td><td class="num">${opt.pe?`<span class="chip ${sp>=.99?'ok':sp>0?'gold':''}">${Math.round(sp*100)}%</span>`:'—'}</td>${P.rows.map(x=>{const v=x.s[sc.id];const L=lvl(v);const r=resp[sc.id]===x.k;return `<td class="c"><i class="lv l${L} ${r?'rsp':''}" title="${esc(x.nome)}: ${v?.n||0} edições, ${v?.c||0} caracteres${v?.ult?' · '+fmtDT(v.ult):''}${r?' · responsável':''}"></i></td>`}).join('')}
       <td>${opt.assign?`<select data-resp="${sc.id}" aria-label="Responsável por ${esc(sc.n)}"><option value="">—</option>${P.rows.filter(x=>!x.gestor).map(x=>`<option value="${x.k}" ${resp[sc.id]===x.k?'selected':''}>${esc(x.nome)}</option>`).join('')}</select>`:esc(P.rows.find(x=>x.k===resp[sc.id])?.nome||'—')}</td></tr>`}).join('')}
     </tbody></table></div>${opt.assign?'<p class="help" style="margin-top:8px">Como líder, defina o responsável de cada seção. O painel compara a divisão planejada com quem de fato editou.</p>':''}</div>
   </div>`}
@@ -1704,7 +1753,7 @@ function normW(t){return String(t||'').normalize('NFD').replace(/[̀-ͯ]/g,'').t
 function h32(s){let h=0x811c9dc5;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
 function shSet(t,k=4){const w=normW(t),s=new Set();for(let i=0;i+k<=w.length;i++)s.add(h32(w.slice(i,i+k).join(' ')));return s}
 function flatT(v,out=[]){if(v==null)return out;if(typeof v==='string'){if(!(/__/.test(v)&&!/\s/.test(v)))out.push(v)}else if(typeof v==='number'){}else if(Array.isArray(v))v.forEach(x=>flatT(x,out));else if(typeof v==='object')Object.entries(v).forEach(([k,x])=>{if(!/^(upd_|original|logo|organograma|foto|imagem|plusImg|atrImg)/.test(k))flatT(x,out)});return out}
-function peTxt(pe){const o=[];Object.entries(pe||{}).forEach(([k,v])=>{if(/^upd_/.test(k)||k==='original')return;if(k==='corpus')o.push(v?.texto||'');else o.push(flatT(v).join('\n'))});return o.join('\n')}
+function peTxt(pe){const o=[];Object.entries(pe||{}).forEach(([k,v])=>{if(/^upd_/.test(k)||k==='original'||k==='basicoArq')return;if(k==='corpus')o.push(v?.texto||'');else o.push(flatT(v).join('\n'))});return o.join('\n')}
 const SIM_SECS=()=>[...VIEWABLE.map(s=>({id:s.id,n:s.n})),{id:'basico',n:'PE básico (pôster A1)'}];
 async function simBase(){const [eqs,pes]=await Promise.all([Store.list('equipes'),Store.list('pes')]);const E={};eqs.forEach(e=>E[e.id]=e);
   const docs=pes.filter(p=>E[p.id]).map(p=>({id:p.id,eq:E[p.id],pe:p,sh:shSet(peTxt(p))})).filter(d=>d.sh.size>=15);
