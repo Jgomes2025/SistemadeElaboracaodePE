@@ -767,6 +767,118 @@ details.card>summary::before{content:"▸";color:var(--gold);font-weight:800;tra
 details.card[open]>summary::before{transform:rotate(90deg)}
 @media (max-width:900px){.bsteps{grid-template-columns:minmax(0,1fr)}}
 .nav-r .who{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}.nav-r .who::before{display:inline-block;margin-right:6px;vertical-align:middle}
+/* Matriz RACI ampliada */
+.raci-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.raci-leg{display:flex;align-items:center;gap:6px 10px;flex-wrap:wrap}.raci-leg small{color:var(--muted);margin-right:6px}
+.rc{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:7px;font-weight:800;font-size:.85rem}
+.raci-wrap{max-height:min(640px,70vh);overflow:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface);box-shadow:0 8px 24px -18px rgba(18,38,77,.35)}
+table.raci{border-collapse:separate;border-spacing:0;width:100%;min-width:max-content}
+.raci thead th{position:sticky;top:0;z-index:2;white-space:normal;vertical-align:bottom;padding:12px 8px}
+.raci th.rcol{min-width:96px;max-width:130px;text-align:center}.raci th.rcol span{display:block;line-height:1.2}
+.raci td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+.raci tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--surface2) 45%,var(--surface))}
+.raci tbody tr:focus-within td{background:var(--blue-soft)}
+.raci .rn{width:42px;text-align:center;color:var(--muted);font-size:.85rem;position:sticky;left:0;z-index:1;background:inherit}
+.raci thead .rn,.raci thead .rr{z-index:3}
+.raci .rr{min-width:300px;position:sticky;left:42px;z-index:1;background:var(--surface)}
+.raci tbody tr:nth-child(even) .rr,.raci tbody tr:nth-child(even) .rn{background:color-mix(in srgb,var(--surface2) 45%,var(--surface))}
+.raci tbody tr:focus-within .rr,.raci tbody tr:focus-within .rn{background:var(--blue-soft)}
+.raci tbody .rn{background:var(--surface)}
+.raci thead .rr,.raci thead .rn{position:sticky;left:0}.raci thead .rr{left:42px}
+.raci .rr input{padding:10px 12px;font-size:1rem}
+.raci td.rcol{text-align:center}
+.raci select{width:70px;text-align:center;text-align-last:center;font-weight:800;padding:8px 6px;border-radius:9px}
+.raci .rx{width:46px;text-align:center}
+.rR{background:#F6DCE4!important;color:#8E1F44!important;border-color:#E8B3C3!important}
+.rA{background:#F6EBCF!important;color:#8A5A12!important;border-color:#E3C987!important}
+.rC{background:#E1EAF8!important;color:#1F4C9A!important;border-color:#B5C8EC!important}
+.rI{background:#EDE3F6!important;color:#4A1D6B!important;border-color:#CDB5E3!important}
+.rN{background:#EEEDF1!important;color:#6E6A78!important;border-color:#D8D5DE!important}
+@media (max-width:640px){.raci .rr{min-width:200px;position:static}.raci .rn{position:static}}
+.raci thead th,.raci thead .rr,.raci thead .rn{background:color-mix(in srgb,var(--navy) 8%,var(--surface))!important}
+/* Seção 3 · SWOT e Atratividade */
+.swgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media (max-width:760px){.swgrid{grid-template-columns:minmax(0,1fr)}}
+.swg{border:1px solid var(--line);border-radius:16px;padding:16px;background:var(--surface);display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden}
+.swg::before{content:"";position:absolute;inset:0 0 auto;height:4px}
+.swg.sF::before{background:linear-gradient(90deg,#3FA36B,#2E7D4F)}.swg.sW::before{background:linear-gradient(90deg,#E5A24A,#B26A00)}
+.swg.sO::before{background:linear-gradient(90deg,#4F7BD1,#1F4C9A)}.swg.sT::before{background:linear-gradient(90deg,#E05A50,#8E1F44)}
+.swgh{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.swgh h4{font-size:1.2rem;color:var(--ink)}
+.swamb{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--muted)}
+.switems{display:flex;flex-direction:column;gap:10px}
+.swit{display:flex;gap:10px;align-items:flex-start}
+.swn{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:.8rem;font-weight:800;flex:none;margin-top:6px;background:var(--surface2);color:var(--muted)}
+.swit input{font-size:.88rem;padding:7px 10px}
+.swg>.btn{align-self:flex-start}
+.swmx{display:grid;grid-template-columns:34px minmax(0,1fr) minmax(0,1fr);gap:10px}
+.swrow-l{writing-mode:vertical-rl;transform:rotate(180deg);display:flex;align-items:center;justify-content:center;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--navy);background:color-mix(in srgb,var(--navy) 8%,transparent);border-radius:10px;text-align:center}
+.swq{border-radius:14px;padding:14px 16px;min-height:120px;border:1px solid var(--line);background:var(--surface)}
+.swq ul{margin:6px 0 0;padding-left:1.15em;display:flex;flex-direction:column;gap:4px}
+.swq li{text-align:left}
+.swqh b{font-size:1.05rem}
+.swq.sF{background:color-mix(in srgb,#2E7D4F 9%,var(--surface));border-color:color-mix(in srgb,#2E7D4F 30%,transparent)}.swq.sF b{color:#2E7D4F}
+.swq.sW{background:color-mix(in srgb,#B26A00 9%,var(--surface));border-color:color-mix(in srgb,#B26A00 30%,transparent)}.swq.sW b{color:#B26A00}
+.swq.sO{background:color-mix(in srgb,#1F4C9A 9%,var(--surface));border-color:color-mix(in srgb,#1F4C9A 30%,transparent)}.swq.sO b{color:#1F4C9A}
+.swq.sT{background:color-mix(in srgb,#B3261E 8%,var(--surface));border-color:color-mix(in srgb,#B3261E 30%,transparent)}.swq.sT b{color:#B3261E}
+@media (max-width:640px){.swmx{grid-template-columns:minmax(0,1fr)}.swrow-l{writing-mode:horizontal-tb;transform:none;padding:6px}}
+.atq{border:1px solid var(--line);border-radius:16px;padding:16px;background:var(--surface);display:flex;flex-direction:column;gap:6px}
+.atq p{font-weight:600;text-align:left}
+.seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:6px;padding:5px;border-radius:12px;background:var(--surface2)}
+.seg button{border:0;border-radius:9px;padding:10px;font-weight:700;cursor:pointer;background:transparent;color:var(--muted);transition:background .15s,color .15s}
+.seg button:hover{background:var(--surface);color:var(--ink)}
+.seg button.on{background:#12264D;color:#fff;box-shadow:0 6px 14px -8px rgba(18,38,77,.9)}
+.amwrap{display:grid;grid-template-columns:34px minmax(0,1fr);grid-template-rows:auto auto;gap:8px;max-width:620px;margin:0 auto}
+.amaxis-y{grid-row:1;display:flex;align-items:center;justify-content:center}
+.amaxis-y span{writing-mode:vertical-rl;transform:rotate(180deg);font-weight:700;color:var(--navy);font-size:.85rem;letter-spacing:.06em}
+.amgrid{display:grid;grid-template-columns:62px repeat(3,minmax(0,1fr));gap:6px}
+.amaxis-x{grid-column:2;text-align:center;font-weight:700;color:var(--navy);font-size:.85rem;letter-spacing:.06em}
+.amy,.amx{display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:700;color:var(--muted)}
+.amy{justify-content:flex-end;padding-right:6px}
+.amc{aspect-ratio:1.5;max-width:100%;border-radius:12px;display:grid;place-items:center;border:1px solid var(--line);transition:all .2s}
+.amc.lv0{background:color-mix(in srgb,var(--navy) 3%,var(--surface))}.amc.lv1{background:color-mix(in srgb,var(--navy) 7%,var(--surface))}.amc.lv2{background:color-mix(in srgb,var(--navy) 11%,var(--surface))}.amc.lv3{background:color-mix(in srgb,var(--navy) 15%,var(--surface))}.amc.lv4{background:color-mix(in srgb,var(--navy) 20%,var(--surface))}
+.amc.on{background:linear-gradient(135deg,#F0D48E,#C9A24A);border-color:#A87B22;box-shadow:0 12px 26px -14px rgba(168,123,34,.9);transform:scale(1.03)}
+.amk{display:inline-flex;align-items:center;gap:6px;background:#12264D;color:#fff;font-weight:700;font-size:.85rem;padding:6px 12px;border-radius:99px;white-space:nowrap}
+.amk svg{width:15px;height:15px;color:#E8C77A}
+.amhint{text-align:center;font-weight:600;color:var(--navy);margin-top:12px}
+@media (max-width:520px){.amgrid{grid-template-columns:44px repeat(3,minmax(0,1fr))}.amk{font-size:.7rem;padding:4px 8px}.amc{aspect-ratio:1.1}}
+/* Seção 3 guiada */
+.howto{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:14px;background:linear-gradient(135deg,color-mix(in srgb,var(--blue) 8%,var(--surface)),var(--surface));border:1px solid color-mix(in srgb,var(--blue) 25%,transparent);margin-bottom:16px}
+.howto>svg{width:24px;height:24px;color:var(--blue);margin-top:2px}.howto p{color:var(--muted);margin-top:2px}
+.swqs{border-radius:12px;background:var(--surface2);padding:10px 12px}
+.swqs span,.aqs>span{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--gold)}
+.swqs ol{margin:6px 0 0;padding-left:1.2em;display:flex;flex-direction:column;gap:3px;font-size:.92rem}
+.swqs li{text-align:left}
+.swsrc{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px}.swsrc input{font-size:.86rem;padding:7px 10px}
+@media (max-width:560px){.swsrc{grid-template-columns:minmax(0,1fr)}}
+.mxfig{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(260px,1fr);gap:16px;margin-top:18px;align-items:start}
+.mxfig.v{grid-template-columns:minmax(0,1.6fr) minmax(220px,1fr)}
+.mxfig.v>div:only-child{grid-column:1/-1}
+@media (max-width:980px){.mxfig,.mxfig.v{grid-template-columns:minmax(0,1fr)}}
+.mxbox{background:var(--surface2)}
+.figbox{background:var(--surface);border:1px dashed color-mix(in srgb,var(--gold2) 60%,transparent)}
+.figs{display:flex;flex-direction:column;gap:12px;margin-top:10px}
+.figed{display:flex;flex-direction:column;gap:8px;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--surface2)}
+.fign{color:var(--navy)}
+.figed .imgbox{min-height:110px}.figed .imgbox img{max-height:200px}
+.figed .fgrid{gap:6px}.figed input{font-size:.88rem;padding:7px 10px}
+.figcol{display:flex;flex-direction:column;gap:14px}
+.fig3{margin:0;display:flex;flex-direction:column;gap:6px}
+.fig3 img{width:100%;border-radius:10px;border:1px solid var(--line);cursor:zoom-in;background:#fff}
+.fig3 figcaption{font-size:.88rem;text-align:left}.fig3 figcaption b{color:var(--navy)}
+svg.ic.lk{width:12px;height:12px;vertical-align:-1px}
+.att{font-size:1.05rem}.atp{font-weight:600;text-align:left}
+.aqs{display:flex;flex-direction:column;gap:8px;padding:12px;border-radius:12px;background:var(--surface2);margin-top:6px}
+.aq{display:flex;flex-direction:column;gap:6px}.aqt{font-size:.92rem;text-align:left}
+.mini-seg{display:inline-flex;gap:4px;flex-wrap:wrap}
+.mini-seg button{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:4px 12px;font-size:.84rem;font-weight:600;color:var(--muted);cursor:pointer}
+.mini-seg button.on.s{background:#E3F2E9;border-color:#9FD1B3;color:#2E7D4F}.mini-seg button.on.p{background:#F6EBCF;border-color:#E3C987;color:#8A5A12}.mini-seg button.on.n{background:#F8E0DE;border-color:#E9AFAA;color:#B3261E}
+.atend{font-size:.88rem;color:var(--muted);display:block;text-align:left;padding:8px 10px;border-radius:10px;background:color-mix(in srgb,var(--gold2) 10%,transparent)}
+.atend svg{color:var(--gold);width:15px;height:15px;vertical-align:-2px;margin-right:4px}.atend b{color:var(--ink)}
+.aqv{margin:4px 0 8px;padding-left:1.2em;display:flex;flex-direction:column;gap:4px}.aqv li{text-align:left}
+.pfban{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 14px;border-radius:12px;margin-bottom:12px;background:color-mix(in srgb,var(--purple,#5B2A86) 8%,var(--surface));border:1px solid color-mix(in srgb,var(--purple,#5B2A86) 25%,transparent);font-size:.92rem}
+.pfban>svg{width:20px;height:20px;color:var(--purple,#5B2A86);flex:none}.pfban>div{flex:1;min-width:200px;text-align:left}
+.pfban.warn{background:color-mix(in srgb,var(--gold2) 14%,var(--surface));border-color:color-mix(in srgb,var(--gold2) 50%,transparent)}.pfban.warn>svg{color:var(--gold)}
 
 @page{size:A1 portrait;margin:0}
 @media print{
@@ -804,7 +916,7 @@ details.card[open]>summary::before{transform:rotate(90deg)}
   </div>
 </nav>
 <main id="app"><div class="wrap"><div class="empty"><b>Carregando o sistema…</b>Conectando ao banco de dados.</div></div></main>
-<div class="foot">Curso de Engenharia de Produção · Faculdade de Tecnologia · Universidade Federal do Amazonas · Manaus/AM<br><small style="opacity:.7">Atualização do sistema: 29/10/2026 · PE Básico com template e versões</small></div>
+<div class="foot">Curso de Engenharia de Produção · Faculdade de Tecnologia · Universidade Federal do Amazonas · Manaus/AM<br><small style="opacity:.7">Atualização do sistema: 29/10/2026 · perguntas curtas e adaptadas à natureza jurídica (v6)</small></div>
 <div id="printArea"></div>
 
 <script>
@@ -914,7 +1026,7 @@ function hydrateImgs(root){$$('img[data-img]',root).forEach(async im=>{const d=a
 
 /* ===================== Estrutura do PE (Modelo 2 e Modelo 1) ===================== */
 const SEGMENTOS=['Alimentação','Comércio','Serviços','Indústria','Educação','Saúde','Organização religiosa','ONG / Terceiro setor','Transporte e logística','Tecnologia','Cultura e audiovisual','Outro'];
-const NATUREZAS=['MEI – Microempreendedor Individual','EI – Empresário Individual','SLU – Sociedade Limitada Unipessoal','LTDA – Sociedade Limitada','S/A – Sociedade Anônima','Associação privada','Fundação privada','Organização religiosa','Órgão público','Outra'];
+const NATUREZAS=['MEI – Microempreendedor Individual','EI – Empresário Individual','SLU – Sociedade Limitada Unipessoal','LTDA – Sociedade Limitada','S/A – Sociedade Anônima','Cooperativa','Associação privada','Fundação privada','Organização religiosa','Órgão público','Empresa pública ou sociedade de economia mista','Outra'];
 const STATUS=['Não iniciado','Em andamento','Concluído','Atrasado','Cancelado'];
 const PERSP=[
  {k:'SF',n:'Sustentabilidade Financeira',c:'MF',ob:'OB4',q:'Para alcançar nossa missão e visão, como podemos melhorar nosso relacionamento com a sociedade e garantir a sustentabilidade financeira?'},
@@ -924,40 +1036,28 @@ const PERSP=[
 const SECOES=[
  {id:'capa',g:'1. Informações iniciais',n:'1.1 Capa',d:'Identificação do documento e da organização alvo escolhida pela equipe.',f:[
   {k:'organizacao',l:'Nome da organização alvo'},
-  {k:'cidade',l:'Cidade',ph:'Manaus',w:1},{k:'codigo',l:'Código',ph:'PE 01',w:1},{k:'revisao',l:'Revisão nº',t:'number',w:1},{k:'dataRevisao',l:'Data da revisão',t:'date',w:1},
+  {k:'cidade',l:'Cidade',ph:'Manaus',w:1},{k:'cnpj',l:'CNPJ',ph:'00.000.000/0000-00',w:1},{k:'revisao',l:'Versão nº',t:'number',w:1},{k:'dataRevisao',l:'Data da revisão',t:'date',w:1},
   {k:'representante',l:'Representante da organização',ph:'Nome do(a) representante'},
   {k:'logo',l:'Logomarca da organização',t:'image'}]},
- {id:'perfil',n:'1.2 Perfil institucional',d:'Dados cadastrais, natureza jurídica, fontes de recursos e principais fatos históricos.',f:[
+ {id:'perfil',n:'1.2 Perfil institucional',d:'Dados cadastrais, natureza jurídica e principais fatos históricos.',f:[
   {k:'email',l:'E-mail institucional',t:'email',w:2},{k:'site',l:'Site institucional',t:'url',w:2},
-  {k:'endereco',l:'Endereço',w:2},{k:'diretor',l:'Diretor(a)',w:2},
-  {k:'natureza',l:'Natureza jurídica',t:'select',opts:NATUREZAS,w:2,help:'Consulte a lista oficial de naturezas jurídicas da Receita Federal.'},
-  {k:'atividade',l:'Principal atividade',t:'textarea',w:4},
-  {k:'recBanco',l:'Recursos: banco (%)',t:'number',w:1},{k:'recConvenio',l:'Recursos: convênio (%)',t:'number',w:1},{k:'recProprios',l:'Recursos: próprios (%)',t:'number',w:1},{k:'recOutros',l:'Recursos: outros (%)',t:'number',w:1},
-  {k:'historico',l:'Principais fatos históricos',t:'list',max:10,item:'fato',sub:[{k:'quando',l:'Quando',w:1,ph:'2020'},{k:'fato',l:'Fato histórico',t:'textarea',w:3,rows:2}]}]},
- {id:'proposito',g:'2. Quem somos',n:'2.1–2.3 Missão, visão, slogan e valores',d:'O propósito organizacional. A missão diz a razão de existir e o grande diferencial; a visão diz onde a organização quer estar ao final do horizonte do plano.',f:[
-  {k:'missao',l:'2.1 Missão',t:'textarea',max:40,ph:'Qual a razão da existência da organização? Inclua o grande diferencial do empreendimento.'},
-  {k:'visao',l:'2.2 Visão',t:'textarea',max:30,ph:'Onde a organização deseja estar ao final do horizonte do plano?',vis:true},
+  {k:'diretor',l:'Diretor(a)',w:2},
+  {k:'natureza',l:'Natureza jurídica',t:'select',opts:NATUREZAS,w:2,help:'Consulte a lista oficial de naturezas jurídicas da Receita Federal. A escolha adapta as perguntas da seção 3 ao tipo de organização.'},
+  {k:'endereco',l:'Endereço',w:3,ph:'Rua, número, bairro, CEP'},{k:'cidadePerfil',l:'Cidade',w:1,ph:'Manaus – AM'},
+  {k:'historico',l:'Principais fatos históricos',t:'list',max:15,item:'fato',help:'Informe o ano/semestre ou a data (dd/mm/aaaa) e o fato principal ocorrido, do mais antigo ao mais recente.',sub:[{k:'quando',l:'Ano/semestre ou data',w:1,ph:'2020 · 2021/2 · 15/03/2022'},{k:'fato',l:'Fato principal ocorrido',t:'textarea',w:3,rows:2}]}]},
+ {id:'proposito',g:'2. Quem somos',n:'2.1–2.3 Missão, visão, slogan e valores',d:'',f:[
+  {k:'missao',l:'2.1 Missão',t:'textarea',max:30,help:'Máximo de 30 palavras.',ph:'Qual a razão da existência da organização? Inclua o grande diferencial do empreendimento.'},
+  {k:'visao',l:'2.2 Visão',t:'textarea',max:30,help:'Máximo de 30 palavras.',ph:'Onde a organização deseja estar ao final do horizonte do plano?',vis:true},
   {k:'slogan',l:'2.3 Slogan'},
   {k:'valores',l:'2.3 Valores',t:'list',max:6,item:'valor',sub:[{k:'palavra',l:'Palavra-chave',w:1},{k:'descricao',l:'Descrição',t:'textarea',w:3,rows:2}]}]},
- {id:'areas',n:'2.4 Áreas estratégicas de atuação',d:'Áreas de atuação, público-alvo e principais produtos ou serviços de cada área.',f:[
+ {id:'areas',n:'2.4 Áreas estratégicas de atuação para os próximos 3 anos',d:'',f:[
   {k:'areas',l:'Áreas de atuação',t:'list',max:4,item:'área',sub:[{k:'area',l:'Área de atuação',w:2},{k:'publico',l:'Público-alvo',w:2},{k:'produtos',l:'Principais produtos ou serviços',t:'textarea',w:4,rows:2}]}]},
  {id:'gestores',n:'2.5 Gestores e organograma',d:'Equipe gestora (cargos usados na Matriz RACI e na Matriz X) e organograma funcional.',f:[
   {k:'gestores',l:'Gestores',t:'list',max:6,item:'gestor',sub:[{k:'cargo',l:'Cargo',w:2},{k:'nome',l:'Nome do gestor',w:2}]},
   {k:'organograma',l:'2.6 Organograma funcional',t:'image'}]},
- {id:'raci',n:'2.6 Matriz RACI',t:'raci',d:'Papéis, responsabilidades e autoridade. R = responsável pela execução · A = autoridade para aprovar · C = consultado para contribuir · I = informado do progresso.'},
- {id:'macro',g:'3. Análise do ambiente — onde e como estamos?',n:'3.1 Síntese da análise macro (Manaus)',d:'Segmentos e variáveis do macroambiente que favorecem ou ameaçam o empreendimento. Cite as fontes dos dados.',f:[
-  {k:'itens',l:'Segmentos e variáveis',t:'list',max:8,item:'segmento',sub:[{k:'segmento',l:'Segmento e variável',w:1,ph:'Ex.: Clima'},{k:'analise',l:'Análise',t:'textarea',w:3,rows:3},{k:'fonte',l:'Fonte',w:4,ph:'Ex.: IBGE (2022)'}]}]},
- {id:'local',n:'3.2 Síntese da análise local (5 Forças de Porter)',d:'Análise competitiva do setor e posição atual da organização no mercado.',f:[
-  {k:'rivalidade',l:'Rivalidade entre os concorrentes',t:'textarea',w:2},{k:'fornecedores',l:'Poder de negociação dos fornecedores',t:'textarea',w:2},
-  {k:'compradores',l:'Poder de negociação dos compradores',t:'textarea',w:2},{k:'substitutos',l:'Ameaça de produtos substitutos',t:'textarea',w:2},
-  {k:'entrantes',l:'Ameaça de entrada de novos concorrentes',t:'textarea',w:2},{k:'ranking',l:'Principais concorrentes e ranking atual da organização',t:'textarea',w:2,ph:'Os avaliadores da Mostra costumam pedir o ranking atual da empresa.'}]},
- {id:'swot',n:'3.3 Pontos fortes e fracos',d:'Ambiente interno: use brainstorming, figura rica e matriz de score.',f:[
-  {k:'fortes',l:'Pontos fortes',t:'list',max:8,item:'ponto forte',w:2,sub:[{k:'item',l:'Ponto forte',w:4}]},
-  {k:'fracos',l:'Pontos fracos',t:'list',max:8,item:'ponto fraco',w:2,sub:[{k:'item',l:'Ponto fraco',w:4}]},
-  {k:'foto',l:'Foto do brainstorming ou figura rica',t:'image'}]},
- {id:'oport',n:'3.4 Oportunidades e ameaças com recomendações',d:'Para cada oportunidade e ameaça do ambiente externo, recomende como usar os pontos fortes e como melhorar os pontos fracos.',f:[
-  {k:'oportunidades',l:'Principais oportunidades',t:'list',max:6,item:'oportunidade',sub:[{k:'item',l:'Oportunidade',w:4},{k:'sf',l:'Captar usando os pontos fortes',t:'textarea',w:2,rows:2},{k:'sw',l:'Captar melhorando os pontos fracos',t:'textarea',w:2,rows:2}]},
-  {k:'ameacas',l:'Principais ameaças',t:'list',max:6,item:'ameaça',sub:[{k:'item',l:'Ameaça',w:4},{k:'sf',l:'Reduzir impactos usando os pontos fortes',t:'textarea',w:2,rows:2},{k:'sw',l:'Reduzir impactos melhorando os pontos fracos',t:'textarea',w:2,rows:2}]}]},
+ {id:'raci',n:'2.6 Matriz RACI',t:'raci',d:'Papéis, responsabilidades e autoridade. R = responsável pela execução · A = autoridade para aprovar · C = consultado para contribuir · I = informado do progresso · — significa que o cargo não participa daquela atividade.'},
+ {id:'swotm',g:'3. Análise do ambiente — qual é nossa situação e como podemos competir?',n:'3.1 Matriz SWOT',t:'swotm',d:'Identifique os principais fatores internos e externos que influenciam a organização. Adicione um fator por item.'},
+ {id:'atrat',n:'3.2 Matriz de Atratividade',t:'atrat',d:'Com base na SWOT, avalie a atratividade do ambiente externo e a capacidade da organização para atuar nele. As duas respostas definirão a posição da organização na matriz.'},
  {id:'bsc',g:'4. Planejamento — o que vamos fazer?',n:'4.1 e 4.3 Diretrizes e Balanced Scorecard',persp:true,d:'Para cada perspectiva: objetivo estratégico, metas, indicadores (KPIs), fórmula, metas anuais, plano de ação do 1º ano e responsável. Estes dados geram automaticamente a Matriz X e o Mapa Estratégico.',f:[
   {k:'objetivo',l:'Objetivo estratégico',t:'textarea',rows:2},
   {k:'metas',l:'Metas estratégicas',t:'list',max:4,item:'meta',sub:[{k:'meta',l:'Meta estratégica',t:'textarea',w:4,rows:2},{k:'indicador',l:'Principal indicador (KPI)',w:2},{k:'formula',l:'Fórmula do indicador',w:2},{k:'m1',yr:0,w:1},{k:'m2',yr:1,w:1},{k:'m3',yr:2,w:1},{k:'resp',l:'Responsável',w:1},{k:'plano',l:'Plano de ação ou projeto para o 1º ano',t:'textarea',w:4,rows:2}]}]},
@@ -1012,7 +1112,7 @@ function fieldHTML(f,v,path,ctx){
     case 'check':return `<label class="fld chk" ${span}><input type="checkbox" id="${id}" data-k="${path}" ${v?'checked':''}> ${esc(lab(f))}</label>`;
     case 'image':return `<div class="fld" ${span}>${L}<div class="imgbox">${v?`<img data-img="${esc(v)}" alt="${esc(lab(f))}">`:'<div class="imgph">Nenhuma imagem enviada.<br>JPG ou PNG; a imagem é otimizada automaticamente.</div>'}</div><div class="row"><label class="btn sm ghost" for="${id}">${v?'Trocar imagem':'Enviar imagem'}</label><input type="file" accept="image/*" id="${id}" data-file="${path}" hidden>${v?`<button type="button" class="btn sm danger" data-clr="${path}">Remover</button>`:''}</div></div>`;
     case 'list':{const arr=Array.isArray(v)?v:[];
-      return `<div class="fld lst" ${span}>${L}<div class="rows">${arr.map((r,i)=>`<div class="lrow"><div class="lnum">${i+1}</div><div class="fgrid">${f.sub.map(s=>fieldHTML(s,r?.[s.k],`${path}.${i}.${s.k}`,ctx)).join('')}</div><button type="button" class="icon" data-del="${path}.${i}" title="Remover" aria-label="Remover ${esc(f.item||'linha')} ${i+1}">×</button></div>`).join('')||`<div class="help">Nenhum(a) ${esc(f.item||'item')} adicionado(a).</div>`}</div>${arr.length<(f.max||20)?`<button type="button" class="btn sm ghost" data-add="${path}">+ Adicionar ${esc(f.item||'linha')}</button>`:`<span class="help">Limite de ${f.max} atingido.</span>`}</div>`}
+      return `<div class="fld lst" ${span}>${L}${help}<div class="rows">${arr.map((r,i)=>`<div class="lrow"><div class="lnum">${i+1}</div><div class="fgrid">${f.sub.map(s=>fieldHTML(s,r?.[s.k],`${path}.${i}.${s.k}`,ctx)).join('')}</div><button type="button" class="icon" data-del="${path}.${i}" title="Remover" aria-label="Remover ${esc(f.item||'linha')} ${i+1}">×</button></div>`).join('')||`<div class="help">Nenhum(a) ${esc(f.item||'item')} adicionado(a).</div>`}</div>${arr.length<(f.max||20)?`<button type="button" class="btn sm ghost" data-add="${path}">+ Adicionar ${esc(f.item||'linha')}</button>`:`<span class="help">Limite de ${f.max} atingido.</span>`}</div>`}
     case 'date':return `<label class="fld" ${span}>${L}<input type="text" inputmode="numeric" maxlength="10" data-date="1" id="${id}" data-k="${path}" value="${esc(isoToBR(v))}" placeholder="dd/mm/aaaa" autocomplete="off">${help}</label>`;
     case 'number':return `<label class="fld" ${span}>${L}<input type="text" inputmode="decimal" data-num="1" id="${id}" data-k="${path}" value="${esc(numBR(v))}"${ph||' placeholder="0"'}>${help}</label>`;
     default:return `<label class="fld" ${span}>${L}<input type="${f.t||'text'}" id="${id}" data-k="${path}" value="${esc(v)}"${ph}>${help}</label>`;
@@ -1040,6 +1140,8 @@ function mountForm(el,fields,obj,ctx,onChange){
 
 /* ===================== Progresso ===================== */
 function secProg(sec,pe){const d=pe?.[sec.id];
+  if(sec.t==='swotm')return swotFill(d);
+  if(sec.t==='atrat')return ((d?.mercado?1:0)+(d?.capacidade?1:0)+(((d?.mercadoPq||d?.justificativa)||'').trim()?1:0)+((d?.capacidadePq||'').trim()?1:0))/4;
   if(sec.t==='raci'){return (d?.linhas||[]).some(r=>Object.keys(r).some(k=>/^c\d$/.test(k)&&r[k]))?1:0}
   if(sec.persp){let t=0,o=0;PERSP.forEach(p=>sec.f.forEach(f=>{t++;if(filled(d?.[p.k]?.[f.k]))o++}));return o/t}
   return sec.f.filter(f=>filled(d?.[f.k])).length/sec.f.length}
@@ -1080,6 +1182,8 @@ function secView(sec,pe,ano){
   if(sec.id==='mapa')return mapaHTML(pe,ano);
   if(sec.id==='matrizx')return matrizXHTML(pe)+'<div style="margin-top:12px">'+desdobHTML(pe,ano)+'</div>';
   if(sec.t==='raci')return raciView(pe);
+  if(sec.t==='swotm')return `<div class="mxfig v"><div>${swotMatrixHTML(pe?.swotm)}</div>${figsOk(pe?.swotm?.figuras).length?`<div class="figcol">${figsView(pe.swotm.figuras,1)}</div>`:''}</div>`+(hasOld3(pe)?`<details style="margin-top:10px"><summary><b>Registros anteriores</b></summary>${oldRecordsHTML(pe)}</details>`:'');
+  if(sec.t==='atrat')return atratView(pe);
   const d=pe?.[sec.id]||{};
   if(sec.persp)return PERSP.map(p=>filled(d[p.k])?`<div class="vsec"><h4>${p.k} · ${p.n}</h4>${dlHTML(sec.f,d[p.k])}</div>`:'').join('')||'<span class="muted">Seção não preenchida.</span>';
   return dlHTML(sec.f,d)}
@@ -1260,7 +1364,7 @@ async function renderAlunoLogin(){
     const membros=$('#nvMembros').value.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{const[n,m]=l.split(/[;,]/);return{nome:(n||'').trim(),email:(m||'').trim()}});
     const id='eq_'+uid();const org=$('#nvOrg').value.trim();const lk=mkey($('#nvLider').value.trim());if(!/^\d{4,6}$/.test($('#nvPin').value))return toast('O PIN deve ter de 4 a 6 dígitos.');
     await Store.set('equipes',id,{semestre:S.cfg.semestre,edicao:S.cfg.edicao,anoInicio:S.cfg.anoInicio,nome,slogan:$('#nvSlogan').value.trim(),organizacao:org,segmento:$('#nvSeg').value,lider:$('#nvLider').value.trim(),liderEmail:$('#nvEmail').value.trim(),membros,gestor:{},pins:{[lk]:await sha('pin:'+id+':'+lk+':'+$('#nvPin').value)},senhaHash:await sha($('#nvS1').value),criadaEm:Date.now(),atualizadoEm:Date.now(),progresso:0,publico:false,arquivado:false});
-    await Store.set('pes',id,{capa:{organizacao:org,cidade:'Manaus',codigo:'PE 01',revisao:1}});
+    await Store.set('pes',id,{capa:{organizacao:org,cidade:'Manaus',revisao:1}});
     setSess({role:'aluno',eqId:id,nome:$('#nvLider').value.trim(),papel:'Líder (representante)',mk:lk});S.atab='inicio';toast('Equipe criada. Repasse a senha aos membros e ao gestor.');render()};
 }
 async function renderAluno(){
@@ -1323,7 +1427,7 @@ async function openSec(id){await flushSave();const fresh=await Store.get('pes',S
 function refreshDots(){const nav=$('.secnav');if(nav){nav.innerHTML=secNavHTML();$$('[data-sec]',nav).forEach(b=>b.onclick=()=>openSec(b.dataset.sec))}}
 function drawSec(){
   const sec=SECOES.find(s=>s.id===S.sec)||SECOES[0];const sp=$('#secpane');const i=SECOES.indexOf(sec);const upd=S.pe['upd_'+sec.id];
-  sp.innerHTML=`<div class="card stack"><div class="row between"><div><div class="eyebrow">${esc(sec.g||SECOES.slice(0,i).reverse().find(s=>s.g)?.g||'')}</div><h2>${esc(sec.n)}</h2></div><span class="savest" id="savest">${upd?`Última edição: ${esc(upd.por)} · ${fmtDT(upd.em)}`:''}</span></div><p>${esc(sec.d||'')}</p>
+  sp.innerHTML=`<div class="card stack"><div class="row between"><div><div class="eyebrow">${esc(sec.g||SECOES.slice(0,i).reverse().find(s=>s.g)?.g||'')}</div><h2>${esc(sec.n)}</h2></div><span class="savest" id="savest">${upd?`Última edição: ${esc(upd.por)} · ${fmtDT(upd.em)}`:''}</span></div>${sec.d?`<p>${esc(sec.d)}</p>`:''}
    ${S.fb[sec.id]?`<div class="fbk"><b>Recomendação do professor:</b> ${nl(S.fb[sec.id])}</div>`:''}<div id="secbody"></div></div>
    <div class="row between"><button class="btn ghost" id="prevS" ${i===0?'disabled':''}>← Seção anterior</button><button class="btn" id="nextS" ${i===SECOES.length-1?'disabled':''}>Próxima seção →</button></div>`;
   $('#prevS').onclick=()=>openSec(SECOES[i-1].id);$('#nextS').onclick=()=>openSec(SECOES[i+1].id);
@@ -1331,6 +1435,8 @@ function drawSec(){
   if(sec.t==='auto'){body.innerHTML=(sec.id==='mapa'?mapaHTML(S.pe):matrizXHTML(S.pe)+'<div style="margin-top:14px">'+desdobHTML(S.pe)+'</div>')+'<p class="help" style="margin-top:10px">Para alterar, edite a seção “4.1 e 4.3 Diretrizes e Balanced Scorecard”.</p>';return}
   const d=S.pe[sec.id]||(S.pe[sec.id]={});
   if(sec.t==='raci')return mountRaci(body,d,ch);
+  if(sec.t==='swotm')return mountSwot(body,d,ch);
+  if(sec.t==='atrat')return mountAtrat(body,d,ch);
   if(sec.persp){
     if(sec.tabs){body.innerHTML=`<div class="ptabs" role="tablist">${PERSP.map(p=>`<button data-pt="${p.k}" class="${S.ptab===p.k?'on':''}">${p.k} · ${p.n}</button>`).join('')}</div><p class="help" id="pq"></p><div id="pform"></div>`;
       const draw=()=>{const p=PERSP.find(x=>x.k===S.ptab);$('#pq').textContent=p.q;d[p.k]=d[p.k]||{};mountForm($('#pform'),sec.f,d[p.k],{...ctx,idp:p.k+'_',imgp:ctx.imgp+'_'+p.k},ch)};
@@ -1340,11 +1446,23 @@ function drawSec(){
     return}
   mountForm(body,sec.f,d,ctx,ch);
 }
-function mountRaci(el,d,ch){d.linhas=d.linhas||[{resp:'Executar compras'},{resp:'Elaborar padrões'},{resp:'Contratar'}];
+function mountRaci(el,d,ch){const MAXR=30,INI=10,OPTS=['','R','A','C','I','—'];
+  d.linhas=d.linhas||[{resp:'Executar compras'},{resp:'Elaborar padrões'},{resp:'Contratar'}];while(d.linhas.length<INI)d.linhas.push({resp:''});
   const cargos=(S.pe.gestores?.gestores||[]).filter(g=>g.cargo).map(g=>g.cargo);
-  const draw=()=>{el.innerHTML=cargos.length?`<div class="tbl-wrap"><table><thead><tr><th style="min-width:200px">Responsabilidade</th>${cargos.map(c=>`<th>${esc(c)}</th>`).join('')}<th></th></tr></thead><tbody>${d.linhas.map((r,i)=>`<tr><td><input data-k="linhas.${i}.resp" id="rc_${i}" value="${esc(r.resp)}" aria-label="Responsabilidade ${i+1}"></td>${cargos.map((c,j)=>`<td><select data-k="linhas.${i}.c${j}" id="rc_${i}_${j}" aria-label="${esc(c)}">${['','R','A','C','I'].map(o=>`<option ${r['c'+j]===o?'selected':''}>${o}</option>`).join('')}</select></td>`).join('')}<td><button class="icon" data-del="${i}" aria-label="Remover linha">×</button></td></tr>`).join('')}</tbody></table></div><button class="btn sm ghost" id="raciAdd" style="margin-top:10px">+ Adicionar responsabilidade</button>`:'<div class="empty"><b>Cadastre primeiro os gestores</b>A matriz usa os cargos da seção 2.5.</div>'};
-  draw();el.oninput=e=>{const k=e.target.dataset.k;if(k){setPath(d,k,e.target.value);ch()}};
-  el.onclick=e=>{if(e.target.id==='raciAdd'){d.linhas.push({resp:''});draw();ch()}else if(e.target.dataset.del){d.linhas.splice(+e.target.dataset.del,1);draw();ch()}}}
+  const cls=v=>({R:'rR',A:'rA',C:'rC',I:'rI','—':'rN'}[v]||'');
+  const cnt=()=>d.linhas.filter(r=>(r.resp||'').trim()).length;
+  const draw=(focus)=>{if(!cargos.length){el.innerHTML='<div class="empty"><b>Cadastre primeiro os gestores</b>A matriz usa os cargos da seção 2.5.</div>';return}
+    el.innerHTML=`<div class="raci-top"><div class="raci-leg">${[['R','Responsável'],['A','Aprova'],['C','Consultado'],['I','Informado'],['—','Não participa']].map(([k,l])=>`<span class="rc ${cls(k)}">${k}</span><small>${l}</small>`).join('')}</div><span class="help"><b class="num">${cnt()}</b> de ${MAXR} responsabilidades · Enter passa para a linha seguinte</span></div>
+    <div class="raci-wrap"><table class="raci"><thead><tr><th class="rn">#</th><th class="rr">Responsabilidade / atividade</th>${cargos.map(c=>`<th class="rcol" title="${esc(c)}"><span>${esc(c)}</span></th>`).join('')}<th class="rx"></th></tr></thead><tbody>
+    ${d.linhas.map((r,i)=>`<tr><td class="rn num">${i+1}</td><td class="rr"><input data-k="linhas.${i}.resp" data-row="${i}" id="rc_${i}" value="${esc(r.resp)}" placeholder="Descreva a atividade" aria-label="Responsabilidade ${i+1}"></td>${cargos.map((c,j)=>`<td class="rcol"><select class="${cls(r['c'+j])}" data-k="linhas.${i}.c${j}" id="rc_${i}_${j}" aria-label="${esc(c)} · linha ${i+1}">${OPTS.map(o=>`<option value="${o}" ${(r['c'+j]||'')===o?'selected':''}>${o||'·'}</option>`).join('')}</select></td>`).join('')}<td class="rx"><button class="icon" data-del="${i}" aria-label="Remover linha ${i+1}" title="Remover linha">×</button></td></tr>`).join('')}
+    </tbody></table></div>
+    <div class="row" style="margin-top:12px">${d.linhas.length<MAXR?`<button class="btn sm ghost" id="raciAdd">+ Adicionar responsabilidade</button><button class="btn sm ghost" id="raciAdd5">+ 5 linhas</button>`:`<span class="help">Limite de ${MAXR} responsabilidades atingido.</span>`}</div>`;
+    if(focus!=null){const x=$('#rc_'+focus,el);if(x){x.focus();x.scrollIntoView({block:'nearest'})}}};
+  draw();
+  el.oninput=e=>{const t=e.target,k=t.dataset.k;if(!k)return;setPath(d,k,t.value);if(t.tagName==='SELECT')t.className=cls(t.value);else{const h=$('.raci-top .num',el);if(h)h.textContent=cnt()}ch()};
+  el.onkeydown=e=>{const t=e.target;if(e.key==='Enter'&&t.dataset.row!=null){e.preventDefault();const n=+t.dataset.row+1;if(n>=d.linhas.length){if(d.linhas.length>=MAXR)return;d.linhas.push({resp:''});draw(n);ch()}else{const x=$('#rc_'+n,el);x&&x.focus()}}};
+  el.onclick=e=>{const b=e.target.closest('button');if(!b)return;if(b.id==='raciAdd'||b.id==='raciAdd5'){const k=Math.min(b.id==='raciAdd'?1:5,MAXR-d.linhas.length);const f=d.linhas.length;for(let q=0;q<k;q++)d.linhas.push({resp:''});draw(f);ch()}
+    else if(b.dataset.del){d.linhas.splice(+b.dataset.del,1);if(d.linhas.length<1)d.linhas.push({resp:''});draw();ch()}}}
 function queueSave(secId){S.dirty[secId]=true;const st=$('#savest');if(st){st.textContent='Salvando…';st.className='savest ing'}clearTimeout(S.saveT);S.saveT=setTimeout(flushSave,1200)}
 async function flushSave(){clearTimeout(S.saveT);const ks=Object.keys(S.dirty);if(!ks.length||!S.eq)return;S.dirty={};const part={};const now=Date.now();
   ks.forEach(k=>{part[k]=S.pe[k];part['upd_'+k]={por:S.sess?.nome||'—',em:now};S.pe['upd_'+k]=part['upd_'+k]});
@@ -1776,6 +1894,206 @@ function simHTML(r,opt={}){if(!r)return '<div class="empty"><b>Sem conteúdo par
     <p class="help">Comparação por sequências de 4 palavras significativas, desconsiderando o texto padrão do modelo (frases presentes em muitos PEs). Faixas: Baixa &lt; 15% · Moderada 15–34% · Alta ≥ 35%. Semelhança não é prova de cópia: confira os trechos indicados.</p></div></div>
    ${r.top.length?`<h4 style="margin-top:6px">PEs mais parecidos</h4><div class="simlist">${r.top.map(t=>{const [cc]=simLvl(t.score);return `<div class="simrow"><span class="sn">${simLabel(t.eq)}${t.mesmo?' <span class="chip blue">mesmo semestre</span>':''}</span><span class="jb"><i class="${cc}" style="width:${Math.min(100,t.score*100)}%"></i></span><b class="num">${pctS(t.score)}</b></div>`}).join('')}</div>`:''}
    ${r.secs.length?`<h4 style="margin-top:6px">Seções com maior coincidência</h4><div class="tbl-wrap"><table><thead><tr><th>Seção</th><th>Mais parecida com</th><th class="r">Coincidência</th></tr></thead><tbody>${r.secs.slice(0,8).map(x=>`<tr><td>${esc(x.n)}</td><td>${simLabel(x.eq)}</td><td class="r"><span class="chip ${simLvl(x.score)[0]}">${pctS(x.score)}</span></td></tr>`).join('')}</tbody></table></div>`:''}</div>`}
+
+/* ---- Perfis por natureza jurídica: perguntas da seção 3 adaptadas ---- */
+const PERFIS={
+ empresa:{nome:'Empresa',alvo:'Seu negócio',
+  sw:{forcas:{qs:['O que a empresa faz melhor que os concorrentes?','Que recurso da empresa é difícil de copiar?','Por que os clientes voltam?'],ph:'Ex.: equipe experiente e atendimento personalizado.'},
+   fraquezas:{qs:['Onde a empresa perde dinheiro?','O que falta à empresa hoje?','Do que os clientes mais reclamam?'],ph:'Ex.: baixa divulgação e falta de controle de estoques.'},
+   oportunidades:{qs:['Que tendência favorece o negócio?','Que mudança em Manaus abre espaço para a empresa?','Que cliente ainda não foi atendido?'],ph:'Ex.: crescimento da procura pelos produtos ou serviços oferecidos.'},
+   ameacas:{qs:['Que concorrente pode tirar clientes?','Que fator externo pode prejudicar o negócio?','De quem a empresa depende demais?'],ph:'Ex.: novos concorrentes e aumento dos preços dos fornecedores.'}},
+  mercado:{t:'A. Atratividade do mercado',eixo:'Atratividade do mercado',p:'O mercado é favorável?',o:'Considere as oportunidades e ameaças da SWOT.',
+   qs:['A procura está crescendo?','Há clientes dispostos a pagar?','Há espaço frente à concorrência?','Os riscos externos são controláveis?'],
+   ph:'Ex.: a procura cresce 10% ao ano e há poucos concorrentes no bairro, mas os insumos sobem com a inflação.'},
+  capacidade:{t:'B. Capacidade competitiva da empresa',eixo:'Capacidade competitiva da empresa',p:'A empresa consegue competir?',o:'Considere as forças e fraquezas da SWOT.',
+   qs:['Os clientes veem um diferencial?','Há recursos para crescer?','Os preços são competitivos?','A gestão é organizada?'],
+   ph:'Ex.: atendimento é diferencial reconhecido, porém faltam controle de custos e divulgação.'}},
+ micro:{nome:'Microempreendedor ou empresa individual',alvo:'Seu negócio',
+  sw:{forcas:{qs:['O que o negócio faz melhor que os concorrentes?','Qual habilidade do(a) dono(a) faz diferença?','Por que os clientes voltam?'],ph:'Ex.: receita exclusiva e clientela fiel conquistada pelo atendimento do(a) dono(a).'},
+   fraquezas:{qs:['O negócio para sem o(a) dono(a)?','Qual controle financeiro falta?','Do que os clientes mais reclamam?'],ph:'Ex.: mistura das finanças pessoais com as do negócio e falta de controle de custos.'},
+   oportunidades:{qs:['Que canal de venda pode crescer?','Que apoio externo está disponível?','Que cliente ainda não foi atendido?'],ph:'Ex.: vendas por aplicativos de entrega em expansão em Manaus.'},
+   ameacas:{qs:['Que concorrente pode tirar clientes?','Que custo pode subir?','De quem o negócio depende demais?'],ph:'Ex.: abertura de uma rede de lojas no bairro com preços menores.'}},
+  mercado:{t:'A. Atratividade do mercado',eixo:'Atratividade do mercado',p:'O mercado é favorável?',o:'Considere as oportunidades e ameaças da SWOT.',
+   qs:['A procura está crescendo?','O preço cobrado cobre os custos?','Há espaço frente à concorrência?','Os riscos externos são controláveis?'],
+   ph:'Ex.: a procura aumenta nas datas comemorativas e há poucos concorrentes com entrega no bairro.'},
+  capacidade:{t:'B. Capacidade competitiva do negócio',eixo:'Capacidade competitiva do negócio',p:'O negócio consegue competir?',o:'Considere as forças e fraquezas da SWOT.',
+   qs:['Os clientes veem um diferencial?','Há capital de giro para crescer?','Os custos são conhecidos?','As finanças do negócio estão separadas das pessoais?'],
+   ph:'Ex.: produto diferenciado, mas o(a) dono(a) concentra todas as tarefas e não controla o caixa.'}},
+ coop:{nome:'Cooperativa',alvo:'Sua cooperativa',
+  sw:{forcas:{qs:['O que a cooperativa faz melhor que os concorrentes?','Que recurso coletivo é o maior trunfo?','Por que os cooperados permanecem?'],ph:'Ex.: produção regular de cooperados experientes e selo de origem.'},
+   fraquezas:{qs:['Onde a cooperativa perde dinheiro?','Os cooperados participam das decisões?','Do que os compradores mais reclamam?'],ph:'Ex.: baixa participação nas assembleias e atraso nos repasses aos cooperados.'},
+   oportunidades:{qs:['Que novo mercado pode ser acessado?','Que programa público pode comprar da cooperativa?','Que parceria pode fortalecer a cooperativa?'],ph:'Ex.: ampliação das compras da merenda escolar de produtores locais.'},
+   ameacas:{qs:['Que concorrente pode tirar mercado?','Que fator externo pode prejudicar a produção?','De quem a cooperativa depende demais?'],ph:'Ex.: seca dos rios dificultando o escoamento da produção.'}},
+  mercado:{t:'A. Atratividade do mercado',eixo:'Atratividade do mercado',p:'O mercado é favorável?',o:'Considere as oportunidades e ameaças da SWOT.',
+   qs:['A procura pelos produtos está crescendo?','Os compradores pagam um preço justo?','Há espaço frente aos atravessadores?','Os riscos externos são controláveis?'],
+   ph:'Ex.: compras públicas em alta e consumidores valorizando produtos da Amazônia, mas a logística fluvial é instável.'},
+  capacidade:{t:'B. Capacidade competitiva da cooperativa',eixo:'Capacidade competitiva da cooperativa',p:'A cooperativa consegue competir?',o:'Considere as forças e fraquezas da SWOT.',
+   qs:['A produção é regular?','Os compradores veem um diferencial?','Os preços são competitivos?','A gestão é organizada?'],
+   ph:'Ex.: qualidade reconhecida, porém produção irregular e pouca participação nas decisões.'}},
+ terceiro:{nome:'Associação ou fundação (terceiro setor)',alvo:'Sua organização',
+  sw:{forcas:{qs:['Qual o maior resultado da organização para a causa?','Que recurso gera mais credibilidade?','Por que os apoiadores confiam nela?'],ph:'Ex.: 15 anos de atuação reconhecida no bairro e rede ativa de voluntários.'},
+   fraquezas:{qs:['Onde a organização perde recursos?','Que competência falta à equipe?','Do que os beneficiários mais reclamam?'],ph:'Ex.: dependência de um único financiador e pouca divulgação dos resultados.'},
+   oportunidades:{qs:['Que fonte de recursos pode ser acessada?','Que demanda social está crescendo?','Que parceria ainda não foi feita?'],ph:'Ex.: editais de empresas do Polo Industrial voltados à educação.'},
+   ameacas:{qs:['Que fator pode reduzir as receitas?','Que mudança na lei pode afetar a organização?','De quem a organização depende demais?'],ph:'Ex.: encerramento do convênio que financia metade das atividades.'}},
+  mercado:{t:'A. Atratividade do ambiente',eixo:'Atratividade do ambiente',p:'O ambiente favorece a causa?',o:'Considere as oportunidades e ameaças da SWOT.',
+   qs:['A demanda pela causa está crescendo?','Há financiadores interessados?','Há espaço sem sobrepor outras organizações?','Os riscos externos são controláveis?'],
+   ph:'Ex.: a demanda por reforço escolar cresce e há editais disponíveis, mas as doações caíram com a crise.'},
+  capacidade:{t:'B. Capacidade institucional',eixo:'Capacidade institucional',p:'A organização consegue cumprir a missão?',o:'Considere as forças e fraquezas da SWOT.',
+   qs:['Os resultados são reconhecidos?','Há equipe suficiente para crescer?','As receitas são diversificadas?','A prestação de contas é transparente?'],
+   ph:'Ex.: resultados reconhecidos pela comunidade, porém receita concentrada em um único financiador.'}},
+ religiosa:{nome:'Organização religiosa',alvo:'Sua organização',
+  sw:{forcas:{qs:['Em que a organização se destaca na comunidade?','Que recurso é o maior trunfo?','Por que os membros permanecem?'],ph:'Ex.: ações sociais reconhecidas e grupo engajado de voluntários.'},
+   fraquezas:{qs:['Onde a organização perde participação?','Que competência falta às lideranças?','Do que os membros mais reclamam?'],ph:'Ex.: controle financeiro informal e poucas lideranças em formação.'},
+   oportunidades:{qs:['Que necessidade da comunidade pode ser atendida?','Que parceria pode ampliar o alcance?','Que novo público pode ser alcançado?'],ph:'Ex.: crescimento populacional do bairro com carência de atividades para jovens.'},
+   ameacas:{qs:['Que fator pode reduzir as contribuições?','Que exigência legal pode afetar as atividades?','De quem a organização depende demais?'],ph:'Ex.: exigências do Corpo de Bombeiros para o uso do salão.'}},
+  mercado:{t:'A. Atratividade do ambiente',eixo:'Atratividade do ambiente',p:'O contexto local é favorável?',o:'Considere as oportunidades e ameaças da SWOT.',
+   qs:['A comunidade atendida está crescendo?','Há necessidades locais não atendidas?','Há espaço sem sobrepor outras organizações?','Os riscos externos são controláveis?'],
+   ph:'Ex.: o bairro cresce e faltam atividades de acolhimento, mas a violência limita os horários.'},
+  capacidade:{t:'B. Capacidade institucional',eixo:'Capacidade institucional',p:'A organização consegue cumprir a missão?',o:'Considere as forças e fraquezas da SWOT.',
+   qs:['A comunidade reconhece as atividades?','Há voluntários suficientes?','As receitas cobrem as despesas?','As finanças são transparentes?'],
+   ph:'Ex.: forte engajamento dos membros, porém receitas instáveis e gestão financeira informal.'}},
+ publico:{nome:'Órgão ou entidade pública',alvo:'Seu órgão',
+  sw:{forcas:{qs:['Qual serviço do órgão é mais bem avaliado?','Que recurso é o maior trunfo do órgão?','Por que os cidadãos confiam no órgão?'],ph:'Ex.: servidores experientes e atendimento digital bem avaliado.'},
+   fraquezas:{qs:['Onde há mais atraso no atendimento?','O que falta aos servidores hoje?','Do que os cidadãos mais reclamam?'],ph:'Ex.: processos em papel e tempo médio de atendimento elevado.'},
+   oportunidades:{qs:['Que fonte de recursos pode ser acessada?','Que tecnologia pode melhorar os serviços?','Que parceria ainda não foi feita?'],ph:'Ex.: programa federal de transformação digital com recursos para municípios.'},
+   ameacas:{qs:['Que corte de orçamento pode ocorrer?','Que mudança na lei pode afetar o órgão?','Que fator externo pode aumentar a demanda?'],ph:'Ex.: contingenciamento orçamentário no próximo exercício.'}},
+  mercado:{t:'A. Atratividade do ambiente',eixo:'Atratividade do ambiente',p:'O ambiente favorece a missão do órgão?',o:'Considere as oportunidades e ameaças da SWOT.',
+   qs:['A demanda pelos serviços está crescendo?','Há apoio político à atuação do órgão?','Há recursos externos disponíveis?','Os riscos externos são controláveis?'],
+   ph:'Ex.: a demanda cresce com a população e há programas federais disponíveis, mas o orçamento próprio está restrito.'},
+  capacidade:{t:'B. Capacidade institucional',eixo:'Capacidade institucional',p:'O órgão consegue entregar bons serviços?',o:'Considere as forças e fraquezas da SWOT.',
+   qs:['Os cidadãos aprovam os serviços?','Há servidores suficientes?','Os recursos são bem aplicados?','Os processos são padronizados?'],
+   ph:'Ex.: servidores qualificados, porém sistemas defasados e processos pouco padronizados.'}},
+ geral:{nome:'Organização (perguntas gerais)',alvo:'Sua organização',
+  sw:{forcas:{qs:['O que a organização faz melhor que as outras?','Que recurso é difícil de copiar?','Por que o público confia nela?'],ph:'Ex.: equipe experiente e boa reputação junto ao público atendido.'},
+   fraquezas:{qs:['Onde a organização perde recursos?','O que falta à organização hoje?','Do que o público mais reclama?'],ph:'Ex.: processos pouco padronizados e baixa divulgação.'},
+   oportunidades:{qs:['Que tendência favorece a organização?','Que mudança em Manaus abre espaço?','Que público ainda não foi atendido?'],ph:'Ex.: aumento da procura pelos serviços oferecidos.'},
+   ameacas:{qs:['Que alternativa pode atrair o público?','Que fator externo pode prejudicar a organização?','De quem a organização depende demais?'],ph:'Ex.: redução de recursos e surgimento de alternativas ao serviço.'}},
+  mercado:{t:'A. Atratividade do ambiente',eixo:'Atratividade do ambiente',p:'O ambiente é favorável?',o:'Considere as oportunidades e ameaças da SWOT.',
+   qs:['A procura está crescendo?','Há necessidades não atendidas?','Há espaço frente a outras organizações?','Os riscos externos são controláveis?'],
+   ph:'Ex.: a procura cresce e há poucas alternativas na região, mas os custos aumentaram.'},
+  capacidade:{t:'B. Capacidade da organização',eixo:'Capacidade da organização',p:'A organização consegue atuar bem?',o:'Considere as forças e fraquezas da SWOT.',
+   qs:['O público vê um diferencial?','Há recursos para crescer?','Os recursos são bem aplicados?','A gestão é organizada?'],
+   ph:'Ex.: diferencial reconhecido, porém faltam pessoas e controle de custos.'}}};
+function perfilKey(nat){nat=String(nat||'');
+  if(/^(MEI|EI|SLU)\b/.test(nat))return 'micro';
+  if(/^(LTDA|S\/A)\b/.test(nat))return 'empresa';
+  if(/Cooperativa/i.test(nat))return 'coop';
+  if(/Associação|Fundação/i.test(nat))return 'terceiro';
+  if(/religiosa/i.test(nat))return 'religiosa';
+  if(/público|pública|economia mista/i.test(nat))return 'publico';
+  return 'geral'}
+function perfilPE(pe){const nat=pe?.perfil?.natureza||'';const k=perfilKey(nat);return {k,nat,...PERFIS[k]}}
+function perfilBanner(pe){const P=perfilPE(pe);
+  return `<div class="pfban ${P.nat?'':'warn'}">${ic(P.nat?'building':'clock')}<div>${P.nat?`Perguntas adaptadas para <b>${esc(P.nat)}</b> <span class="muted">· perfil ${esc(P.nome.toLowerCase())}</span>`:`<b>Natureza jurídica não informada.</b> Exibindo perguntas gerais. Informe a natureza jurídica para receber perguntas adequadas ao tipo de organização.`}</div><button class="btn sm ghost" data-gosec="perfil">${P.nat?'Alterar em 1.2':'Informar em 1.2'}</button></div>`}
+
+/* ===================== Seção 3 · SWOT e Matriz de Atratividade ===================== */
+const OLD3=[
+ {id:'macro',n:'Síntese da análise macro (Manaus)',f:[{k:'itens',l:'Segmentos e variáveis',t:'list',sub:[{k:'segmento',l:'Segmento e variável'},{k:'analise',l:'Análise'},{k:'fonte',l:'Fonte'}]}]},
+ {id:'local',n:'Síntese da análise local (5 Forças de Porter)',f:[{k:'rivalidade',l:'Rivalidade entre os concorrentes'},{k:'fornecedores',l:'Poder de negociação dos fornecedores'},{k:'compradores',l:'Poder de negociação dos compradores'},{k:'substitutos',l:'Ameaça de produtos substitutos'},{k:'entrantes',l:'Ameaça de entrada de novos concorrentes'},{k:'ranking',l:'Principais concorrentes e ranking'}]},
+ {id:'swot',n:'Pontos fortes e fracos (versão anterior)',f:[{k:'fortes',l:'Pontos fortes',t:'list',sub:[{k:'item',l:'Ponto forte'}]},{k:'fracos',l:'Pontos fracos',t:'list',sub:[{k:'item',l:'Ponto fraco'}]},{k:'foto',l:'Foto do brainstorming ou figura rica',t:'image'}]},
+ {id:'oport',n:'Oportunidades e ameaças com recomendações (versão anterior)',f:[{k:'oportunidades',l:'Oportunidades',t:'list',sub:[{k:'item',l:'Oportunidade'},{k:'sf',l:'Usando os pontos fortes'},{k:'sw',l:'Melhorando os pontos fracos'}]},{k:'ameacas',l:'Ameaças',t:'list',sub:[{k:'item',l:'Ameaça'},{k:'sf',l:'Usando os pontos fortes'},{k:'sw',l:'Melhorando os pontos fracos'}]}]}];
+const SWG=[
+ {k:'forcas',t:'Forças',amb:'Ambiente interno',c:'sF',add:'+ Adicionar força'},
+ {k:'fraquezas',t:'Fraquezas',amb:'Ambiente interno',c:'sW',add:'+ Adicionar fraqueza'},
+ {k:'oportunidades',t:'Oportunidades',amb:'Ambiente externo',c:'sO',add:'+ Adicionar oportunidade'},
+ {k:'ameacas',t:'Ameaças',amb:'Ambiente externo',c:'sT',add:'+ Adicionar ameaça'}];
+const NIV=['Baixa','Média','Alta'];
+const RESP=[['s','Sim'],['p','Em parte'],['n','Não']];
+const swItems=(sw,k)=>(sw?.[k]||[]).filter(x=>(x?.d||'').trim());
+function swotSig(sw){return h32(JSON.stringify(SWG.map(g=>swItems(sw,g.k).map(x=>x.d.trim()))))}
+function swotFill(sw){return SWG.filter(g=>swItems(sw,g.k).length).length/4}
+function hasOld3(pe){return OLD3.some(s=>filled(pe?.[s.id]))}
+const okUrl=u=>/^https?:\/\/\S+\.\S+/i.test(String(u||'').trim());
+function srcHTML(fonte,link){const f=(fonte||'').trim(),l=(link||'').trim();if(!f&&!l)return '';
+  return okUrl(l)?`<a href="${esc(l)}" target="_blank" rel="noopener">${esc(f||l.replace(/^https?:\/\//,'').slice(0,60))} ${ic('globe','lk')}</a>`:esc(f||l)}
+function migrarSwot(pe){const d=pe.swotm||(pe.swotm={});if(d.migrado||SWG.some(g=>swItems(d,g.k).length))return false;
+  const m=(arr,key='item')=>(arr||[]).filter(x=>(x?.[key]||'').trim()).map(x=>({d:x[key].trim(),fonte:'',link:''}));
+  d.forcas=m(pe.swot?.fortes);d.fraquezas=m(pe.swot?.fracos);d.oportunidades=m(pe.oport?.oportunidades);d.ameacas=m(pe.oport?.ameacas);d.migrado=true;
+  return SWG.some(g=>d[g.k].length)}
+const figsOk=a=>(a||[]).filter(f=>f&&(f.img||(f.titulo||'').trim()));
+function figsView(arr,start){return figsOk(arr).map((f,i)=>`<figure class="fig3">${f.img?`<img data-img="${esc(f.img)}" data-zoom alt="Figura ${start+i}${f.titulo?' – '+esc(f.titulo):''}">`:''}<figcaption><b>Figura ${start+i}</b>${f.titulo?' – '+esc(f.titulo):''}${(f.fonte||f.link)?`<br><small>Fonte: ${srcHTML(f.fonte,f.link)}</small>`:''}</figcaption></figure>`).join('')}
+function figsEditor(arr,start,pre){return `<div class="figs">${arr.map((f,i)=>`<div class="figed"><div class="row between"><b class="fign">Figura ${start+i}</b><button class="icon" data-fdel="${i}" aria-label="Remover figura ${start+i}">×</button></div>
+   <div class="imgbox">${f.img?`<img data-img="${esc(f.img)}" alt="Figura ${start+i}">`:'<div class="imgph">Nenhuma imagem.<br>JPG ou PNG (gráfico, foto, tabela).</div>'}</div>
+   <div class="row"><label class="btn sm ghost" for="${pre}fi_${i}">${f.img?'Trocar imagem':'Enviar imagem'}</label><input type="file" accept="image/*" id="${pre}fi_${i}" data-fimg="${i}" hidden></div>
+   <input id="${pre}ft_${i}" data-fk="${i}.titulo" value="${esc(f.titulo||'')}" placeholder="Título da figura (ex.: Evolução das vendas 2022–2025)" aria-label="Título da figura ${start+i}">
+   <div class="fgrid"><input style="grid-column:span 2" id="${pre}ff_${i}" data-fk="${i}.fonte" value="${esc(f.fonte||'')}" placeholder="Fonte (ex.: IBGE, 2024)" aria-label="Fonte da figura ${start+i}"><input style="grid-column:span 2" type="url" id="${pre}fl_${i}" data-fk="${i}.link" value="${esc(f.link||'')}" placeholder="Link da fonte (opcional)" aria-label="Link da fonte da figura ${start+i}"></div></div>`).join('')}
+   ${arr.length<4?`<button class="btn sm ghost" data-fadd="1">${ic('layout')}+ Inserir figura</button>`:'<span class="help">Limite de 4 figuras.</span>'}</div>`}
+function bindFigs(root,arr,redraw,ch,imgp){
+  root.addEventListener('click',e=>{const a=e.target.closest('[data-fadd],[data-fdel]');if(!a||!root.contains(a))return;
+    if(a.dataset.fadd){arr.push({img:'',titulo:'',fonte:'',link:''});redraw();ch()}else{const i=+a.dataset.fdel;if(arr[i]?.img)delImg(arr[i].img);arr.splice(i,1);redraw();ch()}});
+  root.addEventListener('input',e=>{const k=e.target.dataset.fk;if(!k)return;setPath(arr,k,e.target.value);ch()});
+  root.addEventListener('change',async e=>{const i=e.target.dataset.fimg;if(i==null||!e.target.files[0])return;toast('Otimizando e enviando imagem…');
+    try{const data=await compressImage(e.target.files[0],1600,650000);const id=`${imgp}__fig_${uid()}`;await putImg(id,data);if(arr[i].img)delImg(arr[i].img);arr[i].img=id;redraw();ch();toast('Figura salva.')}catch(err){toast('Não foi possível ler esta imagem. Use JPG ou PNG.')}})}
+function swotMatrixHTML(sw){const any=SWG.some(g=>swItems(sw,g.k).length);
+  if(!any)return '<div class="empty"><b>A matriz aparece aqui</b>Preencha os fatores para gerar a Matriz SWOT.</div>';
+  const cell=g=>`<div class="swq ${g.c}"><div class="swqh"><b>${g.t}</b></div>${swItems(sw,g.k).length?`<ul>${swItems(sw,g.k).map(x=>`<li>${esc(x.d)}${(x.fonte||x.link)?` <small>(${srcHTML(x.fonte,x.link)})</small>`:''}</li>`).join('')}</ul>`:'<p class="muted">Nenhum fator informado.</p>'}</div>`;
+  return `<div class="swmx"><div class="swrow-l">Ambiente interno</div>${cell(SWG[0])}${cell(SWG[1])}<div class="swrow-l">Ambiente externo</div>${cell(SWG[2])}${cell(SWG[3])}</div>`}
+function atratMatrixHTML(a,P){P=P||PERFIS.geral;const ok=a?.mercado&&a?.capacidade;
+  const grid=[...NIV].reverse().map(lin=>`<div class="amy">${lin}</div>${NIV.map(col=>{const on=ok&&a.mercado===lin&&a.capacidade===col;const lv=NIV.indexOf(lin)+NIV.indexOf(col);return `<div class="amc lv${lv} ${on?'on':''}">${on?`<span class="amk">${ic('target')} ${esc(P.alvo)}</span>`:''}</div>`}).join('')}`).join('');
+  return `<div class="amwrap"><div class="amaxis-y"><span>${esc(P.mercado.eixo)}</span></div><div class="amgrid">${grid}<div></div>${NIV.map(c=>`<div class="amx">${c}</div>`).join('')}</div><div class="amaxis-x">${esc(P.capacidade.eixo)}</div></div>
+   ${ok?'':'<p class="amhint">Selecione as duas avaliações para visualizar a posição da organização.</p>'}
+   <p class="help">Esta matriz representa uma avaliação qualitativa dos participantes, fundamentada na SWOT. Não constitui uma medição objetiva nem uma decisão automática (de investimento, expansão ou priorização).</p>`}
+function tendencia(qa){const v=Object.values(qa||{}).filter(Boolean);if(v.length<4)return null;const sc=v.reduce((a,x)=>a+(x==='s'?2:x==='p'?1:0),0);return sc>=6?'Alta':sc>=3?'Média':'Baixa'}
+function oldRecordsHTML(pe){return OLD3.filter(s=>filled(pe?.[s.id])).map(s=>`<div class="vsec" style="margin-top:12px"><h4>${esc(s.n)}</h4>${dlHTML(s.f,pe[s.id])}</div>`).join('')}
+function swotFigStart(){return 1}
+function atratFigStart(pe){return 1+figsOk(pe?.swotm?.figuras).length}
+function mountSwot(el,d,ch){
+  if(migrarSwot(S.pe)){d=S.pe.swotm;ch();toast('Os fatores da análise anterior foram trazidos para a nova SWOT.')}
+  SWG.forEach(g=>{d[g.k]=d[g.k]||[];if(!d[g.k].length)d[g.k].push({d:'',fonte:'',link:''})});d.figuras=d.figuras||[];
+  const P=perfilPE(S.pe);
+  const grp=g=>`<div class="swg ${g.c}" data-g="${g.k}"><div class="swgh"><div><span class="swamb">${g.amb}</span><h4>${g.t}</h4></div><span class="chip">${swItems(d,g.k).length}</span></div>
+    <div class="swqs"><span>Perguntas para responder</span><ol>${P.sw[g.k].qs.map(q=>`<li>${esc(q)}</li>`).join('')}</ol></div>
+    <div class="switems">${d[g.k].map((x,i)=>`<div class="swit"><span class="swn">${i+1}</span><div class="stack" style="gap:6px;flex:1;min-width:0"><textarea rows="2" id="sw_${g.k}_${i}" data-k="${g.k}.${i}.d" placeholder="${esc(P.sw[g.k].ph)}" aria-label="${g.t} ${i+1}">${esc(x.d||'')}</textarea>
+      <div class="swsrc"><input id="swf_${g.k}_${i}" data-k="${g.k}.${i}.fonte" value="${esc(x.fonte||'')}" placeholder="Evidência ou fonte (opcional)" aria-label="Fonte ${i+1}"><input type="url" id="swl_${g.k}_${i}" data-k="${g.k}.${i}.link" value="${esc(x.link||'')}" placeholder="Link (opcional)" aria-label="Link da fonte ${i+1}"></div></div><button class="icon" data-sdel="${g.k}.${i}" aria-label="Excluir item ${i+1}" title="Excluir item">×</button></div>`).join('')}</div>
+    <button class="btn sm ghost" data-sadd="${g.k}">${g.add}</button></div>`;
+  const draw=focus=>{el.innerHTML=`${perfilBanner(S.pe)}<div class="howto">${ic('compass')}<div><b>Como preencher</b><p>Responda às perguntas de cada quadro com frases curtas, <b>um fator por item</b>. Prefira fatos a opiniões e, quando puder, informe a evidência ou fonte (pesquisa, entrevista com o gestor ou dirigente, IBGE, notícia, relatório) e o link.</p></div></div>
+    <div class="swgrid">${SWG.map(grp).join('')}</div>
+    <div class="mxfig"><div class="card flat mxbox"><div class="eyebrow">Gerada automaticamente</div><h3>Matriz SWOT</h3><div id="swmx" style="margin-top:12px">${swotMatrixHTML(d)}</div></div>
+     <div class="card flat figbox"><div class="eyebrow">Opcional</div><h3>Figuras de apoio</h3><p class="help">Foto do brainstorming, gráfico ou tabela que sustente a análise.</p><div id="swfig">${figsEditor(d.figuras,swotFigStart(),'sw')}</div></div></div>
+    ${hasOld3(S.pe)?`<details class="card flat" style="margin-top:18px"><summary><b>Registros anteriores</b> <small class="muted">· conteúdo das antigas subseções da análise do ambiente, preservado para consulta</small></summary>${oldRecordsHTML(S.pe)}</details>`:''}`;
+    hydrateImgs(el);if(focus){const x=$('#'+focus,el);x&&x.focus()}};
+  draw();
+  const figRedraw=()=>{$('#swfig',el).innerHTML=figsEditor(d.figuras,swotFigStart(),'sw');hydrateImgs($('#swfig',el))};
+  bindFigs(el,d.figuras,figRedraw,ch,S.eq.id+'_sw');
+  el.oninput=e=>{const k=e.target.dataset.k;if(!k)return;setPath(d,k,e.target.value);$('#swmx',el).innerHTML=swotMatrixHTML(d);const g=k.split('.')[0];const c=$(`[data-g="${g}"] .swgh .chip`,el);if(c)c.textContent=swItems(d,g).length;ch()};
+  el.onclick=e=>{const gs=e.target.closest('[data-gosec]');if(gs){openSec(gs.dataset.gosec);return}const b=e.target.closest('[data-sadd],[data-sdel]');if(!b)return;
+    if(b.dataset.sadd){const g=b.dataset.sadd;d[g].push({d:'',fonte:'',link:''});draw(`sw_${g}_${d[g].length-1}`);figRedraw()}
+    else{const [g,i]=b.dataset.sdel.split('.');d[g].splice(+i,1);if(!d[g].length)d[g].push({d:'',fonte:'',link:''});draw();ch()}}}
+function mountAtrat(el,d,ch){
+  const sw=S.pe.swotm||{};d.figuras=d.figuras||[];['mercado','capacidade'].forEach(k=>{d[k+'Q']=d[k+'Q']||{}});
+  if(d.justificativa&&!d.mercadoPq&&!d.capacidadePq){d.mercadoPq=d.justificativa}
+  const P=perfilPE(S.pe);const answered=['mercado','capacidade'].some(k=>Object.values(d[k+'Q']).some(Boolean));if(!d.perfilQ&&answered)d.perfilQ=P.k;
+  const dim=k=>{const A=P[k],qa=d[k+'Q'],tend=tendencia(qa);return `<div class="atq" data-dim="${k}"><b class="att">${A.t}</b><p class="atp">${A.p}</p><small class="help">${A.o}</small>
+    <div class="aqs"><span>Perguntas essenciais</span>${A.qs.map((q,i)=>`<div class="aq"><span class="aqt">${i+1}. ${esc(q)}</span><div class="mini-seg">${RESP.map(([v,l])=>`<button type="button" class="${qa['q'+i]===v?'on '+v:''}" data-aq="${k}.q${i}" data-v="${v}">${l}</button>`).join('')}</div></div>`).join('')}</div>
+    <div class="atend" id="tend_${k}">${tend?`${ic('chart')} Suas respostas indicam tendência <b>${tend}</b>. A decisão final é da equipe.`:'Responda às 4 perguntas para ver uma indicação de tendência.'}</div>
+    <span class="lbl" style="margin-top:4px">Sua avaliação</span><div class="seg" role="radiogroup" aria-label="${A.t}">${NIV.map(v=>`<button type="button" role="radio" aria-checked="${d[k]===v}" class="${d[k]===v?'on':''}" data-at2="${k}" data-v="${v}">${v}</button>`).join('')}</div>
+    <label class="fld"><span class="lbl">Por quê? (principais motivos, ligados à SWOT)</span><textarea rows="3" id="at_${k}Pq" data-k="${k}Pq" placeholder="${esc(A.ph)}">${esc(d[k+'Pq']||'')}</textarea></label>
+    <div class="swsrc"><input id="at_${k}F" data-k="${k}Fonte" value="${esc(d[k+'Fonte']||'')}" placeholder="Fonte (opcional)" aria-label="Fonte da avaliação"><input type="url" id="at_${k}L" data-k="${k}Link" value="${esc(d[k+'Link']||'')}" placeholder="Link da fonte (opcional)" aria-label="Link da fonte da avaliação"></div></div>`};
+  const warn=()=>d.mercado&&d.capacidade&&d.sig&&d.sig!==swotSig(S.pe.swotm)?`<div class="palert warn">${ic('clock')}<div><b>A SWOT foi atualizada. Revise as avaliações de atratividade e capacidade competitiva.</b><button class="btn sm ghost" data-atok="1" style="margin-top:8px">Avaliações revisadas</button></div></div>`:'';
+  const pwarn=()=>d.perfilQ&&d.perfilQ!==P.k&&['mercado','capacidade'].some(k=>Object.values(d[k+'Q']).some(Boolean))?`<div class="palert warn">${ic('clock')}<div><b>A natureza jurídica foi alterada e as perguntas foram adaptadas ao novo perfil (${esc(P.nome)}). Revise as respostas abaixo.</b><button class="btn sm ghost" data-pfok="1" style="margin-top:8px">Respostas revisadas</button></div></div>`:'';
+  const fs=atratFigStart(S.pe);
+  el.innerHTML=`${perfilBanner(S.pe)}<div id="pfWarn">${pwarn()}</div><div id="atWarn">${warn()}</div>
+    <div class="howto">${ic('compass')}<div><b>Como preencher</b><p>Responda às perguntas essenciais de cada eixo, escolha a avaliação (Baixa, Média ou Alta) e explique em poucas linhas por quê, ligando aos fatores da SWOT. As perguntas mudam conforme a natureza jurídica informada na seção 1.2. Se tiver dados, cite a fonte e o link ou insira uma figura ao lado da matriz.</p></div></div>
+    <details class="card flat" style="background:var(--surface2)"><summary><b>Consultar a SWOT preenchida</b> <small class="muted">· ${SWG.map(g=>`${swItems(sw,g.k).length} ${g.t.toLowerCase()}`).join(' · ')}</small></summary><div style="margin-top:12px">${swotMatrixHTML(sw)}</div></details>
+    <div class="g2" style="margin-top:16px;align-items:start">${dim('mercado')}${dim('capacidade')}</div>
+    <div class="mxfig"><div class="card flat mxbox"><div class="eyebrow">Gerada automaticamente</div><h3>Matriz de Atratividade</h3><div id="atmx" style="margin-top:14px">${atratMatrixHTML(d,P)}</div></div>
+     <div class="card flat figbox"><div class="eyebrow">Opcional</div><h3>Figuras de apoio</h3><p class="help">Gráficos de mercado, participação dos concorrentes, pesquisa com clientes. A numeração continua a partir das figuras da 3.1.</p><div id="atfig">${figsEditor(d.figuras,fs,'at')}</div></div></div>`;
+  hydrateImgs(el);
+  const figRedraw=()=>{$('#atfig',el).innerHTML=figsEditor(d.figuras,fs,'at');hydrateImgs($('#atfig',el))};
+  bindFigs(el,d.figuras,figRedraw,ch,S.eq.id+'_at');
+  el.onclick=e=>{const gs=e.target.closest('[data-gosec]');if(gs){openSec(gs.dataset.gosec);return}
+    const pf=e.target.closest('[data-pfok]');if(pf){d.perfilQ=P.k;ch();$('#pfWarn',el).innerHTML='';return}
+    const ok=e.target.closest('[data-atok]');if(ok){d.sig=swotSig(S.pe.swotm);ch();$('#atWarn',el).innerHTML='';return}
+    const q=e.target.closest('[data-aq]');if(q){const [k,qi]=q.dataset.aq.split('.');d[k+'Q'][qi]=d[k+'Q'][qi]===q.dataset.v?'':q.dataset.v;if(!d.perfilQ)d.perfilQ=P.k;
+      $$(`[data-aq="${q.dataset.aq}"]`,el).forEach(x=>x.className=d[k+'Q'][qi]===x.dataset.v?'on '+x.dataset.v:'');const t=tendencia(d[k+'Q']);$('#tend_'+k,el).innerHTML=t?`${ic('chart')} Suas respostas indicam tendência <b>${t}</b>. A decisão final é da equipe.`:'Responda às 4 perguntas para ver uma indicação de tendência.';ch();return}
+    const b=e.target.closest('[data-at2]');if(!b)return;d[b.dataset.at2]=b.dataset.v;d.sig=swotSig(S.pe.swotm);
+    $$(`[data-at2="${b.dataset.at2}"]`,el).forEach(x=>{const on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-checked',on)});$('#atmx',el).innerHTML=atratMatrixHTML(d,P);$('#atWarn',el).innerHTML=warn();ch()};
+  el.oninput=e=>{const k=e.target.dataset.k;if(!k)return;d[k]=e.target.value;ch()}}
+function atratView(pe){const a=pe?.atrat||{};const P=PERFIS[a.perfilQ]||perfilPE(pe);const dimV=k=>{const A=P[k],qa=a[k+'Q']||{};return `<div class="vsec"><h4>${A.t}: ${esc(a[k]||'—')}</h4>
+   ${Object.values(qa).some(Boolean)?`<ul class="aqv">${A.qs.map((q,i)=>`<li>${esc(q)} <span class="chip ${qa['q'+i]==='s'?'ok':qa['q'+i]==='p'?'gold':qa['q'+i]==='n'?'bad':''}">${(RESP.find(r=>r[0]===qa['q'+i])||[,'—'])[1]}</span></li>`).join('')}</ul>`:''}
+   ${a[k+'Pq']?`<div class="pre">${esc(a[k+'Pq'])}</div>`:''}${(a[k+'Fonte']||a[k+'Link'])?`<small>Fonte: ${srcHTML(a[k+'Fonte'],a[k+'Link'])}</small>`:''}</div>`};
+  const figs=figsView(a.figuras,atratFigStart(pe));
+  return `${dimV('mercado')}${dimV('capacidade')}${a.justificativa&&a.justificativa!==a.mercadoPq?`<div class="vsec"><h4>Justificativa (versão anterior)</h4><div class="pre">${esc(a.justificativa)}</div></div>`:''}<div class="mxfig v"><div>${atratMatrixHTML(a,P)}</div>${figs?`<div class="figcol">${figs}</div>`:''}</div>`}
 
 /* ===================== Dados iniciais ===================== */
 async function seed(){const local=Store.mode==='local';
