@@ -1280,7 +1280,7 @@ body.pdfmode{overflow:hidden}
   </div>
 </nav>
 <main id="app"><div class="wrap"><div class="empty"><b>Carregando o sistema…</b>Conectando ao banco de dados.</div></div></main>
-<div class="foot">Curso de Engenharia de Produção · Faculdade de Tecnologia · Universidade Federal do Amazonas · Manaus/AM<br><small style="opacity:.7">Atualização do sistema: 25/11/2026 · slides: organograma ampliado e contribuição dos membros (v26)</small></div>
+<div class="foot">Curso de Engenharia de Produção · Faculdade de Tecnologia · Universidade Federal do Amazonas · Manaus/AM<br><small style="opacity:.7">Atualização do sistema: 25/11/2026 · PE Básico vira apresentação de slides; checklist e nomenclatura revisados (v27)</small></div>
 <div id="printArea"></div>
 
 <script>
@@ -1753,7 +1753,7 @@ async function renderAluno(){
   S.eq=eq;S.ano=anoDe(eq);S.pe=await Store.get('pes',eq.id)||{};S.fb=await Store.get('feedback',eq.id)||{};snapAll();
   const msgs=(await Store.list('msgs')).filter(m=>m.canal==='prof'&&(m.equipeId===eq.id||m.equipeId==='*')&&m.papel==='professor');
   const seen=ls('sispe_seen_'+eq.id)||0;const unread=msgs.filter(m=>m.em>seen).length;
-  const T=[['inicio','Início'],['orient','Orientações'],['check','Checklist'],['completo','PE Completo · Modelo 2'],['basico','PE Básico A1 · Modelo 1'],['part','Participação'],['msgs','Mensagens'],['equipe','Equipe']];
+  const T=[['inicio','Início'],['orient','Orientações'],['check','Checklist'],['completo','PE Completo'],['basico','PE Básico (Apresentação)'],['part','Participação'],['msgs','Mensagens'],['equipe','Equipe']];
   const fzA=(await Store.list('orientacoes')).filter(o=>o.semestre===eq.semestre&&o.publicada).flatMap(o=>o.fases||[]).filter(f=>f.prazo&&f.prazo>=today()).sort((a,b)=>a.prazo.localeCompare(b.prazo));const dA=fzA[0]?Math.ceil((new Date(fzA[0].prazo+'T23:59')-new Date())/864e5):null;
   const nRec=SECOES.filter(s=>S.fb[s.id]).length;const nOk=VIEWABLE.filter(s=>secProg(s,S.pe)>=.99).length;
   app.innerHTML=`<div class="wrap"><section class="hero hero-team">
@@ -1874,38 +1874,10 @@ function versoesHTML(lst,opt={}){const L=[...(lst||[])].sort((a,b)=>b.em-a.em);i
   return `<div class="dl-list">${L.map(a=>`<div class="dl-item"><span class="dl-ic ${extIc(a.nome)==='PDF'?'pdf':''}">${extIc(a.nome)}</span><div style="min-width:0;flex:1"><b>V${a.v} · ${esc(a.nome)}</b> ${a.v===vmax?'<span class="chip ok">Mais recente</span>':''}<br><small>${fmtTam(a.tam||0)} · enviado por ${esc(a.por||'—')} em ${fmtDT(a.em)}${a.obs?' · '+esc(a.obs):''}</small></div><div class="row" style="flex-wrap:nowrap;gap:6px"><button class="btn sm" data-bdl="${a.id}">Baixar</button>${opt.del&&opt.del(a)?`<button class="btn sm danger" data-bdel="${a.id}">Excluir</button>`:''}</div></div>`).join('')}</div>`}
 function bindVersoes(root,lst,onDel){$$('[data-bdl]',root).forEach(b=>b.onclick=()=>baixarArquivo((lst||[]).find(x=>x.id===b.dataset.bdl),b));$$('[data-bdel]',root).forEach(b=>b.onclick=()=>onDel&&onDel(b.dataset.bdel))}
 function alunoBasico(pane,eq){
-  const b=S.pe.basico||(S.pe.basico={});const lider=/Líder/.test(S.sess.papel||'');const tpl=S.cfg?.tplBasico;
-  const lst=()=>S.pe.basicoArq||[];const prox=()=>Math.max(0,...lst().map(x=>x.v||0))+1;
   pane.innerHTML=`<div class="stack">
-   <div class="card stack" id="apresBox"></div>
-   <div class="card stack"><div class="row between"><div><div class="eyebrow">Modelo 1 · arquivo oficial do pôster A1</div><h2>Template e versões do PE Básico</h2></div><span class="chip purple">${lst().length} arquivo(s) enviado(s)</span></div>
-    ${S.fb.basico?`<div class="fbk"><b>Recomendação do professor:</b> ${nl(S.fb.basico)}</div>`:''}
-    <div class="bsteps">
-     <div class="bstep"><span class="bn">1</span><div><b>Baixe o template</b><p class="help">${esc(tpl?.nome||TPL_PADRAO.nome)} · aba <b>PEBasicoVazio</b> para preencher e aba <b>PEBasicoExemplo</b> como referência.</p><button class="btn gold sm" id="tplDl">${ic('file')}Baixar template em Excel</button></div></div>
-     <div class="bstep"><span class="bn">2</span><div><b>Preencha no Excel</b><p class="help">Use o conteúdo do PE completo (Modelo 2). Ao terminar, salve também uma versão em PDF no tamanho A1.</p></div></div>
-     <div class="bstep"><span class="bn">3</span><div><b>Envie a versão</b><p class="help">Envie o Excel e o PDF juntos. Cada envio vira uma nova versão (V1, V2, V3…), sem apagar as anteriores.</p>
-      <div class="upbox"><label class="btn sm" for="bUp">${ic('archive')}Selecionar Excel e/ou PDF</label><input type="file" id="bUp" accept=".xlsx,.xlsm,.xls,.pdf" multiple hidden><span id="bSel" class="help">Nenhum arquivo selecionado.</span></div>
-      <label class="fld" style="margin-top:8px"><span class="lbl">Observação da versão (opcional)</span><input id="bObs" placeholder="Ex.: ajustes após recomendações da Mostra"></label>
-      <div class="row" style="margin-top:8px"><button class="btn" id="bSend" disabled>Enviar como V${prox()}</button><span id="bProg" class="help"></span></div></div></div>
-    </div></div>
-   <div class="card stack"><div><div class="eyebrow">Histórico</div><h3>Versões enviadas</h3></div><div id="bVers"></div></div>
-   <details class="card"><summary><b>Rascunho no sistema (opcional)</b> <small class="muted">· atratividade, “Plus” da equipe e pré-visualização automática do pôster</small></summary>
-    <div class="stack" style="margin-top:14px"><div class="row between"><p class="muted" style="max-width:70ch">Missão, visão, valores, áreas, equipe gestora, mapa estratégico, Matriz X e planejamento de curto prazo vêm automaticamente do PE completo. Aqui você preenche o que é exclusivo do pôster.</p><span class="savest" id="savest"></span></div><div id="bform"></div>
-    <div class="row between" style="margin-top:6px"><h3>Pré-visualização do pôster</h3><button class="btn sm ghost" id="refP">Atualizar pré-visualização</button></div><div id="pbox"></div></div></details></div>`;
-  {const ab=$('#apresBox',pane);if(ab)mountApres(ab,eq,S.pe)}
-  $('#tplDl').onclick=e=>baixarTemplate(e.currentTarget);
-  const drawV=()=>{$('#bVers').innerHTML=versoesHTML(lst(),{del:a=>lider||a.mk===S.sess.mk});bindVersoes($('#bVers'),lst(),async id=>{if(!await confirmBox('Excluir este arquivo do histórico de versões?','Excluir'))return;const f=await Store.get('pes',eq.id);const L=(f?.basicoArq||[]).filter(x=>x.id!==id);await delImg(id);await Store.patch('pes',eq.id,{basicoArq:L});S.pe.basicoArq=L;drawV();toast('Arquivo excluído.')})};drawV();
-  let files=[];$('#bUp').onchange=e=>{files=[...e.target.files].filter(f=>{if(f.size>20*1048576){toast(`${f.name} passa de 20 MB.`);return false}return /\.(xlsx|xlsm|xls|pdf)$/i.test(f.name)});
-    $('#bSel').textContent=files.length?files.map(f=>`${f.name} (${fmtTam(f.size)})`).join(' · '):'Nenhum arquivo selecionado.';$('#bSend').disabled=!files.length};
-  $('#bSend').onclick=async ev=>{if(!files.length)return;ev.target.disabled=true;const v=prox(),now=Date.now(),obs=$('#bObs').value.trim(),novos=[];
-    try{for(const [i,f] of files.entries()){$('#bProg').textContent=`Enviando ${f.name}…`;const id=`${eq.id}__basico_v${v}_${i}__${uid()}`;await putImg(id,await readDataURL(f),p=>$('#bProg').textContent=`Enviando ${f.name}… ${Math.round(p*100)}%`);delete imgCache[id];
-        novos.push({id,v,nome:f.name,tam:f.size,tipo:f.type||'',em:now,por:S.sess.nome,mk:S.sess.mk,obs})}
-      const fr=await Store.get('pes',eq.id);const L=[...(fr?.basicoArq||[]),...novos];await Store.patch('pes',eq.id,{basicoArq:L});S.pe.basicoArq=L;await Store.patch('equipes',eq.id,{atualizadoEm:now});
-      if(S.sess.mk){const mk=S.sess.mk;logPart(eq.id,{[`m.${mk}.s.basico.n`]:1,[`m.${mk}.s.basico.c`]:800,[`m.${mk}.n`]:1,[`m.${mk}.c`]:800},{[`m.${mk}.s.basico.ult`]:now,[`m.${mk}.ult`]:now,[`m.${mk}.d.${today().replace(/-/g,'')}`]:true,[`m.${mk}.nome`]:S.sess.nome,[`m.${mk}.papel`]:S.sess.papel||''})}
-      toast(`Versão V${v} enviada.`);render()}
-    catch(e){console.error(e);$('#bProg').textContent='Falha no envio: '+(e.message||e);ev.target.disabled=false}};
-  mountForm($('#bform'),BASICO.f,b,{imgp:eq.id+'_basico'},()=>queueSave('basico'));
-  const draw=()=>mountPoster($('#pbox'),eq,S.pe);$('details.card',pane).addEventListener('toggle',e=>{if(e.target.open)draw()},{once:true});$('#refP').onclick=async()=>{await flushSave();draw()};
+   ${S.fb.basico?`<div class="fbk"><b>Recomendação do professor:</b> ${nl(S.fb.basico)}</div>`:''}
+   <div class="card stack" id="apresBox"></div></div>`;
+  const ab=$('#apresBox',pane);if(ab)mountApres(ab,eq,S.pe);
 }
 async function alunoMsgs(pane,eq){
   const draw=async(scroll)=>{const all=(await Store.list('msgs')).sort((a,b)=>a.em-b.em);
@@ -2038,7 +2010,7 @@ async function profRevisar(eqs){const eq=eqs.find(e=>e.id===S.revId);if(!eq){S.p
   app.innerHTML=`<div class="wrap stack"><div><button class="btn sm ghost" id="back">← Voltar</button></div>
    <div class="card"><div class="row between"><div><div class="eyebrow">Revisão do PE · ${esc(eq.semestre)}</div><h2>${esc(eq.nome||'—')} · ${esc(eq.organizacao||'organização não definida')}</h2><p class="muted" style="margin-top:4px">Consultores: ${esc(consultores(eq).join(', '))}${eq.gestor?.nome?` · Gestor: ${esc(eq.gestor.nome)}`:''}</p></div><div style="min-width:220px">${progBar(peProg(pe))}<small>Última edição: ${fmtDT(eq.atualizadoEm)}</small></div></div></div>
    <div class="card flat row between" style="gap:10px;flex-wrap:wrap"><span class="help">Para demonstração: substitui todo o PE desta equipe pelo exemplo completo da Padaria Pão da Terra (dados fictícios), inclui 5 membros fictícios (PIN = primeiro nome, por exemplo: bruno) e distribui o checklist entre eles. O nome da start-up, o líder e os membros atuais são mantidos.</span><div class="row" style="gap:8px"><button class="btn sm" id="acRev">${ic('key')} Membros e acessos</button><button class="btn sm ghost" id="useEx">${ic('star')} Substituir pelo PE de exemplo</button></div></div>
-   <div class="tabs"><button data-rt="completo" class="${S.rtab==='completo'?'on':''}">PE Completo + recomendações</button><button data-rt="basico" class="${S.rtab==='basico'?'on':''}">PE Básico A1</button><button data-rt="check" class="${S.rtab==='check'?'on':''}">${ic('target')}Checklist</button><button data-rt="part" class="${S.rtab==='part'?'on':''}">${ic('chart')}Participação</button><button data-rt="sim" class="${S.rtab==='sim'?'on':''}">${ic('layout')}Similaridade</button></div>
+   <div class="tabs"><button data-rt="completo" class="${S.rtab==='completo'?'on':''}">PE Completo + recomendações</button><button data-rt="basico" class="${S.rtab==='basico'?'on':''}">PE Básico (Apresentação)</button><button data-rt="check" class="${S.rtab==='check'?'on':''}">${ic('target')}Checklist</button><button data-rt="part" class="${S.rtab==='part'?'on':''}">${ic('chart')}Participação</button><button data-rt="sim" class="${S.rtab==='sim'?'on':''}">${ic('layout')}Similaridade</button></div>
    <div id="rbody" class="stack"></div></div>`;
   $('#back').onclick=()=>{S.ptabProf='equipes';render()};$$('[data-rt]').forEach(b=>b.onclick=()=>{S.rtab=b.dataset.rt;render()});
   $('#acRev').onclick=()=>profAcessos(eq.id);
@@ -2154,7 +2126,7 @@ service cloud.firestore {
     }
   }
 }</div><p class="help" style="margin-top:6px">As senhas são guardadas apenas como código criptográfico (hash). Para um controle mais rígido, o próximo passo é ativar o Firebase Authentication.</p></details></div>
-   <div class="card stack"><h3>Template do PE Básico (Modelo 1)</h3><p class="help">Arquivo que as equipes baixam na aba “PE Básico”. Atual: <b>${esc(S.cfg.tplBasico?.nome||'PEBASICO.xlsx (arquivo publicado junto ao sistema no GitHub)')}</b>${S.cfg.tplBasico?' · enviado em '+fmtDT(S.cfg.tplBasico.em):''}.</p>
+   <div class="card stack"><h3>Template do PE Básico</h3><p class="help">Arquivo que as equipes baixam na aba “PE Básico”. Atual: <b>${esc(S.cfg.tplBasico?.nome||'PEBASICO.xlsx (arquivo publicado junto ao sistema no GitHub)')}</b>${S.cfg.tplBasico?' · enviado em '+fmtDT(S.cfg.tplBasico.em):''}.</p>
     <div class="row"><label class="btn sm gold" for="tplUp">Enviar novo template</label><input type="file" id="tplUp" accept=".xlsx,.xlsm,.xls" hidden><button class="btn sm ghost" id="tplDl2">Baixar o atual</button>${S.cfg.tplBasico?'<button class="btn sm danger" id="tplRst">Voltar ao padrão</button>':''}</div><span id="tplMsg" class="help"></span></div>
    <div class="card stack"><h3>Cópia de segurança</h3><p class="help">Exporte todos os dados em JSON (para guardar ou migrar do modo local para o Firebase) e importe quando precisar.</p><div class="row"><button class="btn ghost" id="bkE">Exportar dados</button><button class="btn ghost" id="bkO">Exportar só as orientações</button><button class="btn ghost" id="bkI">Importar dados</button></div><textarea id="bkT" rows="6" placeholder="O JSON exportado aparece aqui. Para importar, cole o JSON e clique em Importar dados." aria-label="JSON de backup"></textarea><div class="row"><button class="btn sm ghost" id="bkC">Copiar JSON</button></div></div></div></div>`;
   mountForm($('#cf'),F,c,{imgp:'cfg'});
@@ -2173,7 +2145,7 @@ service cloud.firestore {
 }
 
 /* ===================== Arquivos do acervo histórico (download) ===================== */
-const ARQ_TIPOS=[{k:'completo',l:'PE completo (Modelo 2)',acc:'.xlsx,.xlsm,.xls',ic:'Excel'},{k:'basico',l:'PE básico (Modelo 1)',acc:'.xlsx,.xlsm,.xls',ic:'Excel'},{k:'poster',l:'Pôster A1 (PDF ou imagem), opcional',acc:'.pdf,image/*',ic:'PDF'}];
+const ARQ_TIPOS=[{k:'completo',l:'PE completo',acc:'.xlsx,.xlsm,.xls',ic:'Excel'},{k:'basico',l:'PE básico',acc:'.xlsx,.xlsm,.xls',ic:'Excel'},{k:'poster',l:'Pôster A1 (PDF ou imagem), opcional',acc:'.pdf,image/*',ic:'PDF'}];
 const fmtTam=b=>b>1048576?n2(b/1048576)+' MB':Math.max(1,Math.round(b/1024))+' KB';
 async function putImg(id,data,prog){const CH=850000;if(data.length<=CH)await Store.set('imgs',id,{data,em:Date.now()});else{const n=Math.ceil(data.length/CH);for(let i=0;i<n;i++){await Store.set('imgs',id+'_p'+i,{data:data.slice(i*CH,(i+1)*CH)});prog&&prog((i+1)/n)}await Store.set('imgs',id,{parts:n,em:Date.now()})}imgCache[id]=data}
 async function delImg(id){if(!id||/^(data|ex):/.test(String(id)))return;try{const d=await Store.get('imgs',id);if(d?.parts)for(let i=0;i<d.parts;i++)await Store.del('imgs',id+'_p'+i);await Store.del('imgs',id)}catch(e){}delete imgCache[id]}
@@ -2357,7 +2329,7 @@ function W0nome(eq,k0){if(eq.lider&&mkey(eq.lider)===k0)return eq.lider;const m=
 const CK_ST=['Planejado','Realizando','Concluído'];const CK_MAX=3;
 const ckResps=c=>(Array.isArray(c?.resps)?c.resps:(c?.resp?[c.resp]:[])).map(x=>String(x||'').trim()).filter(Boolean);
 function ckItens(){const it=[];let g='';SECOES.forEach(s=>{if(s.g&&s.g!==g){g=s.g}it.push({id:s.id,n:s.n,g,auto:s.t==='auto',opt:!!s.opt})});
-  it.push({id:'basico',n:'PE Básico A1 · Modelo 1 (Excel e PDF)',g:'Entregas finais'},{id:'pdf',n:'Documento final do PE em PDF',g:'Entregas finais'});return it}
+  return it}
 function ckProg(pe,it){if(it.id==='basico')return (pe?.basicoArq||[]).length?1:filled(pe?.basico)?.5:0;if(it.id==='pdf')return null;const sc=SECOES.find(s=>s.id===it.id);if(!sc||sc.t==='auto')return null;return secProg(sc,pe)}
 function ckStatus(c){const st=c?.status||'';if(st!=='Concluído'&&c?.prazo&&c.prazo<today())return 'Atrasado';return st}
 const CKC={'Planejado':'blue','Realizando':'gold','Concluído':'ok','Atrasado':'bad'};
@@ -2913,7 +2885,7 @@ function slContrib(eq,part){const it=ckItens(),C=eq.checklist||{};const L=[];con
   return `<div class="s-ctbox"><div class="s-fit" style="width:1124px"><div class="s-ctg" style="grid-template-columns:repeat(${cols},1fr)">${cards}</div>
     <p class="s-ctleg"><b>% = parcela do trabalho do PE</b> assumida no checklist (seções ponderadas pelo esforço e divididas entre os corresponsáveis) · PE ${Math.round(100*done/tot)}% concluído · <span class="cOk">Concluído</span> <span class="cAnd">Realizando</span> <span class="cAtr">Atrasado</span> <span class="cPl">Planejado</span></p></div></div>`}
 async function mountApres(box,eq,pe,opt={}){let part=null;try{part=await Store.get('feedback','part_'+eq.id)}catch(e){}const {slides,D}=slSlides(eq,pe,part);const ap=pe.apres||{};let tema=ap.tema||'t1';const tot=slides.reduce((a,s)=>a+s.min,0);
-  const draw=()=>{box.innerHTML=`<div class="row between" style="gap:10px;flex-wrap:wrap"><div><div class="eyebrow">Apresentação para a Mostra · ${slides.length} slides · ${Math.round(tot)} minutos</div><h2>Slides do Planejamento Estratégico</h2><p class="help">Gerados automaticamente a partir do PE Completo (Modelo 2). Escolha um dos três estilos; a escolha vale para toda a equipe e para o professor. Para mudar o conteúdo, edite o PE Completo.</p></div><div class="row" style="gap:8px"><button class="btn" id="slPlay">${ic('target')} Apresentar (tela cheia)</button><button class="btn ghost" id="slPdf">${ic('file')} Baixar slides em PDF</button></div></div>
+  const draw=()=>{box.innerHTML=`<div class="row between" style="gap:10px;flex-wrap:wrap"><div><div class="eyebrow">Apresentação para a Mostra · ${slides.length} slides · ${Math.round(tot)} minutos</div><h2>Slides do Planejamento Estratégico</h2><p class="help">Gerados automaticamente a partir do PE Completo. Escolha um dos três estilos; a escolha vale para toda a equipe e para o professor. Para mudar o conteúdo, edite o PE Completo.</p></div><div class="row" style="gap:8px"><button class="btn" id="slPlay">${ic('target')} Apresentar (tela cheia)</button><button class="btn ghost" id="slPdf">${ic('file')} Baixar slides em PDF</button></div></div>
     <div class="sltemas" role="radiogroup" aria-label="Estilo dos slides">${SL_TEMAS.map(t=>`<button class="sltema ${t.k===tema?'on':''}" role="radio" aria-checked="${t.k===tema}" data-tema="${t.k}">${slBox(slHTML(slides[0],0,slides.length,t.k,D),300)}<span><b>${t.n}</b>${t.k===tema?' <i class="chip ok">escolhido</i>':''}<small>${t.d}</small></span></button>`).join('')}</div>
     ${ap.por?`<p class="help">Estilo definido por ${esc(ap.por)} em ${fmtDT(ap.em)}.</p>`:''}
     <div class="slgrid">${slides.map((s,i)=>`<figure class="slthumb" data-go="${i}">${slBox(slHTML(s,i,slides.length,tema,D),260)}<figcaption><b>${i+1}. ${esc(s.t)}</b><small>${String(s.min).replace('.',',')} min</small></figcaption></figure>`).join('')}</div>`;
