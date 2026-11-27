@@ -1281,7 +1281,7 @@ body.pdfmode{overflow:hidden}
   </div>
 </nav>
 <main id="app"><div class="wrap"><div class="empty"><b>Carregando o sistema…</b>Conectando ao banco de dados.</div></div></main>
-<div class="foot">Curso de Engenharia de Produção · Faculdade de Tecnologia · Universidade Federal do Amazonas · Manaus/AM<br><small style="opacity:.7">Atualização do sistema: 25/11/2026 · PE Básico vira apresentação de slides; observação do critério de exclusão visível a todos no painel de Participação (v33)</small></div>
+<div class="foot">Curso de Engenharia de Produção · Faculdade de Tecnologia · Universidade Federal do Amazonas · Manaus/AM<br><small style="opacity:.7">Atualização do sistema: 27/11/2026 · Excluir membro em Revisar › Participação (com e-mail ao aluno) · critério visível a todos · aba “Participação individual” removida (v34)</small></div>
 <div id="printArea"></div>
 
 <script>
@@ -1931,7 +1931,7 @@ const PIC={ppart:'chart',simil:'layout',painel:'grid',orient:'compass',equipes:'
 const AIC={check:'target',part:'chart',inicio:'home',orient:'compass',completo:'file',basico:'layout',msgs:'msg',equipe:'users'};
 async function renderProf(){
   const eqs=await Store.list('equipes');const msgs=await Store.list('msgs');const orsAll=await Store.list('orientacoes');const unread=msgs.filter(m=>m.papel==='aluno'&&m.canal==='prof'&&!m.lidaProf).length;
-  const T=[['painel','Painel'],['orient','Orientações'],['equipes','Equipes e PEs'],['ppart','Participação individual'],['simil','Similaridade dos PEs'],['aval','Avaliação da Mostra'],['acervo','Acervo histórico'],['msgs','Mensagens'],['config','Semestre e configurações']];
+  const T=[['painel','Painel'],['orient','Orientações'],['equipes','Equipes e PEs'],['simil','Similaridade dos PEs'],['aval','Avaliação da Mostra'],['acervo','Acervo histórico'],['msgs','Mensagens'],['config','Semestre e configurações']];
   if(S.ptabProf==='revisar')return profRevisar(eqs);
   const cur0=eqs.filter(e=>e.semestre===S.cfg.semestre&&!e.arquivado);const pm0=cur0.length?Math.round(cur0.reduce((a,e)=>a+(e.progresso||0),0)/cur0.length):0;
   const fz=orsAll.filter(o=>o.semestre===S.cfg.semestre).flatMap(o=>o.fases||[]).filter(f=>f.prazo&&f.prazo>=today()).sort((a,b)=>a.prazo.localeCompare(b.prazo));const dz=fz[0]?Math.ceil((new Date(fz[0].prazo+'T23:59')-new Date())/864e5):null;
