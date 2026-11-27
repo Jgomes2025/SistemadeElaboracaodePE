@@ -1280,7 +1280,7 @@ body.pdfmode{overflow:hidden}
   </div>
 </nav>
 <main id="app"><div class="wrap"><div class="empty"><b>Carregando o sistema…</b>Conectando ao banco de dados.</div></div></main>
-<div class="foot">Curso de Engenharia de Produção · Faculdade de Tecnologia · Universidade Federal do Amazonas · Manaus/AM<br><small style="opacity:.7">Atualização do sistema: 25/11/2026 · PE Básico vira apresentação de slides; slide 14 reflete a participação real × checklist (v28)</small></div>
+<div class="foot">Curso de Engenharia de Produção · Faculdade de Tecnologia · Universidade Federal do Amazonas · Manaus/AM<br><small style="opacity:.7">Atualização do sistema: 25/11/2026 · PE Básico vira apresentação de slides; exclusão de membro limpa participação, checklist, responsáveis e créditos em todas as seções (v30)</small></div>
 <div id="printArea"></div>
 
 <script>
@@ -1955,8 +1955,42 @@ async function profPart(pane,cur){const docs={};(await Store.list('feedback')).f
   pane.innerHTML=`<div class="stack" style="gap:18px"><div class="g3"><div class="kpi" data-ic="users"><b>${rows.length}</b><span>Alunos nas equipes do semestre</span></div><div class="kpi gold" data-ic="target"><b>${media}</b><span>IPI médio da turma</span></div><div class="kpi purple" data-ic="clock"><b>${nb}</b><span>Alunos com IPI baixo (&lt; 40)</span></div></div>
    <div class="card"><div class="row between"><div><div class="eyebrow">Índice de Participação Individual</div><h3>Participação por membro</h3></div><div class="ptabs">${[['todos','Todos'],['baixa','IPI baixo'],['alta','IPI alto']].map(([k,l])=>`<button data-ppf="${k}" class="${S.ppf===k?'on':''}">${l}</button>`).join('')}</div></div>
    <p class="help" style="margin:6px 0 12px">IPI = 50% contribuição em relação à cota justa da equipe + 25% regularidade (dias com edição; meta 6) + 25% cobertura das seções. Ordenado do menor para o maior IPI.</p>
-   ${f.length?`<div class="tbl-wrap"><table><thead><tr><th>Membro</th><th>Equipe</th><th style="min-width:170px">IPI</th><th class="r">Contribuição</th><th class="r">Edições</th><th class="r">Dias ativos</th><th class="r">Seções</th><th>Última atividade</th></tr></thead><tbody>${f.map(({e,x})=>{const c=ipiCls(x.ipi,x.n);return `<tr><td><b>${esc(x.nome)}</b><br><small>${esc(x.papel.replace(' (representante)',''))}</small></td><td>${esc(e.nome)}<br><small>${esc(e.organizacao||'')}</small></td><td><div class="row" style="flex-wrap:nowrap;gap:8px"><span class="jb" style="flex:1"><i class="${c}" style="width:${x.ipi}%"></i></span><b class="num">${x.ipi}</b></div><span class="chip ${c==='gold'?'gold':c}">${x.ipiCl}</span></td><td class="r num">${Math.round(x.share*100)}%</td><td class="r num">${x.n}</td><td class="r num">${x.dias}</td><td class="r num">${x.secs.length}</td><td class="num">${x.ult?fmtDT(x.ult):'—'}</td></tr>`}).join('')}</tbody></table></div>`:'<div class="empty"><b>Nenhum aluno nesta seleção</b>Os índices aparecem à medida que os membros editam o PE.</div>'}</div></div>`;
+   ${f.length?`<div class="tbl-wrap"><table><thead><tr><th>Membro</th><th>Equipe</th><th style="min-width:170px">IPI</th><th class="r">Contribuição</th><th class="r">Edições</th><th class="r">Dias ativos</th><th class="r">Seções</th><th>Última atividade</th><th></th></tr></thead><tbody>${f.map(({e,x},i)=>{const c=ipiCls(x.ipi,x.n);return `<tr><td><b>${esc(x.nome)}</b><br><small>${esc(x.papel.replace(' (representante)',''))}</small></td><td>${esc(e.nome)}<br><small>${esc(e.organizacao||'')}</small></td><td><div class="row" style="flex-wrap:nowrap;gap:8px"><span class="jb" style="flex:1"><i class="${c}" style="width:${x.ipi}%"></i></span><b class="num">${x.ipi}</b></div><span class="chip ${c==='gold'?'gold':c}">${x.ipiCl}</span></td><td class="r num">${Math.round(x.share*100)}%</td><td class="r num">${x.n}</td><td class="r num">${x.dias}</td><td class="r num">${x.secs.length}</td><td class="num">${x.ult?fmtDT(x.ult):'—'}</td><td><button class="btn sm danger" data-del="${i}" title="Excluir este membro da equipe">Excluir</button></td></tr>`}).join('')}</tbody></table></div>`:'<div class="empty"><b>Nenhum aluno nesta seleção</b>Os índices aparecem à medida que os membros editam o PE.</div>'}</div></div>`;
   $$('[data-ppf]',pane).forEach(b=>b.onclick=()=>{S.ppf=b.dataset.ppf;profPart(pane,cur)});
+  $$('[data-del]',pane).forEach(b=>b.onclick=()=>{const r=f[+b.dataset.del];if(r)profExcluirMembro(r.e,r.x)});
+}
+function memEmail(eq,k0){if(eq.lider&&mkey(eq.lider)===k0)return eq.liderEmail||'';const m=(eq.membros||[]).find(x=>mkey(x?.nome)===k0);return m?.email||''}
+async function profExcluirMembro(eq,x){
+  const k0=mkey(x.nome),isLider=!!(eq.lider&&mkey(eq.lider)===k0);
+  const outros=roster(eq).filter(r=>!r.gestor&&mkey(r.nome)!==k0).length;
+  if(isLider)return toast(outros>0?'Este aluno é o líder. Defina outro líder em “Membros e acessos” antes de excluí-lo.':'Este é o único membro (líder). Para remover, exclua a equipe em “Equipes e PEs”.');
+  const alvo=(memEmail(eq,k0)||'').trim();
+  const m=modal(`<h3>${ic('users')} Excluir membro da equipe</h3>
+    <p class="help">Remove <b>${esc(x.nome)}</b> da equipe <b>${esc(eq.nome)}</b> — incluindo o acesso (PIN), as responsabilidades no checklist e o histórico de participação. Esta ação não pode ser desfeita.</p>
+    <div class="fbk" style="margin:4px 0 12px"><b>Aluno:</b> ${esc(x.nome)} · ${esc(x.papel.replace(' (representante)',''))}<br><b>E-mail:</b> ${alvo?esc(alvo):'<i>sem e-mail cadastrado — a mensagem não poderá ser enviada</i>'}</div>
+    <label class="fld"><span class="lbl">Mensagem ao aluno (o motivo)${alvo?' — será enviada para o e-mail dele':''}</span><textarea id="exMot" rows="4" placeholder="Ex.: Você está sendo removido da equipe por não ter participado da construção do PE. Procure o professor para orientações sobre a entrega individual."></textarea></label>
+    <div class="row" style="justify-content:flex-end;gap:8px"><button class="btn ghost" data-close>Cancelar</button><button class="btn danger" id="exGo" disabled>Excluir${alvo?' e enviar e-mail':''}</button></div>`,'sm');
+  const mot=$('#exMot',m),go=$('#exGo',m);
+  mot.oninput=()=>{go.disabled=!mot.value.trim()};
+  go.onclick=async()=>{go.disabled=true;try{
+    const motivo=mot.value.trim();
+    const fresh=await Store.get('equipes',eq.id)||eq;
+    const pins={...(fresh.pins||{})};delete pins[k0];
+    const credPins={...(fresh.credPins||{})};delete credPins[k0];
+    const membros=(fresh.membros||[]).filter(p=>mkey(p?.nome)!==k0);
+    const C=JSON.parse(JSON.stringify(fresh.checklist||{}));Object.values(C).forEach(c=>{const rs=ckResps(c);if(rs.length){c.resps=rs.filter(n=>mkey(n)!==k0);delete c.resp}});
+    const R=JSON.parse(JSON.stringify(fresh.respSec||{}));Object.keys(R).forEach(sid=>{let v=(Array.isArray(R[sid])?R[sid]:[R[sid]]).filter(z=>z!==k0);if(v.length)R[sid]=v;else delete R[sid]});
+    const exclusoes=[...(fresh.exclusoes||[]),{nome:x.nome,email:alvo,papel:x.papel,motivo,por:S.sess?.nome||'Professor',em:Date.now()}];
+    await Store.patch('equipes',eq.id,{membros,pins,credPins,checklist:C,respSec:R,exclusoes,atualizadoEm:Date.now()});
+    try{const pd=await Store.get('feedback','part_'+eq.id);if(pd?.m){let ch=false;Object.keys(pd.m).forEach(kk=>{if(kk===k0||mkey(pd.m[kk]?.nome)===k0){delete pd.m[kk];ch=true}});if(ch)await Store.set('feedback','part_'+eq.id,pd)}}catch(e){}
+    closeModal();
+    if(alvo){const assunto=`${S.cfg.edicao||'Mostra de Planejamento Estratégico'} — exclusão da equipe ${eq.nome}`;
+      const corpo=`Olá ${x.nome},\n\n${motivo||'Você foi removido(a) da equipe.'}\n\nVocê foi removido(a) da equipe "${eq.nome}" no Sistema de Elaboração de Planejamento Estratégico.\n\nAtenciosamente,\nProf. Dr. Jonas Gomes da Silva\njgsilva@ufam.edu.br`;
+      const href='mailto:'+encodeURIComponent(alvo)+'?subject='+encodeURIComponent(assunto)+'&body='+encodeURIComponent(corpo);
+      const a=document.createElement('a');a.href=href;a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove();
+      toast('Membro excluído. Abri seu e-mail para enviar a mensagem ao aluno.')}
+    else toast('Membro excluído. O aluno não tem e-mail cadastrado, então nenhuma mensagem foi enviada.');
+    render()}catch(err){go.disabled=false;toast('Não foi possível excluir: '+(err.message||err))}};
 }
 async function profSim(pane,cur){
   pane.innerHTML=`<div class="stack" style="gap:18px"><div class="card"><div class="row between"><div><div class="eyebrow">Originalidade</div><h3>Similaridade dos PEs com outras equipes</h3></div><button class="btn" id="simGo">${ic('chart')}Calcular agora</button></div>
